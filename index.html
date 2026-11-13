@@ -7,47 +7,49 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Shrikhand&family=Gloock&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
-/* Layout: pasillo de estaciones (tarjetas con la consigna de la puerta) → consultorio en dos columnas: paciente y reloj a la izquierda, preguntar / examinar / indicar a la derecha → lista de cotejo. */
+/* Paleta: verde esmeralda de la portada del cuadernillo. Layout: pasillo de estaciones → consultorio en dos columnas (paciente y reloj | preguntar, examinar, indicar) → lista de cotejo. */
 :root{
-  --bg:#E8E6E1; --surface:#F7F6F3; --ink:#1F2430; --muted:#5A6070; --line:#D3D0C8;
-  --accent:#2F5D8A; --accent-ink:#ffffff; --accent-soft:#DCE5EF;
-  --g1:#2F5D8A; --g2:#F2B48A; --g3:#7FA3C9; --g4:#E8C46A;
-  --ok:#1d7a3e; --ok-soft:#dfecd9; --warn:#8a5a00; --warn-soft:#f1e6cc; --bad:#b3261e; --bad-soft:#f1dcd3; --mixc:var(--ink); --mixp:0%;
+  --bg:#E9F3EE; --surface:#FBFDFC; --ink:#14231D; --muted:#51655C; --line:#CDDDD4;
+  --accent:#0B8A63; --accent-ink:#ffffff; --accent-soft:#D6EEE4;
+  --g1:#0B8A63; --g2:#8AD6B9; --g3:#3FAE8A; --g4:#BFE8D7;
+  --ok:#17764a; --ok-soft:#DDF0E5; --warn:#8a5a00; --warn-soft:#f3e8cc; --bad:#b3261e; --bad-soft:#f6dfd9; --mixc:var(--ink); --mixp:0%;
   --f-display:"Gloock",Georgia,serif; --f-body:"Fredoka",system-ui,sans-serif; --f-mono:"JetBrains Mono",ui-monospace,monospace; --f-num:"Shrikhand","Gloock",Georgia,serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0E121A; --surface:#171D28; --ink:#E6EAF2; --muted:#9AA5B8; --line:#29324A;
-  --accent:#8DB6E6; --accent-ink:#000000; --accent-soft:#1C2A3E;
-  --g1:#2F5D8A; --g2:#F2955F; --g3:#3B6EA5; --g4:#8DB6E6;
-  --ok:#6fd38f; --ok-soft:#12301d; --warn:#e2b257; --warn-soft:#33280f; --bad:#f08a80; --bad-soft:#3a1715; --mixp:45%; color-scheme:dark}}
+  --bg:#0A1511; --surface:#11211B; --ink:#E3F0EA; --muted:#93AEA2; --line:#22392F;
+  --accent:#4FD1A5; --accent-ink:#00150D; --accent-soft:#12332A;
+  --g1:#0B8A63; --g2:#1E6F56; --g3:#14503F; --g4:#2B8F70;
+  --ok:#6fd8a0; --ok-soft:#11301f; --warn:#e2b257; --warn-soft:#33280f; --bad:#f08a80; --bad-soft:#3a1715; --mixp:45%; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#0E121A; --surface:#171D28; --ink:#E6EAF2; --muted:#9AA5B8; --line:#29324A;
-  --accent:#8DB6E6; --accent-ink:#000000; --accent-soft:#1C2A3E;
-  --g1:#2F5D8A; --g2:#F2955F; --g3:#3B6EA5; --g4:#8DB6E6;
-  --ok:#6fd38f; --ok-soft:#12301d; --warn:#e2b257; --warn-soft:#33280f; --bad:#f08a80; --bad-soft:#3a1715; --mixp:45%; color-scheme:dark}
+  --bg:#0A1511; --surface:#11211B; --ink:#E3F0EA; --muted:#93AEA2; --line:#22392F;
+  --accent:#4FD1A5; --accent-ink:#00150D; --accent-soft:#12332A;
+  --g1:#0B8A63; --g2:#1E6F56; --g3:#14503F; --g4:#2B8F70;
+  --ok:#6fd8a0; --ok-soft:#11301f; --warn:#e2b257; --warn-soft:#33280f; --bad:#f08a80; --bad-soft:#3a1715; --mixp:45%; color-scheme:dark}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5}
 body::before,body::after{content:"";position:fixed;inset:-12vh -12vw;z-index:-1;pointer-events:none}
-body::before{background:radial-gradient(55vw 45vh at 88% 14%,color-mix(in oklab,var(--g1) 26%,transparent),transparent 70%),radial-gradient(50vw 45vh at 78% 92%,color-mix(in oklab,var(--g3) 24%,transparent),transparent 70%);animation:bgA 13s ease-in-out infinite alternate}
-body::after{background:radial-gradient(45vw 55vh at 6% 55%,color-mix(in oklab,var(--g2) 30%,transparent),transparent 70%),radial-gradient(35vw 35vh at 34% 8%,color-mix(in oklab,var(--g4) 26%,transparent),transparent 70%);animation:bgB 11s ease-in-out infinite alternate}
+body::before{background:radial-gradient(55vw 45vh at 88% 12%,color-mix(in oklab,var(--g1) 30%,transparent),transparent 70%),radial-gradient(50vw 45vh at 80% 94%,color-mix(in oklab,var(--g3) 24%,transparent),transparent 70%);animation:bgA 13s ease-in-out infinite alternate}
+body::after{background:radial-gradient(45vw 55vh at 4% 58%,color-mix(in oklab,var(--g2) 34%,transparent),transparent 70%),radial-gradient(35vw 35vh at 32% 6%,color-mix(in oklab,var(--g4) 40%,transparent),transparent 70%);animation:bgB 11s ease-in-out infinite alternate}
 @keyframes bgA{to{transform:translate(-7vw,6vh) scale(1.08)}}
 @keyframes bgB{from{transform:scale(1.05)}to{transform:translate(8vw,-5vh) scale(.97)}}
 .wrap{max-width:1240px;margin:0 auto;padding:clamp(24px,5vw,48px) clamp(16px,4vw,48px) 64px;display:flex;flex-direction:column;gap:24px}
 h1,h2,h3{font-family:var(--f-display);font-weight:400;text-wrap:balance;margin:0;line-height:1.15}
-h1{font-size:clamp(2.2rem,7vw,3.1rem);color:var(--accent)} h2{font-size:1.35rem} h3{font-size:1.05rem}
+h1{font-size:clamp(2.2rem,7vw,3.1rem);color:var(--accent)} h2,h3{font-family:var(--f-body);font-weight:600;line-height:1.25} h2{font-size:1.3rem} h3{font-size:1.04rem}
 p{margin:0}
 .eyebrow{font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
 .mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
 .muted{color:var(--muted)} .small{font-size:.88rem}
 button{font:inherit;cursor:pointer;color:inherit}
-button:focus-visible,input:focus-visible,summary:focus-visible,textarea:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+a{color:var(--accent)}
+button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible,textarea:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
 .btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:9px 14px;font-weight:600;transition:transform .15s,border-color .15s,box-shadow .2s}
 .btn:hover{border-color:var(--accent);transform:translateY(-1px);box-shadow:0 6px 16px -10px color-mix(in oklab,var(--ink) 45%,transparent)}
 .btn:active{transform:scale(.97)}
 .btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .btn[disabled]{opacity:.5;cursor:not-allowed;transform:none}
+.link{background:none;border:0;padding:0;color:var(--accent);text-decoration:underline;font-weight:600}
 .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:14px;min-width:0}
 .strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
@@ -56,14 +58,12 @@ header{display:flex;justify-content:space-between;align-items:flex-start;gap:12p
 .stat span{color:var(--muted);font-size:.92rem}
 .chip{border:1px solid var(--line);background:none;color:var(--muted);border-radius:99px;padding:4px 12px;font-size:.86rem;transition:background-color .15s,color .15s}
 .chip[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
-.dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--cc);flex:none}
-/* color por sección */
 [data-c]{--cc:color-mix(in oklab,var(--c) calc(100% - var(--mixp)),var(--mixc));--cct:color-mix(in oklab,var(--cc) 78%,var(--ink))}
 /* pasillo */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
-.door{background:color-mix(in oklab,var(--cc) 7%,var(--surface));border:1px solid color-mix(in oklab,var(--cc) 40%,var(--line));border-left:5px solid var(--cc);border-radius:12px;padding:14px;display:grid;grid-template-columns:76px minmax(0,1fr);gap:12px;text-align:left;align-items:center;transition:transform .2s,box-shadow .2s;animation:rise .5s cubic-bezier(.2,.8,.2,1) both}
+.door{background:color-mix(in oklab,var(--cc) 6%,var(--surface));border:1px solid color-mix(in oklab,var(--cc) 35%,var(--line));border-left:5px solid var(--cc);border-radius:12px;padding:12px 14px;display:grid;grid-template-columns:78px minmax(0,1fr);gap:12px;text-align:left;align-items:center;transition:transform .2s,box-shadow .2s;animation:rise .5s cubic-bezier(.2,.8,.2,1) both}
 .door:hover{transform:translateY(-2px);box-shadow:0 10px 24px -14px color-mix(in oklab,var(--cc) 70%,transparent)}
-.door .av{width:76px;height:84px}
+.door .av{width:78px;height:90px}
 .door h3{color:var(--cct)}
 .door .meta{font-size:.84rem;color:var(--muted)}
 .badge{font-family:var(--f-mono);font-size:.76rem;border-radius:99px;padding:1px 8px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
@@ -72,10 +72,10 @@ header{display:flex;justify-content:space-between;align-items:flex-start;gap:12p
 @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 /* consultorio */
 .room{display:grid;grid-template-columns:1fr;gap:20px;align-items:start}
-@media (min-width:920px){.room{grid-template-columns:minmax(300px,380px) minmax(0,1fr)}.left{position:sticky;top:16px}}
+@media (min-width:920px){.room{grid-template-columns:minmax(300px,360px) minmax(0,1fr)}.left{position:sticky;top:16px}}
 .left{display:flex;flex-direction:column;gap:14px}
 .stage{align-items:center;text-align:center;border-color:color-mix(in oklab,var(--cc) 45%,var(--line))}
-.stage .av{width:190px;height:210px}
+.stage .av{width:190px;height:218px}
 .bubble{position:relative;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:12px 14px;text-align:left;width:100%;min-height:64px;animation:rise .3s ease-out}
 .bubble::before{content:"";position:absolute;top:-8px;left:50%;width:14px;height:14px;background:var(--bg);border-left:1px solid var(--line);border-top:1px solid var(--line);transform:translateX(-50%) rotate(45deg)}
 .clock{font-family:var(--f-num);font-size:clamp(2.6rem,10vw,3.6rem);line-height:1;font-variant-numeric:tabular-nums;transition:color .4s}
@@ -83,15 +83,19 @@ header{display:flex;justify-content:space-between;align-items:flex-start;gap:12p
 .timer.running{animation:glow 3.2s ease-in-out infinite}
 @keyframes glow{50%{box-shadow:0 0 0 6px color-mix(in oklab,var(--accent) 14%,transparent)}}
 .sheet{border-left:5px solid var(--cc)}
-.sheet ol,.sheet ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
+.sheet ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
 .tabs{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:10px}
 .tab{border:1px solid var(--line);background:none;border-radius:8px;padding:7px 12px;font-weight:600;color:var(--muted)}
 .tab[aria-selected="true"]{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+.tab .n{font-family:var(--f-mono);font-size:.78rem;margin-left:4px;opacity:.8}
 .opts{display:flex;flex-direction:column;gap:8px}
 .opt{display:block;width:100%;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 12px;transition:border-color .15s,background-color .15s,transform .1s}
 .opt:hover{border-color:var(--accent)} .opt:active{transform:scale(.99)}
-.opt.used{background:var(--accent-soft);border-color:color-mix(in oklab,var(--accent) 50%,var(--line))}
-.opt .ans{display:block;margin-top:6px;font-size:.93rem;color:var(--ink);border-top:1px dashed var(--line);padding-top:6px;animation:rise .25s ease-out}
+.opt.used{background:var(--accent-soft);border-color:color-mix(in oklab,var(--accent) 55%,var(--line))}
+.opt.pick{display:grid;grid-template-columns:22px minmax(0,1fr);gap:10px;align-items:start}
+.opt.pick::before{content:"";width:20px;height:20px;border-radius:6px;border:2px solid var(--line);margin-top:2px;background:var(--surface)}
+.opt.pick.used::before{background:var(--accent);border-color:var(--accent);background-image:linear-gradient(45deg,transparent 44%,var(--accent-ink) 44% 56%,transparent 56%),linear-gradient(-45deg,transparent 44%,var(--accent-ink) 44% 56%,transparent 56%);background-size:7px 7px,12px 12px;background-position:3px 9px,7px 3px;background-repeat:no-repeat}
+.opt .ans{display:block;margin-top:6px;font-size:.93rem;color:var(--ink);border-top:1px dashed color-mix(in oklab,var(--accent) 40%,var(--line));padding-top:6px;animation:rise .25s ease-out}
 .opt .cat{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;display:block}
 .chat{display:flex;flex-direction:column;gap:8px;max-height:420px;overflow:auto;padding:4px}
 .msg{max-width:85%;padding:8px 12px;border-radius:12px;font-size:.95rem;animation:rise .25s ease-out;white-space:pre-wrap}
@@ -99,47 +103,65 @@ header{display:flex;justify-content:space-between;align-items:flex-start;gap:12p
 .msg.pt{align-self:flex-start;background:var(--bg);border:1px solid var(--line)}
 .ask{display:flex;gap:8px}
 .ask textarea{flex:1;min-width:0;min-height:46px;max-height:140px;font:inherit;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px;resize:vertical}
-.cot{display:flex;flex-direction:column;gap:2px}
-.cot h3{margin-top:10px;color:var(--cct)}
-.ci{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 4px;border-top:1px solid var(--line)}
-.ci input{width:20px;height:20px;accent-color:var(--cc)}
-.ci .pts{font-family:var(--f-mono);font-size:.82rem;color:var(--muted)}
-.ci.hit label{font-weight:500}
-.score{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
-.score b{font-family:var(--f-num);font-weight:400;font-size:3rem;line-height:1;color:var(--accent)}
+/* corrección */
+.res{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 18px;align-items:center}
+.res b{font-family:var(--f-num);font-weight:400;font-size:clamp(2.8rem,9vw,3.6rem);line-height:1;color:var(--accent);grid-row:span 2}
+.res .verdict{font-weight:600;font-size:1.25rem}
 .bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden}
 .bar>i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .9s cubic-bezier(.2,.8,.2,1)}
+.facts{display:flex;flex-wrap:wrap;gap:8px}
+.fact{font-size:.86rem;border:1px solid var(--line);border-radius:99px;padding:2px 10px;color:var(--muted)}
+.fact.bad{color:var(--bad);border-color:color-mix(in oklab,var(--bad) 50%,var(--line));background:var(--bad-soft)}
+.grp{border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.grp+.grp{margin-top:10px}
+.grp header{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 12px;background:color-mix(in oklab,var(--cc) 10%,var(--surface));flex-wrap:nowrap}
+.grp header span:first-child{font-weight:600;color:var(--cct)}
+.grp header .mono{font-size:.84rem;color:var(--muted);white-space:nowrap}
+.ci{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 12px;border-top:1px solid var(--line);cursor:pointer}
+.ci input{width:18px;height:18px;margin:0;accent-color:var(--accent)}
+.ci .t{color:var(--muted)}
+.ci.hit .t{color:var(--ink)}
+.ci .pts{font-family:var(--f-mono);font-size:.8rem;color:var(--muted);white-space:nowrap}
+.ci.hit .pts{color:var(--ok);font-weight:600}
+.minus{border:1px solid color-mix(in oklab,var(--bad) 45%,var(--line));border-radius:10px;overflow:hidden}
+.minus header{padding:8px 12px;background:var(--bad-soft);color:var(--bad);font-weight:600;display:block}
+.minus .mi{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;padding:8px 12px;border-top:1px solid var(--line)}
+.minus .mi .why{grid-column:1/-1;font-size:.88rem;color:var(--muted)}
+.minus .mi .pts{font-family:var(--f-mono);font-size:.8rem;color:var(--bad);font-weight:600}
+details.fold{border:1px solid var(--line);border-radius:10px;padding:0 12px}
+details.fold>summary{padding:10px 0;font-weight:600;cursor:pointer}
+details.fold>ul{margin:0 0 12px;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+details.fold li .why{display:block;font-size:.88rem;color:var(--muted)}
+details.fold li.miss{color:var(--ink)} details.fold li.got::marker{color:var(--ok)}
 .note{border-radius:10px;padding:10px 12px;font-size:.93rem}
-.note.bad{background:var(--bad-soft);color:var(--bad)} .note.ok{background:var(--ok-soft);color:var(--ok)} .note.info{background:var(--accent-soft)}
-.keys{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
-.glob{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
-.glob button{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:8px 4px;font-size:.84rem}
-.glob button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.note.info{background:var(--accent-soft)}
+/* IA */
 .cfg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
 .cfg label{display:flex;flex-direction:column;gap:4px;font-size:.86rem;color:var(--muted);font-weight:600}
 .cfg input,.cfg select{font:inherit;font-weight:400;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 10px;min-width:0}
-#aiHelp a{color:var(--accent)}
+.steps{margin:0;padding:12px 14px 12px 34px;background:var(--accent-soft);border-radius:10px;display:flex;flex-direction:column;gap:4px;font-size:.94rem}
 [hidden]{display:none!important}
 /* avatar */
 .av{display:block}
-.av .body{animation:breathe 4.2s ease-in-out infinite;transform-origin:100px 200px}
-.av .eye{animation:blink 5s infinite;transform-box:fill-box;transform-origin:center}
+.av .body{animation:breathe 4.2s ease-in-out infinite;transform-origin:100px 215px}
+.av .eye{animation:blink 5.2s infinite;transform-box:fill-box;transform-origin:center}
 .av .eye.r{animation-delay:.03s}
 .av .mouth{transform-box:fill-box;transform-origin:center}
-.av.talk .mouth{animation:talk .28s ease-in-out infinite alternate}
-.av .tear{animation:tear 2.6s ease-in infinite}
+.av.talk .mouth{animation:talk .26s ease-in-out infinite alternate}
+.av .tear{animation:tear 2.8s ease-in infinite}
 .av .sweat{animation:tear 3.4s ease-in infinite .8s}
-.av.dolor .head{animation:wince 2.8s ease-in-out infinite;transform-origin:100px 150px}
-.av.agitado .head{animation:shake .5s ease-in-out infinite alternate;transform-origin:100px 150px}
-.av .baby{animation:rock 3s ease-in-out infinite alternate;transform-origin:150px 190px}
-@keyframes breathe{50%{transform:scaleY(1.018) translateY(-1px)}}
-@keyframes blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
-@keyframes talk{from{transform:scaleY(.5)}to{transform:scaleY(1.7)}}
-@keyframes tear{0%{opacity:0;transform:translateY(0)}20%{opacity:1}100%{opacity:0;transform:translateY(22px)}}
-@keyframes wince{0%,60%,100%{transform:rotate(0)}70%{transform:rotate(-3deg)}85%{transform:rotate(2deg)}}
-@keyframes shake{from{transform:rotate(-2deg)}to{transform:rotate(2deg)}}
+.av.dolor .head{animation:wince 2.8s ease-in-out infinite;transform-origin:100px 160px}
+.av.agitado .head{animation:shake .5s ease-in-out infinite alternate;transform-origin:100px 160px}
+.av.agitado .body{animation-duration:1.3s}
+.av .baby{animation:rock 3s ease-in-out infinite alternate;transform-origin:150px 200px}
+@keyframes breathe{50%{transform:scaleY(1.02) translateY(-1px)}}
+@keyframes blink{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.08)}}
+@keyframes talk{from{transform:scaleY(.7)}to{transform:scaleY(1.6)}}
+@keyframes tear{0%{opacity:0;transform:translateY(0)}20%{opacity:1}100%{opacity:0;transform:translateY(24px)}}
+@keyframes wince{0%,60%,100%{transform:rotate(0)}70%{transform:rotate(-2.5deg)}85%{transform:rotate(1.5deg)}}
+@keyframes shake{from{transform:rotate(-1.2deg)}to{transform:rotate(1.2deg)}}
 @keyframes rock{from{transform:rotate(-3deg)}to{transform:rotate(3deg)}}
-@media (max-width:600px){.strip{grid-template-columns:1fr 1fr}.strip .stat:last-child{grid-column:1/-1}.glob{grid-template-columns:1fr 1fr}}
+@media (max-width:600px){.strip{grid-template-columns:1fr 1fr}.strip .stat:last-child{grid-column:1/-1}}
 @media (prefers-reduced-motion:reduce){*,body::before,body::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
 </style>
 </head>
@@ -152,35 +174,35 @@ header{display:flex;justify-content:space-between;align-items:flex-start;gap:12p
     </div>
     <div class="row">
       <button class="btn" id="homeBtn" hidden>← Volver al pasillo</button>
-      <button class="btn" id="aiBtn">Configurar IA</button>
+      <button class="btn" id="aiBtn" hidden>Configurar IA</button>
       <button class="btn" id="themeBtn">Modo nocturno</button>
     </div>
   </header>
 
   <section class="panel" id="aiPanel" hidden>
     <h2>Paciente con inteligencia artificial</h2>
-    <p class="muted small">Opcional. Con una clave gratuita, el paciente responde lo que le escribas y la entrevista se corrige sola. Sin clave, el simulador funciona igual con las preguntas sugeridas. La clave queda guardada solo en este navegador y se envía únicamente al proveedor que elijas.</p>
+    <p class="muted small">Es opcional. Con una clave gratuita, el paciente responde lo que le escribas y la entrevista se corrige sola. Sin clave, el simulador funciona igual con las preguntas sugeridas.</p>
+    <ol class="steps" id="aiSteps"></ol>
     <div class="cfg">
-      <label>Proveedor<select id="aiProv"><option value="gemini">Google Gemini</option><option value="groq">Groq</option></select></label>
+      <label>Proveedor<select id="aiProv"><option value="gemini">Google Gemini (recomendado)</option><option value="groq">Groq</option></select></label>
       <label>Clave de API<input id="aiKey" type="password" autocomplete="off" spellcheck="false" placeholder="Pegá tu clave"></label>
       <label>Modelo<input id="aiModel" list="aiModels" spellcheck="false"><datalist id="aiModels"></datalist></label>
     </div>
-    <p class="small" id="aiHelp"></p>
     <div class="row"><button class="btn primary" id="aiSave">Guardar y probar</button><button class="btn" id="aiDel">Borrar la clave</button><button class="btn" id="aiClose">Cerrar</button></div>
     <p class="small" id="aiMsg" role="status"></p>
+    <p class="muted small">La clave queda guardada solo en este navegador y se envía únicamente al proveedor elegido. No la compartas con nadie.</p>
   </section>
 
-  <!-- PASILLO -->
   <section id="hall" style="display:flex;flex-direction:column;gap:20px">
     <div class="strip">
-      <div class="stat"><b id="sDone">0</b><span id="sDoneL">estaciones practicadas</span></div>
+      <div class="stat"><b id="sDone">0</b><span>estaciones practicadas</span></div>
       <div class="stat"><b id="sAvg">–</b><span>puntaje promedio</span></div>
       <div class="stat"><b id="sWeak">–</b><span>estaciones por debajo de 60 %</span></div>
     </div>
     <div class="panel">
       <div class="row" style="justify-content:space-between">
         <h2>Pasillo de estaciones</h2>
-        <button class="btn primary" id="rndBtn">Estación al azar</button>
+        <span class="row"><button class="btn" id="resetBtn">Borrar progreso</button><button class="btn primary" id="rndBtn">Estación al azar</button></span>
       </div>
       <p class="muted small">Cada tarjeta es la puerta de una estación: leés la consigna, entrás y tenés 8 minutos. Al salir, corregís con la lista de cotejo. Bibliografía: tu Cuadernillo ECOE.</p>
       <div class="row" id="filters"></div>
@@ -188,7 +210,6 @@ header{display:flex;justify-content:space-between;align-items:flex-start;gap:12p
     </div>
   </section>
 
-  <!-- CONSULTORIO -->
   <section id="station" hidden>
     <div class="room" id="room" data-c>
       <div class="left">
@@ -199,7 +220,7 @@ header{display:flex;justify-content:space-between;align-items:flex-start;gap:12p
         </div>
         <div class="panel timer" id="timerBox" style="align-items:center;text-align:center">
           <div class="clock" id="clock">8:00</div>
-          <p class="muted small" id="phase">Leé la consigna. El reloj arranca cuando entrás.</p>
+          <p class="muted small" id="phase"></p>
           <div class="row" style="justify-content:center">
             <button class="btn primary" id="startBtn">Entrar a la estación</button>
             <button class="btn" id="endBtn" hidden>Salir y corregir</button>
@@ -211,15 +232,16 @@ header{display:flex;justify-content:space-between;align-items:flex-start;gap:12p
         <div class="panel" id="work" hidden>
           <div class="tabs" role="tablist">
             <button class="tab" role="tab" data-t="ask" aria-selected="true">Preguntar</button>
-            <button class="tab" role="tab" data-t="exam" aria-selected="false">Examinar y pedir</button>
-            <button class="tab" role="tab" data-t="do" aria-selected="false">Decir e indicar</button>
+            <button class="tab" role="tab" data-t="exam" aria-selected="false">Examinar y pedir<span class="n" id="nExam"></span></button>
+            <button class="tab" role="tab" data-t="do" aria-selected="false">Decir e indicar<span class="n" id="nDo"></span></button>
           </div>
           <div id="tab-ask">
             <div class="row" id="modeRow" hidden style="margin-bottom:10px">
               <span class="muted small">Entrevista:</span>
-              <button class="chip" id="mFree" aria-pressed="true">Libre (el paciente responde con IA)</button>
+              <button class="chip" id="mFree" aria-pressed="true">Libre (responde la IA)</button>
               <button class="chip" id="mGuided" aria-pressed="false">Guiada (preguntas sugeridas)</button>
             </div>
+            <p class="muted small" id="aiHint" hidden style="margin-bottom:10px">¿Querés escribirle libremente al paciente? <button class="link" id="aiHintBtn">Configurá la IA</button>.</p>
             <div id="freeBox" hidden>
               <div class="chat" id="chat"></div>
               <form class="ask" id="askForm" style="margin-top:10px">
@@ -230,8 +252,8 @@ header{display:flex;justify-content:space-between;align-items:flex-start;gap:12p
             </div>
             <div class="opts" id="askOpts"></div>
           </div>
-          <div id="tab-exam" hidden><div class="opts" id="examOpts"></div></div>
-          <div id="tab-do" hidden><p class="muted small" style="margin-bottom:8px">Elegí lo que dirías o indicarías. Hay opciones incorrectas: descuentan.</p><div class="opts" id="doOpts"></div></div>
+          <div id="tab-exam" hidden><p class="muted small" style="margin-bottom:8px">Elegí qué examinás y qué pedís. Tocá de nuevo para deseleccionar. Los estudios innecesarios descuentan.</p><div class="opts" id="examOpts"></div></div>
+          <div id="tab-do" hidden><p class="muted small" style="margin-bottom:8px">Marcá lo que dirías o indicarías. Tocá de nuevo para deseleccionar. Hay opciones incorrectas que descuentan.</p><div class="opts" id="doOpts"></div></div>
         </div>
         <div class="panel" id="review" hidden></div>
       </div>
@@ -240,15 +262,9 @@ header{display:flex;justify-content:space-between;align-items:flex-start;gap:12p
 </div>
 
 <script>
-/* ============ Secciones (mismos colores que el cuadernillo) ============ */
-const AREAS={cli:['Clínica médica','#1F4E79'],cir:['Cirugía general','#2E6B34'],uro:['Urología','#8A6400'],tra:['Traumatología','#6D4C41'],ped:['Pediatría','#BF5B0A'],neo:['Neonatología','#A61E5B'],obs:['Obstetricia','#6A2C91'],gin:['Ginecología','#00767F'],sm:['Salud mental','#303F9F'],urg:['Urgencias','#B3261E'],tr:['Transversales','#4E5B1E']};
-
-/* ============ Estaciones ============
- q: [categoría, pregunta, respuesta del paciente, ítem de cotejo (-1 = no puntúa)]
- x: [examen o estudio, resultado, ítem]
- d: [conducta, devolución, ítem (-1 = error que descuenta), puntos que descuenta]
- cot: [ítem, puntos, grupo] */
+const AREAS={cli:['Clínica médica','#1F4E79'],cir:['Cirugía general','#2E6B34'],uro:['Urología','#8A6400'],tra:['Traumatología','#6D4C41'],ped:['Pediatría','#BF5B0A'],neo:['Neonatología','#A61E5B'],obs:['Obstetricia','#6A2C91'],gin:['Ginecología','#00767F'],sm:['Salud mental','#303F9F'],mf:['Medicina familiar','#1F6F6B'],urg:['Urgencias','#B3261E'],tr:['Transversales','#4E5B1E']};
 const G={c:'Cuidado de pacientes',k:'Conocimiento médico',s:'Aprendizaje basado en el sistema',p:'Profesionalismo',h:'Comunicación'};
+/* q:[categoría,pregunta,respuesta,ítem] · x:[examen o estudio,resultado,ítem | -1 neutro | -9 innecesario] · d:[conducta,devolución,ítem | -1 error | -2 neutro,descuento] · cot:[ítem,puntos,grupo] */
 const ST=[
 {id:'ive',area:'obs',real:1,motivo:'Test de embarazo positivo',lugar:'Consultorio de orientación · Hospital Menor de Ingeniero White',
  pt:{n:'Patricia',e:'30 años',av:{sex:'f',skin:2,hair:'long',hc:'#3b2a20',mood:'angustia',top:'#7b5ea7'}},
@@ -676,40 +692,537 @@ const ST=[
     ['Como mejoró, le doy el alta a los 30 minutos.','Error: debe observarse al menos 4 a 6 horas.',-1,10]],
  cot:[['Interroga el cuadro y el desencadenante',5,'c'],['Pregunta alergias, asma y fármacos',5,'c'],['Controla signos vitales y saturación',8,'c'],['Evalúa piel, vía aérea y respiración',7,'c'],['Reconoce la anafilaxia y pide ayuda',10,'k'],['Indica adrenalina IM en el muslo con la dosis correcta, como primera medida',25,'k'],['Posiciona, da oxígeno y fluidos',10,'k'],['Repite la adrenalina si no responde',8,'k'],['Indica broncodilatador y fármacos de segunda línea',5,'k'],['Deriva para observación de 4 a 6 horas',10,'s'],['Registra la alergia e indica autoinyector y derivación',7,'s']],
  claves:['Adrenalina 0,01 mg/kg IM en el muslo (máximo 0,5 mg en adultos y 0,3 mg en niños), repetible a los 5 a 15 minutos.','No tiene contraindicaciones absolutas en la anafilaxia.','Antihistamínicos y corticoides son de segunda línea.','Acostado con las piernas elevadas; nunca ponerlo de pie de golpe.','Observación de 4 a 6 horas por la reacción bifásica; autoinyector al alta.'],
- ref:'Cuadernillo · Urgencias · RCP, anafilaxia y shock.'}
+ ref:'Cuadernillo · Urgencias · RCP, anafilaxia y shock.'},
+{id:'nac',area:'cli',motivo:'Tos y fiebre de 3 días',lugar:'Consultorio de demanda espontánea',
+ pt:{n:'Héctor',e:'68 años',av:{sex:'m',skin:1,hair:'thin',hc:'#9a948c',mood:'neutral',top:'#3d6a94',old:1}},
+ sit:'Héctor consulta por tos y fiebre. Camina y habla sin dificultad.',
+ tareas:['Hacer la anamnesis.','Examinar y pedir los estudios necesarios.','Definir dónde se trata e indicar el tratamiento.'],
+ abre:'Doctor, hace tres días que estoy con tos y fiebre, y me duele el costado cuando respiro.',
+ guion:'Fiebre de hasta 38,5, tos con catarro amarillento, dolor en el costado derecho al respirar hondo, algo de falta de aire al caminar. Tiene diabetes tipo 2 con metformina. Dejó de fumar hace 10 años. No tomó antibióticos ni estuvo internado en los últimos 3 meses. Se dio la antigripal este año; nunca la del neumococo. Vive con su esposa. Come y toma líquidos bien. Sin alergias. No está confundido.',
+ q:[['Síntomas','¿Desde cuándo tiene tos? ¿Tiene catarro, fiebre, dolor al respirar o falta de aire?','Tres días. Catarro amarillo, fiebre de 38 y medio, me duele el costado derecho al respirar hondo y me agito un poco al caminar.',0],
+    ['Antecedentes','¿Tiene alguna enfermedad crónica? ¿Fuma?','Diabetes, tomo metformina. Dejé de fumar hace 10 años.',1],
+    ['Antecedentes','¿Tomó antibióticos o estuvo internado en los últimos tres meses?','No, ninguna de las dos.',1],
+    ['Prevención','¿Tiene las vacunas de la gripe y del neumococo? ¿Algún contacto enfermo?','La de la gripe sí, este año. La otra nunca. En casa están todos bien.',2],
+    ['Contexto','¿Puede comer y tomar líquidos? ¿Con quién vive? ¿Alergias?','Como bien. Vivo con mi señora. Alergias no tengo.',3]],
+ x:[['Signos vitales, saturación y estado de conciencia','PA 125/75 · FC 98 · FR 22 · saturación 95 % · 38,4 °C · lúcido y orientado.',4],
+    ['Examen respiratorio','Rales crepitantes y soplo tubario en la base derecha, con vibraciones vocales aumentadas.',5],
+    ['Rx de tórax frente y perfil','Consolidación en la base derecha con broncograma aéreo. Sin derrame.',6],
+    ['Urea (para el CURB-65)','38 mg/dl.',-1],
+    ['Hemocultivos y cultivo de esputo','No se piden en el ambulatorio de bajo riesgo.',-9]],
+ d:[['Calculo el CURB-65 en voz alta: sólo suma la edad (1 punto). Tratamiento ambulatorio.','Correcto: sin confusión, urea 38, FR 22, PA normal. Además satura más de 92 %, tolera la vía oral y tiene contención.',7],
+    ['Indico amoxicilina-clavulánico 875/125 mg cada 8 a 12 horas por 5 a 7 días.','Correcto: tiene 65 años o más y una comorbilidad.',8],
+    ['Lo cito a control en 48 a 72 horas y le doy pautas de alarma: falta de aire, fiebre que no cede, confusión o no tolerar la vía oral.','Correcto.',9],
+    ['Le indico la vacuna antineumocócica y una Rx de control a las 6 a 8 semanas.','Correcto: Rx de control en mayores de 50 años y fumadores.',10],
+    ['Le explico el diagnóstico y el plan con palabras simples.','Bien.',11],
+    ['Lo interno en sala por la edad.','Error: con CURB-65 de 1 y sin otros criterios, el tratamiento es ambulatorio.',-1,8],
+    ['Indico amoxicilina 500 mg cada 12 horas por 3 días.','Error: dosis y duración insuficientes, y con comorbilidad corresponde amoxicilina-clavulánico.',-1,10]],
+ cot:[['Interroga los síntomas respiratorios',8,'c'],['Pregunta comorbilidades, tabaco, antibióticos e internaciones previas',8,'c'],['Pregunta vacunas y epidemiología',5,'c'],['Pregunta tolerancia oral, contención y alergias',5,'c'],['Controla FR, saturación, PA y conciencia',10,'c'],['Ausculta y describe el síndrome de condensación',8,'c'],['Pide Rx de tórax y la describe',8,'k'],
+      ['Calcula el CURB-65 y justifica el lugar de tratamiento',14,'k'],['Indica el antibiótico con dosis y duración',14,'k'],['Cita en 48 a 72 horas con pautas de alarma',10,'s'],['Indica vacunas y Rx de control',5,'s'],['Explica el diagnóstico y el plan',5,'h']],
+ claves:['CURB-65: confusión, urea mayor de 42, FR de 30 o más, PAS menor de 90 o PAD de 60 o menos, 65 años o más.','0-1 ambulatorio; 2 sala; 3 o más internación y evaluar UTI.','Menor de 65 sin comorbilidades: amoxicilina 1 g cada 8 horas. Con 65 años o comorbilidades: amoxicilina-clavulánico.','Se interna también con saturación menor de 92 %, compromiso multilobar, derrame o intolerancia oral.','Ambulatorio de bajo riesgo: sólo Rx y saturación; sin hemocultivos ni esputo.'],
+ ref:'Cuadernillo · Clínica médica · Neumonía adquirida en la comunidad.'},
+
+{id:'asma',area:'cli',motivo:'Falta de aire y silbidos en el pecho',lugar:'Guardia',
+ pt:{n:'Brenda',e:'24 años',av:{sex:'f',skin:2,hair:'long',hc:'#2a1c14',mood:'agitado',top:'#3d6a94'}},
+ sit:'Brenda tiene asma desde chica. Llega agitada.',
+ tareas:['Hacer una anamnesis breve.','Clasificar la gravedad de la crisis.','Indicar el tratamiento y las condiciones del alta.'],
+ abre:'Me falta el aire… me silba el pecho desde esta mañana y el puf no me hace nada.',
+ guion:'Asma desde la infancia. Usa sólo salbutamol cuando lo necesita; nunca usó un inhalador preventivo. Resfrío desde hace 2 días. Hoy usó el salbutamol 6 veces, sin aerocámara. Tose de noche. Una internación hace 3 años, nunca terapia intensiva ni respirador. Hace un mes adoptó un gato. No fuma. Sin alergias a medicamentos.',
+ q:[['Crisis','¿Cuándo empezó y qué la desencadenó?','Estoy resfriada hace dos días y hoy a la mañana empecé con falta de aire. Hace un mes tengo un gato.',0],
+    ['Crisis','¿Qué medicación usaste hoy y cómo?','El salbutamol, seis veces. Sin aerocámara, directo en la boca.',1],
+    ['Antecedentes','¿Estuviste internada o en terapia intensiva por asma?','Internada una vez, hace tres años. En terapia nunca.',2],
+    ['Antecedentes','¿Usás algún inhalador todos los días? ¿Fumás? ¿Alergias a medicamentos?','No, sólo el salbutamol cuando lo necesito. No fumo. Alergias no.',3]],
+ x:[['Habla, FR, FC, saturación y estado de conciencia','Habla en frases. FR 26 · FC 112 · saturación 93 % · lúcida.',4],
+    ['Auscultación','Sibilancias difusas en ambos campos, con buena entrada de aire.',4],
+    ['Pico flujo','60 % del valor teórico.',5],
+    ['Rx de tórax y gases arteriales','No se piden de rutina en la crisis asmática.',-9]],
+ d:[['Clasifico la crisis como moderada.','Correcto: habla en frases, FR menor de 30, FC 100-120, saturación 90-95 % y pico flujo mayor de 50 %.',6],
+    ['Indico salbutamol 4 a 6 disparos con aerocámara cada 20 a 30 minutos, hasta 3 veces.','Correcto: un disparo por vez, agitando antes de cada uno.',7],
+    ['Agrego ipratropio 4 disparos con cada salbutamol e inicio corticoide oral (prednisolona 40 a 50 mg).','Correcto.',8],
+    ['Reevalúo a la hora.','Correcto: alta con mejoría sostenida 1 a 2 horas, saturación de 92 % o más y pico flujo mayor de 70 %.',9],
+    ['Al alta: inicio corticoide inhalado (budesonida-formoterol de mantenimiento y rescate), completo el corticoide oral 5 a 7 días, reviso la técnica y entrego un plan escrito.','Correcto: no se trata sólo con salbutamol.',10],
+    ['La cito a control en 2 a 7 días.','Correcto.',11],
+    ['Indico un antibiótico por el resfrío.','Error: no se indican antibióticos de rutina.',-1,8],
+    ['Le doy el alta sólo con salbutamol a demanda.','Error: toda crisis se va con corticoide inhalado.',-1,12],
+    ['Indico un sedante para que se tranquilice.','Error: los sedantes están contraindicados.',-1,10]],
+ cot:[['Interroga inicio y desencadenantes',6,'c'],['Pregunta la medicación usada y la técnica',8,'c'],['Pregunta internaciones y UTI previas',8,'c'],['Pregunta tratamiento de base, tabaco y alergias',6,'c'],['Evalúa habla, FR, FC, saturación, conciencia y auscultación',12,'c'],['Mide el pico flujo',5,'c'],
+      ['Clasifica la gravedad',10,'k'],['Indica salbutamol con aerocámara, dosis e intervalo',12,'k'],['Indica ipratropio y corticoide sistémico',10,'k'],['Reevalúa a la hora y nombra los criterios de alta',8,'s'],['Indica corticoide inhalado, técnica y plan escrito al alta',10,'k'],['Cita a control',5,'s']],
+ claves:['Gravedad por habla, FR, FC, saturación, auscultación y pico flujo. Tórax silencioso o confusión: riesgo vital.','Moderada: salbutamol 4-6 disparos cada 20-30 minutos + ipratropio + corticoide oral.','Grave: salbutamol 6-10 disparos, oxígeno para 92-95 %, corticoide sistémico y sulfato de magnesio 2 g IV si no responde.','Sin Rx, gases, antibióticos ni sedantes de rutina.','Al alta: corticoide inhalado-formoterol, corticoide oral 5-7 días sin descenso, plan escrito y control en 2-7 días.'],
+ ref:'Cuadernillo · Clínica médica · EPOC y asma (GINA 2026).'},
+
+{id:'acv',area:'cli',motivo:'Se le torció la boca y no mueve el brazo',lugar:'Guardia de un hospital con tomógrafo',
+ pt:{n:'Paula (hija de Norma, 71 años)',e:'Norma está en la camilla, despierta',av:{sex:'f',skin:1,hair:'pony',hc:'#5b3a25',mood:'angustia',top:'#3d6a94'}},
+ sit:'Paula trae a su mamá, Norma, que no puede hablar bien. Son las 9:00.',
+ tareas:['Interrogar a la hija.','Examinar y pedir los estudios urgentes.','Decidir la conducta.'],
+ abre:'¡Doctor, a mi mamá se le torció la boca y no puede mover el brazo derecho! Estábamos desayunando.',
+ guion:'Empezó de golpe a las 8:10, mientras desayunaban; Paula la vio bien hasta ese momento. Se le desvió la boca, no mueve el brazo derecho y habla enredado. Norma es hipertensa y toma enalapril. No toma anticoagulantes ni aspirina. No tuvo ACV, golpes en la cabeza, cirugías ni sangrados recientes. No convulsionó. No es diabética. Pesa 70 kg.',
+ q:[['Tiempo','¿A qué hora empezó exactamente? ¿Cuándo fue la última vez que la vio bien?','A las 8 y 10. Estaba perfecta, charlando conmigo, y de golpe se le torció la boca.',0],
+    ['Cuadro','¿Qué notó? ¿Convulsionó o se golpeó?','La boca torcida, no levanta el brazo derecho y habla enredado. No convulsionó ni se golpeó.',1],
+    ['Antecedentes','¿Toma anticoagulantes? ¿Qué medicación toma?','Anticoagulantes no. Toma enalapril para la presión.',2],
+    ['Antecedentes','¿Tuvo un ACV, una cirugía, un golpe fuerte en la cabeza o un sangrado en los últimos tres meses?','No, nada de eso.',2],
+    ['Antecedentes','¿Es diabética? ¿Cuánto pesa?','Diabética no. Pesa unos 70 kilos.',-1]],
+ x:[['Glucemia capilar inmediata','110 mg/dl.',3],
+    ['ABC, PA, saturación y ritmo','Vía aérea permeable. PA 170/95 · FC 84 regular · saturación 96 %.',4],
+    ['Examen neurológico (FAST y NIHSS)','Desviación de la comisura, paresia braquial derecha, afasia de expresión. NIHSS 9.',5],
+    ['TC de cerebro sin contraste, urgente','Sin hemorragia. Sin hipodensidades.',6],
+    ['Laboratorio (hemograma, coagulograma, función renal) y ECG','Se extraen las muestras sin demorar la imagen. ECG: ritmo sinusal.',-1],
+    ['Resonancia de cerebro','No está disponible de urgencia y demora la decisión.',-9]],
+ d:[['Activo el código ACV: es un déficit focal agudo con 50 minutos de evolución.','Correcto: tiempo es cerebro.',7],
+    ['Con TC sin hemorragia, menos de 4,5 horas y sin contraindicaciones: indico trombólisis con alteplase 0,9 mg/kg (10 % en bolo y el resto en 60 minutos).','Correcto. Meta puerta-aguja menor de 60 minutos.',8],
+    ['No bajo la presión: está por debajo de 185/110.','Correcto: sólo se trata por encima de ese valor en candidatos a trombólisis.',9],
+    ['Cabecera a 30°, saturación mayor de 94 %, nada por boca hasta la prueba de deglución, unidad de ACV.','Correcto.',10],
+    ['Le explico a Paula qué pasa, el tratamiento y sus riesgos, y pido el consentimiento.','Correcto.',11],
+    ['Indico aspirina 300 mg ahora.','Error: si se va a trombolizar, se antiagrega recién a las 24 horas con TC de control.',-1,10],
+    ['Bajo la presión con nifedipina sublingual.','Error: bajar la presión empeora la perfusión cerebral.',-1,12],
+    ['Espero el laboratorio completo antes de pedir la tomografía.','Error: nada demora la imagen.',-1,12]],
+ cot:[['Define la hora de inicio o la última vez que estuvo bien',14,'c'],['Interroga el cuadro y descarta convulsión y traumatismo',6,'c'],['Descarta contraindicaciones de trombólisis',10,'c'],['Mide la glucemia capilar de inmediato',8,'c'],['Evalúa ABC, PA y saturación',6,'c'],['Realiza el examen neurológico con una escala',8,'c'],
+      ['Pide TC sin contraste urgente',12,'k'],['Activa el código ACV',8,'s'],['Indica trombólisis con dosis y ventana correctas',12,'k'],['Maneja la presión sin bajarla',6,'k'],['Indica las medidas generales',5,'k'],['Informa a la familia y pide el consentimiento',5,'h']],
+ claves:['Lo primero es la hora de inicio y la glucemia capilar.','TC sin contraste urgente: descarta hemorragia.','Alteplase 0,9 mg/kg (máximo 90 mg) hasta las 4,5 horas. Trombectomía en oclusión de gran vaso hasta las 6 horas.','PA: no tratar salvo más de 220/120, o más de 185/110 si se va a trombolizar.','Sin trombólisis: aspirina en las primeras 24-48 horas. Con trombólisis: a las 24 horas.'],
+ ref:'Cuadernillo · Clínica médica · Accidente cerebrovascular y síncope.'},
+
+{id:'dm2',area:'cli',motivo:'Glucemia alta en un análisis laboral',lugar:'Consultorio de un centro de salud',
+ pt:{n:'Jorge',e:'52 años',av:{sex:'m',skin:2,hair:'short',hc:'#3b3027',mood:'neutral',top:'#3d6a94',beard:1}},
+ sit:'Jorge trae un análisis con glucemia en ayunas de 142 mg/dl. Se siente bien.',
+ tareas:['Completar la anamnesis.','Confirmar el diagnóstico y pedir la evaluación inicial.','Indicar el plan.'],
+ abre:'Me hicieron análisis en el trabajo y me dijeron que tengo el azúcar alta. Yo no siento nada.',
+ guion:'Sin sed, sin orinar de más, sin pérdida de peso ni visión borrosa. Sin hormigueos en los pies. Padre diabético. No sabe si tiene presión alta. No fuma. Toma gaseosas todos los días, come muchas harinas. No hace actividad física, trabaja sentado. Toma cerveza los fines de semana. No toma medicación. Pesa 95 kg y mide 1,75 m.',
+ q:[['Síntomas','¿Tiene mucha sed, orina más, bajó de peso o ve borroso?','No, nada de eso.',0],
+    ['Síntomas','¿Hormigueos en los pies, lastimaduras que no curan, problemas de visión?','No.',1],
+    ['Antecedentes','¿Hay diabetes en la familia? ¿Tiene presión o colesterol alto? ¿Fuma?','Mi papá es diabético. La presión no sé. No fumo.',2],
+    ['Hábitos','¿Cómo come? ¿Hace actividad física? ¿Toma alcohol?','Gaseosa todos los días y muchas harinas. Ejercicio nada. Cerveza los fines de semana.',3]],
+ x:[['Repito la glucemia en ayunas y pido HbA1c','Glucemia 138 mg/dl · HbA1c 7,2 %. Dos determinaciones alteradas confirman el diagnóstico.',4],
+    ['Peso, talla, IMC, cintura y presión arterial','95 kg · 1,75 m · IMC 31 · cintura 108 cm · PA 128/82.',5],
+    ['Examen del pie: inspección, pulsos y monofilamento','Piel sana. Pulsos pedio y tibial posterior presentes. Monofilamento normal.',6],
+    ['Perfil lipídico, creatinina con FGe, RACo, hepatograma y orina','LDL 135 · FGe 88 · RACo normal.',7],
+    ['Fondo de ojo y ECG','Se solicitan al diagnóstico. El fondo de ojo luego es anual.',7]],
+ d:[['Le confirmo que tiene diabetes tipo 2: dos glucemias en ayunas de 126 o más.','Correcto: sin síntomas se necesita una segunda determinación.',8],
+    ['Indico metformina 500 a 850 mg con las comidas y, a los 5 a 7 días, subo a 850 a 1000 mg cada 12 horas.','Correcto: HbA1c menor de 7,5 % = monoterapia.',9],
+    ['Acordamos cambios concretos: sacar las gaseosas, plan de alimentación y 150 a 300 minutos semanales de actividad física.','Correcto.',10],
+    ['Le explico la meta (HbA1c menor de 7 %), las vacunas y el control en 3 meses.','Correcto: antigripal, neumococo, hepatitis B y doble adultos.',11],
+    ['Indico glibenclamida.','Error: la guía pide evitarla por el riesgo de hipoglucemia.',-1,10],
+    ['Indico insulina desde hoy.','Error: no tiene síntomas catabólicos ni HbA1c de 10 % o más.',-1,10],
+    ['Le digo que con una sola glucemia de 142 ya es diabético y no pido nada más.','Error: sin síntomas, el diagnóstico se confirma con una segunda determinación.',-1,8]],
+ cot:[['Pregunta síntomas cardinales',6,'c'],['Pregunta síntomas de complicaciones',5,'c'],['Pregunta antecedentes y factores de riesgo',6,'c'],['Interroga alimentación, actividad física y alcohol',8,'c'],['Confirma con una segunda determinación',12,'k'],['Mide peso, IMC, cintura y PA',6,'c'],['Examina el pie con pulsos y monofilamento',10,'c'],['Pide laboratorio inicial, fondo de ojo y ECG',10,'k'],
+      ['Explica el diagnóstico',7,'h'],['Indica metformina con titulación',12,'k'],['Acuerda cambios de hábitos concretos',10,'h'],['Explica la meta, las vacunas y el seguimiento',8,'s']],
+ claves:['Glucemia en ayunas de 126 o más, HbA1c de 6,5 % o más, o PTOG de 200 o más; sin síntomas, dos determinaciones.','HbA1c menor de 7,5 %: monoterapia; 7,5 a 10 %: terapia dual; 10 % o más con síntomas: insulina.','Metformina: empezar bajo y subir a los 5-7 días. Contraindicada con FGe menor de 30.','Con enfermedad cardiovascular, insuficiencia cardíaca o renal: priorizar iSGLT-2 o arGLP-1.','Examen del pie y fondo de ojo desde el diagnóstico.'],
+ ref:'Cuadernillo · Clínica médica · Diabetes mellitus tipo 2 (Guía SAD 2025).'},
+
+{id:'coleci',area:'cir',motivo:'Dolor debajo de las costillas desde anoche',lugar:'Guardia',
+ pt:{n:'Silvia',e:'45 años',av:{sex:'f',skin:1,hair:'bob',hc:'#7a4a2a',mood:'dolor',top:'#2e6b34'}},
+ sit:'Silvia consulta por dolor abdominal que no cede.',
+ tareas:['Hacer la anamnesis del dolor.','Examinar y pedir los estudios.','Decir el diagnóstico y la conducta.'],
+ abre:'Me duele acá, debajo de las costillas del lado derecho, desde anoche. Ya van como diez horas.',
+ guion:'Dolor en el hipocondrio derecho de 10 horas, continuo, empezó después de comer un asado, se corre a la espalda y al hombro derecho. Vomitó dos veces. Tuvo 38,2 de fiebre. Tuvo episodios parecidos, más cortos, que se iban solos en una hora. Sin piel amarilla, orina normal, materia fecal de color normal. Tiene ligadura tubaria, FUM hace 2 semanas. No toma alcohol. Sin cirugías ni alergias.',
+ q:[['Dolor','¿Dónde es, cómo empezó y hacia dónde se corre?','Debajo de las costillas, a la derecha. Empezó después de un asado. Se me va a la espalda y al hombro.',0],
+    ['Dolor','¿Cuánto hace? ¿Te pasó antes?','Diez horas, no afloja. Antes me agarraba pero se iba en una hora.',1],
+    ['Asociados','¿Fiebre, vómitos?','Vomité dos veces y tuve 38,2.',2],
+    ['Asociados','¿Te pusiste amarilla? ¿Orina oscura, materia fecal blanca?','No, todo normal.',3],
+    ['Antecedentes','¿Fecha de última menstruación? ¿Alcohol? ¿Cirugías o alergias?','Hace dos semanas; tengo ligadura. Alcohol no. Cirugías y alergias no.',4]],
+ x:[['Signos vitales','PA 125/80 · FC 100 · 38,3 °C.',5],
+    ['Examen abdominal','Dolor en el hipocondrio derecho con defensa. Signo de Murphy positivo. Sin ictericia.',6],
+    ['Hemograma, hepatograma y amilasa','Leucocitos 15.200. Bilirrubina y fosfatasa alcalina normales. Amilasa normal.',7],
+    ['Ecografía abdominal','Vesícula con litiasis, pared de 5 mm y líquido perivesicular. Vía biliar de 4 mm.',8],
+    ['TC de abdomen con contraste','No hace falta: la ecografía es el estudio de elección.',-9]],
+ d:[['Diagnóstico: colecistitis aguda litiásica.','Correcto: dolor de más de 6 horas, fiebre, Murphy, leucocitosis y ecografía compatible.',9],
+    ['Interno, indico ayuno, hidratación, analgesia y antibiótico.','Correcto.',10],
+    ['Interconsulta con cirugía para colecistectomía laparoscópica temprana, dentro de las 72 horas.','Correcto.',11],
+    ['Le explico el diagnóstico y la cirugía.','Bien.',12],
+    ['Le doy analgésicos, el alta y un turno para operarse en unos meses.','Error: esa es la conducta del cólico biliar, no de la colecistitis.',-1,20],
+    ['Pido una CPRE urgente.','Error: no hay ictericia, colestasis ni vía biliar dilatada.',-1,10]],
+ cot:[['Caracteriza el dolor y su relación con la comida',8,'c'],['Pregunta la duración y los episodios previos',8,'c'],['Pregunta fiebre y vómitos',6,'c'],['Pregunta ictericia, coluria y acolia',8,'c'],['Pregunta FUM, alcohol, cirugías y alergias',5,'c'],['Controla signos vitales',5,'c'],['Examina el abdomen y busca el signo de Murphy',10,'c'],
+      ['Pide hemograma, hepatograma y amilasa',8,'k'],['Pide ecografía',10,'k'],['Diagnostica colecistitis aguda',10,'k'],['Interna e indica ayuno, hidratación, analgesia y antibiótico',10,'k'],['Indica colecistectomía temprana',7,'s'],['Explica a la paciente',5,'h']],
+ claves:['Cólico biliar: menos de 6 horas, sin fiebre; analgesia y cirugía programada.','Colecistitis: más de 6 horas, fiebre, Murphy; internación, antibiótico y colecistectomía dentro de las 72 horas.','Ictericia + colestasis + vía biliar mayor de 6-7 mm: coledocolitiasis; CPRE.','Charcot (fiebre, ictericia, dolor): colangitis; antibiótico y drenaje urgente.','La ecografía es el primer estudio de la vía biliar.'],
+ ref:'Cuadernillo · Cirugía general · Abdomen agudo.'},
+
+{id:'herida',area:'cir',motivo:'Corte en el antebrazo',lugar:'Guardia',
+ pt:{n:'Mario',e:'34 años',av:{sex:'m',skin:3,hair:'short',hc:'#17120f',mood:'neutral',top:'#2e6b34'}},
+ sit:'Mario se cortó el antebrazo izquierdo con un cuchillo de cocina. Trae la herida envuelta en un repasador.',
+ tareas:['Interrogar lo necesario.','Evaluar la herida.','Explicar el procedimiento, la profilaxis y los cuidados.'],
+ abre:'Me corté cocinando, se me resbaló el cuchillo. Sangraba bastante.',
+ guion:'Corte hace 2 horas con un cuchillo de cocina limpio, en su casa. Lo lavó con agua. Vacunas completas de chico; la última antitetánica fue hace unos 12 años. Sin diabetes ni otras enfermedades. No toma anticoagulantes. Sin alergias; le pusieron anestesia en el dentista sin problemas. Es diestro, trabaja de mozo.',
+ q:[['Herida','¿Con qué te cortaste, dónde y hace cuánto?','Con un cuchillo de cocina, limpio, en casa. Hace dos horas.',0],
+    ['Vacunas','¿Cuándo te diste la última antitetánica?','Tengo todas las de chico. La última fue hace como 12 años.',1],
+    ['Antecedentes','¿Diabetes u otra enfermedad? ¿Tomás anticoagulantes?','No, nada.',2],
+    ['Antecedentes','¿Alergia a la anestesia o a algún medicamento?','No. En el dentista me pusieron anestesia sin problema.',2]],
+ x:[['Inspección de la herida','Herida lineal de 4 cm, bordes netos, hasta el celular subcutáneo. Sin cuerpos extraños. Sangrado escaso.',3],
+    ['Pulso, sensibilidad y movilidad distales, antes de anestesiar','Pulso radial presente. Sensibilidad y movilidad de los dedos conservadas. Tendones indemnes.',4],
+    ['Rx del antebrazo','No hace falta: no se sospechan cuerpos extraños.',-9]],
+ d:[['Le explico el procedimiento y pido su consentimiento.','Correcto.',5],
+    ['Lavado de manos y guantes; irrigación abundante con solución fisiológica; antisepsia de la piel y campo estéril.','Correcto.',6],
+    ['Anestesia local con lidocaína al 1-2 %, sin superar 4,5 mg/kg.','Correcto.',7],
+    ['Cierre primario con puntos separados de nailon 4-0.','Correcto: herida limpia de menos de 6 a 8 horas.',8],
+    ['Indico la vacuna doble adultos.','Correcto: esquema completo con última dosis hace más de 10 años.',9],
+    ['Cuidados: mantener limpia y seca, signos de infección, y retiro de puntos a los 7 a 10 días.','Correcto para el miembro superior.',10],
+    ['Indico además gammaglobulina antitetánica.','Error: sólo con esquema incompleto o desconocido y herida tetanígena.',-1,8],
+    ['Indico antibiótico preventivo.','Error: es una herida limpia sin factores de riesgo.',-1,6],
+    ['Anestesio primero y después reviso la sensibilidad y los tendones.','Error: la función distal se evalúa antes de anestesiar.',-1,8]],
+ cot:[['Interroga mecanismo, lugar y tiempo de evolución',8,'c'],['Pregunta el estado de vacunación antitetánica',10,'c'],['Pregunta enfermedades, anticoagulantes y alergias',6,'c'],['Describe la herida y descarta cuerpos extraños',8,'c'],['Evalúa pulso, sensibilidad y función tendinosa antes de anestesiar',12,'c'],
+      ['Explica y pide el consentimiento',8,'h'],['Nombra la irrigación y la antisepsia',10,'k'],['Indica la anestesia con dosis máxima',8,'k'],['Indica cierre primario con el hilo adecuado',8,'k'],['Indica la profilaxis antitetánica correcta',12,'k'],['Da pautas de cuidado y fecha de retiro de puntos',10,'s']],
+ claves:['Función neurovascular y tendinosa antes de anestesiar.','Cierre primario en heridas limpias de menos de 6-8 horas (24 en cara y cuero cabelludo). No suturar mordeduras ni heridas muy contaminadas.','Lidocaína: máximo 4,5 mg/kg sin epinefrina. Sin epinefrina en dedos, nariz, orejas ni pene.','Antitetánica: esquema completo y más de 10 años, vacuna. Incompleto o desconocido con herida sucia, vacuna + gammaglobulina 250 UI.','Retiro de puntos: cara 4-5 días; tronco y miembros superiores 7-10; miembros inferiores y manos 10-14.'],
+ ref:'Cuadernillo · Cirugía general · Heridas, suturas y profilaxis antitetánica.'},
+
+{id:'rao',area:'uro',motivo:'No puede orinar desde hace 10 horas',lugar:'Guardia',
+ pt:{n:'Alberto',e:'72 años',av:{sex:'m',skin:1,hair:'thin',hc:'#c9c4bc',mood:'dolor',top:'#8A6400',old:1,glasses:1}},
+ sit:'Alberto llega dolorido, tomándose el bajo vientre.',
+ tareas:['Hacer la anamnesis dirigida.','Examinar.','Resolver el cuadro y explicar los pasos siguientes.'],
+ abre:'Doctor, tengo ganas de orinar y no me sale nada desde anoche. Me duele mucho acá abajo.',
+ guion:'No orina desde hace 10 horas, con dolor suprapúbico. Desde hace 2 años tiene chorro débil, tarda en empezar y se levanta 3 veces por noche. Ayer empezó a tomar un antigripal con descongestivo por un resfrío. Es la primera vez que le pasa. Sin fiebre ni ardor. Nunca orinó con sangre. Está constipado hace 3 días. No toma anticoagulantes. Hipertenso, toma amlodipina.',
+ q:[['Cuadro','¿Desde cuándo no orina? ¿Le había pasado antes?','Desde anoche, unas diez horas. Es la primera vez.',0],
+    ['Síntomas previos','¿Cómo venía orinando? ¿Chorro débil, se levanta de noche?','Hace dos años que el chorro es flojo, tardo en arrancar y me levanto tres veces.',1],
+    ['Desencadenantes','¿Empezó algún medicamento nuevo? ¿Está constipado? ¿Tomó alcohol?','Ayer empecé un antigripal por un resfrío. Hace tres días que no voy de cuerpo. Alcohol no.',2],
+    ['Asociados','¿Fiebre, ardor, sangre en la orina?','No, nada.',3],
+    ['Antecedentes','¿Toma anticoagulantes u otra medicación?','Amlodipina para la presión. Anticoagulantes no.',-1]],
+ x:[['Examen abdominal','Globo vesical palpable hasta el ombligo, doloroso, con matidez suprapúbica.',4],
+    ['Tacto rectal','Próstata aumentada de tamaño, elástica, lisa, con surco medio conservado y sin nódulos. Ampolla con materia fecal.',5],
+    ['Ecografía vesical','Volumen vesical estimado de 700 ml.',-1]],
+ d:[['Diagnóstico: retención aguda de orina, probable hiperplasia prostática, desencadenada por el descongestivo y la constipación.','Correcto.',6],
+    ['Le explico el sondaje y pido su consentimiento.','Correcto.',7],
+    ['Coloco una sonda Foley 16-18 Fr: antisepsia, campo estéril, gel de lidocaína y espera de 2 a 5 minutos.','Correcto.',8],
+    ['Inflo el balón recién cuando sale orina, y conecto la bolsa colectora.','Correcto: evita lesionar la uretra.',9],
+    ['Después pido orina, urocultivo y creatinina.','Correcto.',10],
+    ['Suspendo el antigripal, trato la constipación, indico tamsulosina 0,4 mg y prueba de retiro de la sonda en 3 a 7 días, con derivación a urología.','Correcto.',11],
+    ['Indico furosemida para que orine.','Error: aumenta la distensión vesical; el problema es obstructivo.',-1,15],
+    ['Inflo el balón apenas entra la sonda, antes de ver orina.','Error: puede inflarse en la uretra.',-1,10]],
+ cot:[['Interroga el tiempo de retención y los episodios previos',6,'c'],['Pregunta síntomas urinarios previos',8,'c'],['Busca desencadenantes (fármacos, constipación, alcohol)',10,'c'],['Pregunta fiebre, disuria y hematuria',6,'c'],['Palpa y percute el globo vesical',10,'c'],['Realiza el tacto rectal y lo describe',10,'c'],
+      ['Formula el diagnóstico y su causa',8,'k'],['Explica el sondaje y pide el consentimiento',8,'h'],['Describe la técnica estéril del sondaje',12,'k'],['Infla el balón sólo tras ver orina',7,'k'],['Pide orina, urocultivo y creatinina',5,'k'],['Indica alfabloqueante, retiro de la sonda y derivación',10,'s']],
+ claves:['Retención aguda: imposibilidad súbita y dolorosa de orinar con globo vesical. Tratamiento: sonda vesical.','Buscar el desencadenante: descongestivos, antihistamínicos, anticolinérgicos, opioides, constipación, infección.','Balón: inflar sólo después de ver orina.','Luego: alfabloqueante y prueba de retiro de la sonda en 3-7 días.','Cirugía en la HPB: retención recurrente, ITU o hematuria recurrentes, litiasis vesical, insuficiencia renal.'],
+ ref:'Cuadernillo · Urología · Hiperplasia prostática benigna y retención aguda de orina.'},
+
+{id:'tobillo',area:'tra',motivo:'Torcedura de tobillo jugando al vóley',lugar:'Guardia',
+ pt:{n:'Julieta',e:'26 años',av:{sex:'f',skin:1,hair:'pony',hc:'#c9a36b',mood:'dolor',top:'#6D4C41'}},
+ sit:'Julieta entra rengueando. Pide una radiografía.',
+ tareas:['Interrogar el mecanismo.','Examinar y decidir si corresponde una radiografía.','Indicar el tratamiento.'],
+ abre:'Me doblé el tobillo derecho al caer de un salto. Se me hinchó enseguida. ¿Me hacen una placa?',
+ guion:'Hace 3 horas, jugando al vóley, cayó con el pie hacia adentro. Pudo salir de la cancha caminando, rengueando. Se hinchó la parte de afuera del tobillo. No escuchó un chasquido. Es el primer esguince. No está embarazada (FUM hace una semana). Sin enfermedades ni alergias. Juega en un equipo y tiene partido en dos semanas.',
+ q:[['Mecanismo','¿Cómo fue la caída? ¿Hacia dónde se dobló el pie?','Caí de un salto y el pie se me fue hacia adentro.',0],
+    ['Mecanismo','¿Pudiste apoyar y caminar después?','Sí, salí caminando, rengueando.',1],
+    ['Antecedentes','¿Te habías esguinzado antes este tobillo?','No, es la primera vez.',2],
+    ['Antecedentes','¿Podés estar embarazada? ¿Alergias?','No, me vino hace una semana. Alergias no.',3]],
+ x:[['Inspección','Edema y equimosis en la cara lateral del tobillo. Sin deformidad.',4],
+    ['Palpación de los maléolos (borde posterior y punta), base del quinto metatarsiano y escafoides','Sin dolor óseo en ninguno de esos puntos. Dolor por delante y por debajo del maléolo lateral, sobre los ligamentos.',5],
+    ['Palpación del peroné proximal','Indoloro.',6],
+    ['Capacidad de dar 4 pasos','Da cuatro pasos con dolor.',5],
+    ['Cajón anterior y estado neurovascular','Laxitud leve con tope firme. Pulsos y sensibilidad normales.',7],
+    ['Rx de tobillo','No está indicada: las reglas de Ottawa son negativas.',-9]],
+ d:[['Le explico que no necesita radiografía: no tiene dolor óseo en los puntos de Ottawa y puede dar 4 pasos.','Correcto.',8],
+    ['Diagnóstico: esguince lateral de tobillo de grado II.','Correcto: equimosis, dolor al apoyar y laxitud leve.',9],
+    ['Indico hielo, compresión, elevación y un AINE por pocos días.','Correcto.',10],
+    ['Indico inmovilización funcional (tobillera o bota tipo walker) por 2 a 3 semanas, con movilización y carga precoz.','Correcto: es superior a la inmovilización rígida.',11],
+    ['Indico kinesiología con ejercicios de propiocepción y control. Si no mejora en 4 a 6 semanas, derivo a traumatología.','Correcto: la propiocepción previene la recurrencia.',12],
+    ['Indico bota de yeso por 6 semanas sin apoyar.','Error: la inmovilización rígida prolongada retrasa la recuperación.',-1,12]],
+ cot:[['Interroga el mecanismo',6,'c'],['Pregunta si pudo cargar peso',8,'c'],['Pregunta esguinces previos',4,'c'],['Descarta embarazo y alergias',4,'c'],['Inspecciona',5,'c'],['Aplica las reglas de Ottawa (puntos óseos y 4 pasos)',16,'c'],['Palpa el peroné proximal',7,'c'],['Evalúa estabilidad y estado neurovascular',8,'c'],
+      ['Explica por qué no pide radiografía',10,'h'],['Clasifica el esguince',8,'k'],['Indica las medidas iniciales',7,'k'],['Indica tratamiento funcional',10,'k'],['Indica rehabilitación y seguimiento',7,'s']],
+ claves:['Ottawa tobillo: dolor maleolar + dolor óseo en el borde posterior o la punta de un maléolo, o no poder dar 4 pasos.','Ottawa pie: dolor en el mediopié + base del quinto metatarsiano, escafoides o no poder dar 4 pasos.','Palpar siempre el peroné proximal (Maisonneuve).','Grado I vendaje y apoyo; grado II inmovilización funcional 2-3 semanas; grado III bota 3-6 semanas y derivación.','Tratamiento funcional con carga precoz y propiocepción.'],
+ ref:'Cuadernillo · Traumatología · Esguince de tobillo y fractura de radio distal.'},
+
+{id:'cadera',area:'tra',motivo:'Caída en el baño y dolor en la ingle',lugar:'Guardia',
+ pt:{n:'Rosa',e:'82 años',av:{sex:'f',skin:1,hair:'bun',hc:'#d8d4cd',mood:'dolor',top:'#6D4C41',old:1}},
+ sit:'Rosa llega en ambulancia, acostada. Su hija viene en camino.',
+ tareas:['Interrogar la caída y el estado previo.','Examinar y pedir los estudios.','Indicar el manejo inicial y explicar el plan.'],
+ abre:'Me caí anoche en el baño, querido. Me duele mucho la ingle y no puedo pararme.',
+ guion:'Se levantó a orinar de noche, se mareó al pararse y cayó de costado. No perdió el conocimiento ni se golpeó la cabeza. Estuvo unas 2 horas en el piso hasta que llegó la vecina. Dolor en la ingle derecha, no puede apoyar. Toma enalapril y clonazepam para dormir. No toma anticoagulantes. Vive sola, caminaba sin bastón y se manejaba sola. Su hija vive a dos cuadras. Es la segunda caída del año.',
+ q:[['Caída','¿Cómo fue la caída? ¿Qué sintió antes?','Me levanté a hacer pis, me mareé al pararme y me caí de costado.',0],
+    ['Caída','¿Perdió el conocimiento? ¿Se golpeó la cabeza? ¿Cuánto estuvo en el piso?','No me desmayé ni me golpeé la cabeza. Estuve como dos horas hasta que vino la vecina.',1],
+    ['Fármacos','¿Qué medicación toma? ¿Anticoagulantes?','Enalapril y clonazepam para dormir. Anticoagulantes no.',2],
+    ['Estado previo','¿Cómo se manejaba antes? ¿Con quién vive? ¿Se había caído antes?','Caminaba sola, sin bastón. Vivo sola, mi hija está a dos cuadras. Ya me caí otra vez este año.',3]],
+ x:[['Signos vitales','PA 135/80 · FC 88 · saturación 96 % · lúcida y orientada.',-1],
+    ['Inspección y examen del miembro inferior derecho','Miembro acortado y en rotación externa. Dolor inguinal a la movilización. Pulsos y sensibilidad distales conservados.',4],
+    ['Búsqueda de otras lesiones (cabeza, muñecas, columna)','Sin otras lesiones.',5],
+    ['Rx de pelvis frente y de cadera frente y axial','Fractura desplazada del cuello femoral derecho (intracapsular).',6],
+    ['Prequirúrgico: hemograma, coagulograma, grupo y factor, función renal, ionograma, ECG y Rx de tórax','Hemoglobina 11,2. Resto sin alteraciones.',7],
+    ['Densitometría','No hace falta: la fractura por fragilidad ya diagnostica osteoporosis.',-9]],
+ d:[['Indico analgesia (paracetamol, opioide a dosis baja o bloqueo), hidratación e internación.','Correcto.',8],
+    ['Indico tromboprofilaxis con enoxaparina 40 mg por día.','Correcto: se continúa unos 35 días.',9],
+    ['Interconsulta con traumatología para operar dentro de las 24 a 48 horas (artroplastia), con manejo conjunto con clínica.','Correcto: intracapsular desplazada en adulta mayor = prótesis. La cirugía temprana reduce la mortalidad.',10],
+    ['Le explico a Rosa y a su hija el diagnóstico, la cirugía y que va a caminar al día siguiente.','Correcto: movilización y carga precoz.',11],
+    ['Antes del alta: tratar la osteoporosis y evaluar las caídas (revisar el clonazepam, la visión, el calzado y la casa).','Correcto: prevención secundaria.',12],
+    ['Indico tracción del miembro hasta la cirugía.','Error: la tracción no se usa de rutina.',-1,8],
+    ['Indico reposo en cama por seis semanas, sin cirugía.','Error: el tratamiento conservador se reserva para quien no deambulaba o tiene un riesgo inaceptable.',-1,20]],
+ cot:[['Interroga el mecanismo y la causa de la caída',10,'c'],['Pregunta pérdida de conocimiento, golpe en la cabeza y tiempo en el suelo',6,'c'],['Pregunta medicación y anticoagulantes',8,'c'],['Pregunta el estado funcional y el apoyo social',8,'c'],['Examina el miembro y el estado neurovascular',10,'c'],['Busca otras lesiones',5,'c'],
+      ['Pide las radiografías correctas',8,'k'],['Pide el prequirúrgico',6,'k'],['Indica analgesia e internación',8,'k'],['Indica tromboprofilaxis',8,'k'],['Plantea la cirugía dentro de las 24 a 48 horas',10,'s'],['Explica a la paciente y a la familia',5,'h'],['Plantea la prevención secundaria',8,'s']],
+ claves:['Miembro acortado y en rotación externa tras una caída de la propia altura.','Intracapsular desplazada en adulto mayor: artroplastia. Extracapsular: osteosíntesis.','Cirugía dentro de las 24-48 horas; movilización al día siguiente.','Enoxaparina 40 mg por día; sin tracción de rutina.','La fractura por fragilidad diagnostica osteoporosis: se trata sin densitometría. Evaluar siempre la causa de la caída.'],
+ ref:'Cuadernillo · Traumatología · Fractura de cadera del adulto mayor y osteoporosis.'},
+
+{id:'bronq',area:'ped',motivo:'Lactante con tos y dificultad para respirar',lugar:'Guardia pediátrica, en invierno',
+ pt:{n:'Micaela (mamá de Thiago, 4 meses)',e:'Thiago pesa 6,5 kg',av:{sex:'f',skin:2,hair:'long',hc:'#3a2418',mood:'angustia',top:'#BF5B0A',baby:1}},
+ sit:'Micaela trae a Thiago porque respira agitado.',
+ tareas:['Interrogar a la mamá.','Examinar a Thiago y valorar la gravedad.','Indicar la conducta y las pautas.'],
+ abre:'Está con mocos hace tres días y hoy lo veo que respira rápido y le silba el pecho.',
+ guion:'Mocos y tos desde hace 3 días; hoy respira rápido y con silbidos. Es la primera vez. Toma el pecho pero se cansa y toma la mitad. Moja algo menos los pañales. Tuvo 37,8. No se puso morado ni dejó de respirar. Nació a término con 3400 g, sin internaciones. Vacunas al día. Tiene un hermano de 4 años resfriado, que va al jardín. El papá fuma dentro de la casa. Viven a 10 cuadras del hospital.',
+ q:[['Cuadro','¿Cuándo empezó y cómo siguió? ¿Le había pasado antes?','Hace tres días con mocos y tos. Hoy empezó a respirar rápido. Es la primera vez.',0],
+    ['Alimentación','¿Está tomando el pecho? ¿Moja los pañales?','Toma pero se cansa, toma la mitad. Los pañales, un poco menos.',1],
+    ['Alarma','¿Se puso morado o hizo pausas al respirar? ¿Fiebre?','No. Tuvo 37,8.',2],
+    ['Antecedentes','¿Nació a término? ¿Estuvo internado? ¿Tiene las vacunas?','A término, 3 kilos 400. Nunca internado. Vacunas al día.',3],
+    ['Ambiente','¿Hay alguien enfermo en casa? ¿Alguien fuma?','El hermanito está resfriado. El papá fuma adentro.',4]],
+ x:[['FR, FC, saturación y temperatura','FR 58 · FC 145 · saturación 94 % · 37,6 °C.',5],
+    ['Tiraje y auscultación','Tiraje subcostal. Sibilancias en la inspiración y la espiración. Espiración prolongada.',5],
+    ['Hidratación y estado general','Mucosas húmedas. Reactivo, llora con lágrimas.',6],
+    ['Rx de tórax y laboratorio','No se piden de rutina en la bronquiolitis.',-9]],
+ d:[['Diagnóstico: bronquiolitis. Puntaje de Tal de 7: moderada.','Correcto: FC 2, FR 2, sibilancias 2, tiraje 1.',7],
+    ['Indico oxígeno, posición semisentada, lavados nasales y aspiración de secreciones.','Correcto: oxígeno con puntaje de 7 o más.',8],
+    ['Hago la prueba de hospitalización abreviada: salbutamol 2 disparos con aerocámara y máscara cada 20 minutos durante una hora.','Correcto.',9],
+    ['Reevalúo a la hora: con 5 o menos, alta; con 6 o más, segunda hora con corticoide; si sigue igual, interno.','Correcto.',10],
+    ['Si se va de alta: pecho fraccionado, lavados nasales, no fumar en la casa, pautas de alarma y control en 24 horas.','Correcto: alarma si respira más rápido, se le hunde el pecho, no come, tiene pausas o cambia de color.',11],
+    ['Indico un antibiótico.','Error: es un cuadro viral.',-1,10],
+    ['Indico kinesiología respiratoria y nebulizaciones con solución hipertónica.','Error: no están indicadas de rutina.',-1,6]],
+ cot:[['Interroga la evolución y si es el primer episodio',6,'c'],['Pregunta alimentación y diuresis',10,'c'],['Pregunta apneas, cianosis y fiebre',8,'c'],['Pregunta factores de riesgo personales',8,'c'],['Pregunta contactos y tabaquismo en el hogar',5,'c'],['Mide FR, FC y saturación, y evalúa tiraje y sibilancias',12,'c'],['Evalúa la hidratación',5,'c'],
+      ['Diagnostica bronquiolitis y calcula el puntaje de Tal',12,'k'],['Indica oxígeno y medidas de sostén',8,'k'],['Indica la serie de salbutamol con técnica correcta',8,'k'],['Reevalúa a la hora y define la conducta',8,'s'],['Da pautas de alarma y cita en 24 horas',10,'h']],
+ claves:['Bronquiolitis: primer episodio de sibilancias en un menor de 2 años; diagnóstico clínico, sin Rx ni laboratorio.','Tal: FC, FR, sibilancias y tiraje. Leve hasta 4; moderada 5-8; grave 9 o más.','Sostén: oxígeno si la saturación es de 92 % o menos, lavados nasales y alimentación fraccionada.','Moderada: salbutamol 2 disparos cada 20 minutos por una hora y reevaluar.','Internar: puntaje grave, saturación de 92 % o menos, apneas, rechazo del alimento, menor de 1-3 meses con factores de riesgo.'],
+ ref:'Cuadernillo · Pediatría · Infección respiratoria aguda baja.'},
+
+{id:'prenatal',area:'obs',motivo:'Primera consulta de embarazo',lugar:'Consultorio de un centro de salud',
+ pt:{n:'Florencia',e:'27 años',av:{sex:'f',skin:2,hair:'bun',hc:'#5a3520',mood:'neutral',top:'#6A2C91'}},
+ sit:'Florencia tiene un test de embarazo positivo y viene a su primer control.',
+ tareas:['Hacer la anamnesis de la primera consulta.','Examinar y pedir los estudios del primer trimestre.','Indicar suplementos, vacunas y pautas.'],
+ abre:'Hola, doctor. Me hice un test y dio positivo. Estamos muy contentos. ¿Qué tengo que hacer?',
+ guion:'Embarazo buscado. FUM hace 9 semanas, segura, ciclos regulares. Primer embarazo. Sin enfermedades ni cirugías. No toma ácido fólico ni otra medicación. Fuma 5 cigarrillos por día; no toma alcohol. Su mamá es diabética. Doble adultos hace 3 años; no se dio la antigripal. Trabaja en una panadería. Pareja estable que la acompaña; se siente segura y bien tratada. No conoce su grupo sanguíneo. Náuseas matinales leves.',
+ q:[['Embarazo','¿Cuándo fue tu última menstruación? ¿Tus ciclos son regulares?','Hace nueve semanas, estoy segura. Soy regular.',0],
+    ['Embarazo','¿Tuviste otros embarazos? ¿Era un embarazo buscado?','Es el primero, y lo buscábamos.',1],
+    ['Antecedentes','¿Tenés alguna enfermedad? ¿Tomás medicación? ¿Antecedentes en la familia?','Soy sana y no tomo nada. Mi mamá es diabética.',2],
+    ['Hábitos','¿Fumás, tomás alcohol o consumís otra sustancia?','Fumo cinco cigarrillos por día. Alcohol y otras cosas no.',3],
+    ['Prevención','¿Qué vacunas tenés? ¿Estás tomando ácido fólico?','La doble hace tres años. La de la gripe no. Ácido fólico no tomo.',4],
+    ['Contexto','¿Cómo es tu situación en casa y en el trabajo? ¿Te sentís segura y bien tratada por tu pareja?','Trabajo en una panadería. Mi pareja me acompaña, estoy bien.',5]],
+ x:[['Peso, talla, IMC y presión arterial','62 kg · 1,64 m · IMC 23 · PA 110/70.',6],
+    ['Examen clínico general, mamario, odontológico y ginecológico','Sin particularidades. PAP al día.',7],
+    ['Laboratorio del primer trimestre','Grupo y factor, hemograma, glucemia, orina y urocultivo, VDRL, VIH, HBsAg, toxoplasmosis y Chagas.',8],
+    ['Ecografía entre las 11 y las 13 semanas y 6 días','Se solicita: confirma la edad gestacional y mide la translucencia nucal.',9],
+    ['PTOG con 75 g','No corresponde ahora: se pide entre las 24 y las 28 semanas.',-9]],
+ d:[['Calculo la fecha probable de parto con la regla de Naegele y la edad gestacional actual: 9 semanas.','Correcto: FUM + 7 días − 3 meses.',10],
+    ['Indico ácido fólico 0,4 mg por día hasta la semana 12 y hierro 60 mg por día.','Correcto.',11],
+    ['Indico la vacuna antigripal ahora y la triple bacteriana acelular desde la semana 20.','Correcto.',12],
+    ['Le aconsejo dejar de fumar y le ofrezco ayuda.','Correcto.',13],
+    ['Ofrezco serología de sífilis y VIH también a la pareja.','Correcto.',14],
+    ['Explico los signos de alarma (sangrado, dolor, fiebre, pérdida de líquido), entrego la libreta sanitaria y la cito en un mes.','Correcto: control mensual hasta las 32 semanas.',15],
+    ['Indico aspirina 150 mg a la noche.','Error: sólo en las de alto riesgo de preeclampsia.',-1,6]],
+ cot:[['Pregunta la FUM y la regularidad de los ciclos',6,'c'],['Pregunta antecedentes obstétricos y si el embarazo es deseado',5,'c'],['Pregunta antecedentes personales, familiares y medicación',6,'c'],['Pregunta tabaco, alcohol y otras sustancias',6,'c'],['Pregunta vacunas y ácido fólico',5,'c'],['Explora la situación social y pesquisa violencia',6,'c'],['Mide peso, talla, IMC y PA',6,'c'],['Realiza el examen clínico, mamario y odontológico',4,'c'],
+      ['Pide el laboratorio del primer trimestre completo',12,'k'],['Pide la ecografía de las 11-13 semanas',6,'k'],['Calcula la edad gestacional y la fecha probable de parto',8,'k'],['Indica ácido fólico y hierro',8,'k'],['Indica las vacunas',6,'k'],['Aconseja dejar de fumar',5,'h'],['Ofrece serología a la pareja',4,'s'],['Da signos de alarma, libreta y próximo control',7,'s']],
+ claves:['Control precoz (antes de las 12-13 semanas), periódico, completo y de amplia cobertura.','Primer trimestre: grupo y factor, hemograma, glucemia, orina y urocultivo, VDRL, VIH, HBsAg, toxoplasmosis y Chagas.','Ácido fólico 0,4 mg hasta la semana 12 (4-5 mg con antecedente de defecto del tubo neural). Hierro 60 mg.','Antigripal en cualquier trimestre; triple bacteriana acelular desde la semana 20.','PTOG a las 24-28 semanas; estreptococo B a las 35-37.'],
+ ref:'Cuadernillo · Obstetricia · Control prenatal.'},
+
+{id:'hpp',area:'obs',motivo:'Sangrado abundante después del parto',lugar:'Sala de partos',
+ pt:{n:'Daiana',e:'31 años · parto vaginal hace 20 minutos',av:{sex:'f',skin:3,hair:'long',hc:'#120e0c',mood:'agitado',top:'#6A2C91',sweat:1}},
+ sit:'La obstétrica te llama: Daiana sangra mucho. El recién nacido pesó 4100 g y está bien.',
+ tareas:['Reconocer el cuadro y buscar la causa.','Indicar el tratamiento en orden.','Decir cómo sigue si no responde.'],
+ abre:'Me siento mareada, doctor… siento que me sale mucha sangre.',
+ guion:'Tercer parto. Trabajo de parto prolongado, conducido con oxitocina. Recibió oxitocina después del nacimiento. La placenta salió hace 10 minutos. No es hipertensa ni tuvo preeclampsia. Sin problemas de coagulación. Sin alergias. Está mareada y con frío.',
+ q:[['Cuadro','¿Cómo te sentís?','Mareada, con frío. Siento que sale mucha sangre.',-1],
+    ['Antecedentes','¿Tenés presión alta, asma o problemas de coagulación? ¿Alergias?','No, nada de eso.',0]],
+ x:[['Signos vitales e índice de shock','PA 90/55 · FC 118. Índice de shock 1,3.',1],
+    ['Palpación del útero','Útero blando, por encima del ombligo.',2],
+    ['Revisión de la placenta y del canal del parto','Placenta y membranas completas. Sin desgarros del cuello ni de la vagina.',3],
+    ['Estimación de las pérdidas','Unos 900 ml y continúa.',4],
+    ['Muestras: hemograma, coagulograma con fibrinógeno, grupo y compatibilización','Se extraen al colocar las vías.',5]],
+ d:[['Pido ayuda y activo el código rojo obstétrico.','Correcto: es lo primero.',6],
+    ['Masaje uterino sostenido.','Correcto: la causa es atonía (tono).',7],
+    ['Dos vías periféricas gruesas, cristaloides tibios en bolos de 500 ml, oxígeno, sonda vesical y abrigo.','Correcto.',8],
+    ['Oxitocina 10 UI y luego infusión de 20 a 40 UI en 1000 ml.','Correcto: primera línea.',9],
+    ['Ácido tranexámico 1 g IV en 10 minutos.','Correcto: dentro de las 3 horas del parto.',10],
+    ['Si persiste: metilergonovina 0,2 mg IM o misoprostol 800 mcg sublingual.','Correcto: no es hipertensa.',11],
+    ['Si no cede: compresión bimanual, balón de Bakri, transfusión y quirófano.','Correcto.',12],
+    ['Paso la oxitocina en bolo IV rápido.','Error: produce hipotensión.',-1,8],
+    ['Espero el hemograma para decidir.','Error: la conducta no espera el laboratorio.',-1,15]],
+ cot:[['Descarta HTA, asma, coagulopatía y alergias',5,'c'],['Controla signos vitales y calcula el índice de shock',8,'c'],['Palpa el útero',10,'c'],['Revisa la placenta y el canal (las 4 T)',10,'c'],['Estima las pérdidas',5,'c'],['Pide las muestras',5,'k'],
+      ['Pide ayuda y activa el código rojo',10,'s'],['Realiza masaje uterino',10,'k'],['Coloca dos vías, repone volumen, oxígeno y sonda',10,'k'],['Indica oxitocina con dosis',10,'k'],['Indica ácido tranexámico',7,'k'],['Indica un segundo uterotónico',5,'k'],['Nombra los pasos siguientes',5,'s']],
+ claves:['Más de 500 ml en el parto vaginal o cualquier pérdida con inestabilidad.','Las 4 T: tono (70 %), trauma, tejido y trombina.','Minuto 0: ayuda, masaje, dos vías, cristaloides, oxígeno, muestras, sonda.','Oxitocina 10 UI + infusión; ácido tranexámico 1 g; metilergonovina (no en HTA); misoprostol 800 mcg.','Índice de shock (FC/PAS): 0,9 o más es de riesgo; más de 1,3 es grave.'],
+ ref:'Cuadernillo · Obstetricia · Hemorragia posparto.'},
+
+{id:'flujo',area:'gin',motivo:'Flujo con mal olor',lugar:'Consultorio de ginecología',
+ pt:{n:'Carolina',e:'29 años',av:{sex:'f',skin:1,hair:'long',hc:'#8a2f1f',mood:'neutral',top:'#00767F'}},
+ sit:'Carolina consulta por flujo vaginal. Está incómoda al contarlo.',
+ tareas:['Hacer la anamnesis.','Examinar.','Indicar el tratamiento y la consejería.'],
+ abre:'Me da un poco de vergüenza… tengo un flujo con olor feo desde hace una semana.',
+ guion:'Flujo amarillo verdoso, abundante, con olor feo, desde hace una semana. Picazón y ardor al orinar. Sin dolor en el bajo vientre, sin fiebre, sin dolor en las relaciones ni sangrado. Pareja nueva desde hace 2 meses; no usan preservativo. Toma pastillas anticonceptivas. FUM hace 10 días. Nunca se hizo análisis de VIH ni sífilis. PAP hace 2 años, normal. Toma alcohol los fines de semana. Sin alergias.',
+ q:[['Flujo','¿Cómo es el flujo? ¿Color, olor, cantidad?','Amarillo verdoso, bastante, con olor feo.',0],
+    ['Flujo','¿Picazón, ardor al orinar, dolor en las relaciones?','Picazón y ardor al orinar. En las relaciones no me duele.',1],
+    ['Alarma','¿Dolor en el bajo vientre, fiebre o sangrado entre menstruaciones?','No, nada.',2],
+    ['Sexual','¿Tenés pareja? ¿Usan preservativo? ¿Qué método usás?','Pareja nueva hace dos meses. No usamos preservativo, tomo pastillas.',3],
+    ['Antecedentes','¿Fecha de última menstruación? ¿Te hiciste alguna vez análisis de VIH o sífilis? ¿PAP?','Me vino hace 10 días. Análisis nunca. El PAP hace dos años, normal.',4],
+    ['Antecedentes','¿Alergias? ¿Tomás alcohol?','Alergias no. Alcohol los fines de semana.',-1]],
+ x:[['Especuloscopía','Flujo amarillo verdoso, espumoso. Cuello con puntillado rojo («en fresa»). Vulva eritematosa.',5],
+    ['pH y examen en fresco','pH mayor de 4,5. Protozoos móviles y abundantes leucocitos.',6],
+    ['Tacto vaginal','Sin dolor a la movilización del cuello, ni uterino ni anexial.',7],
+    ['Urocultivo','No hace falta: la disuria se explica por la vulvovaginitis.',-9]],
+ d:[['Diagnóstico: tricomoniasis. Le explico que es una infección de transmisión sexual, sin juzgar.','Correcto.',8],
+    ['Indico metronidazol 2 g en dosis única (o 500 mg cada 12 horas por 7 días), sin tomar alcohol.','Correcto: efecto disulfirámico con el alcohol.',9],
+    ['Indico tratar a la pareja al mismo tiempo.','Correcto: siempre en la tricomoniasis.',10],
+    ['Ofrezco VIH, VDRL y hepatitis B y C.','Correcto ante cualquier ITS.',11],
+    ['Indico preservativo y abstinencia hasta completar el tratamiento; reviso las vacunas de hepatitis B y VPH.','Correcto.',12],
+    ['Indico fluconazol 150 mg en dosis única.','Error: es el tratamiento de la candidiasis.',-1,12],
+    ['Le digo que no hace falta que la pareja se trate.','Error: se reinfecta.',-1,12]],
+ cot:[['Caracteriza el flujo',8,'c'],['Pregunta prurito, disuria y dispareunia',6,'c'],['Descarta dolor pelviano, fiebre y sangrado',8,'c'],['Interroga parejas, preservativo y método anticonceptivo',8,'c'],['Pregunta FUM, testeos previos y PAP',6,'c'],['Realiza la especuloscopía',8,'c'],['Mide el pH y pide el examen en fresco',8,'k'],['Descarta enfermedad inflamatoria pelviana con el tacto',8,'c'],
+      ['Explica el diagnóstico sin juzgar',8,'h'],['Indica metronidazol y advierte sobre el alcohol',12,'k'],['Indica el tratamiento de la pareja',8,'k'],['Ofrece testeo de otras ITS',6,'s'],['Aconseja preservativo y abstinencia, y revisa vacunas',6,'h']],
+ claves:['Vaginosis: flujo gris con olor a pescado, pH mayor de 4,5, clue cells; no es ITS; pareja no se trata.','Candidiasis: flujo grumoso, prurito intenso, pH menor de 4,5; fluconazol 150 mg o clotrimazol.','Tricomoniasis: flujo amarillo verdoso espumoso, cuello en fresa; metronidazol 2 g; pareja siempre.','Ante cualquier ITS: VIH, VDRL, hepatitis B y C; tratar parejas; preservativo.','Dolor a la movilización del cuello, uterino o anexial: tratar como enfermedad inflamatoria pelviana.'],
+ ref:'Cuadernillo · Ginecología · Flujo vaginal, ITS y enfermedad inflamatoria pelviana.'},
+
+{id:'violencia',area:'gin',motivo:'Dolor de cabeza y no duerme',lugar:'Consultorio de un centro de salud',
+ pt:{n:'Mónica',e:'36 años',av:{sex:'f',skin:2,hair:'bob',hc:'#2b1e17',mood:'triste',top:'#00767F'}},
+ sit:'Mónica consulta por cefalea e insomnio. Tiene un hematoma en el brazo. Su pareja espera afuera y quiso entrar con ella.',
+ tareas:['Hacer la entrevista.','Valorar el riesgo.','Dar una primera respuesta y un plan.'],
+ abre:'Vengo porque me duele la cabeza todos los días y no puedo dormir. Debe ser el estrés.',
+ guion:'Cefalea diaria e insomnio hace 2 meses. Dice que el hematoma fue «un golpe con la puerta». SOLO si preguntan a solas, con respeto y de forma directa: su pareja la insulta, le revisa el celular y maneja toda la plata; la semana pasada la empujó y le apretó el brazo; hace un mes la agarró del cuello; le dijo «si me dejás te mato». Empeoró desde que él perdió el trabajo y toma más alcohol. No hay armas en la casa. Tienen dos hijos de 8 y 5 años; a ellos no les pega. Su hermana vive cerca y sabe algo. Tiene miedo y no quiere denunciar por ahora. No tiene ideas de quitarse la vida.',
+ q:[['Motivo','¿Desde cuándo tenés el dolor y el insomnio? ¿Pasó algo en este tiempo?','Hace dos meses. Hay problemas en casa… él se quedó sin trabajo.',0],
+    ['Pesquisa','Les pregunto esto a todas las pacientes: ¿alguna vez tu pareja te insultó, te controló, te amenazó o te lastimó?','…Sí. Me insulta, me revisa el celular, maneja toda la plata. La semana pasada me empujó y me apretó el brazo.',1],
+    ['Riesgo','¿Te amenazó de muerte? ¿Alguna vez te agarró del cuello? ¿Hay armas en la casa?','Me dijo que si lo dejo me mata. Hace un mes me agarró del cuello. Armas no hay.',2],
+    ['Riesgo','¿Está siendo más frecuente o más grave? ¿Él consume alcohol o drogas?','Sí, cada vez peor desde que se quedó sin trabajo. Toma mucho.',2],
+    ['Red','¿Tenés hijos? ¿Alguien de confianza que sepa lo que pasa?','Dos, de 8 y 5. A ellos no les pega. Mi hermana vive cerca y algo sabe.',3],
+    ['Decisión','¿Qué te gustaría hacer? ¿Pensaste en hacer la denuncia?','Tengo miedo. Por ahora no quiero denunciar.',4],
+    ['Ánimo','¿Cómo estás de ánimo? ¿Pensaste en hacerte daño?','Triste, cansada. Hacerme daño no.',5]],
+ x:[['Examen de las lesiones','Hematoma de 5 × 3 cm en la cara interna del brazo izquierdo, violáceo-verdoso, de unos 7 días. Sin otras lesiones.',6]],
+ d:[['La atiendo a solas y le aseguro que lo que hablemos es confidencial.','Correcto: nunca con la pareja presente.',7],
+    ['Le digo: «Te creo. No es tu culpa. Nadie merece ser maltratado».','Correcto: escuchar sin juzgar y validar.',8],
+    ['Valoro el riesgo como alto: amenaza de muerte, intento de estrangulamiento, escalada y alcohol del agresor.','Correcto.',9],
+    ['Armamos un plan de seguridad: documentos, dinero, llaves y medicación a mano; una señal con su hermana; adónde ir.','Correcto.',10],
+    ['Le doy los recursos: línea 144, 911 ante una emergencia, y el contacto con trabajo social del centro.','Correcto.',11],
+    ['Respeto su decisión de no denunciar ahora y le ofrezco acompañarla cuando quiera.','Correcto: la mujer adulta decide.',12],
+    ['Registro en la historia clínica su relato textual y la descripción de la lesión.','Correcto: tiene valor legal.',13],
+    ['La cito pronto a un nuevo control.','Correcto: seguimiento.',14],
+    ['Le digo que tiene que denunciarlo hoy y separarse.','Error: presionar la aleja y puede aumentar el riesgo.',-1,12],
+    ['Hago pasar a la pareja para hablar con los dos.','Error grave: la pone en peligro.',-1,25]],
+ cot:[['Explora el motivo de consulta y el contexto',5,'c'],['Pregunta por violencia de forma directa y respetuosa',12,'c'],['Explora indicadores de riesgo alto',12,'c'],['Explora hijos y red de apoyo',6,'c'],['Explora qué quiere hacer la paciente',5,'c'],['Evalúa ánimo e ideación suicida',5,'c'],['Examina y describe las lesiones',5,'c'],
+      ['Garantiza privacidad y confidencialidad',10,'p'],['Valida sin juzgar',10,'h'],['Clasifica el riesgo',6,'k'],['Arma un plan de seguridad',8,'k'],['Informa los recursos (144, 911, equipo)',6,'s'],['Respeta la autonomía sobre la denuncia',4,'p'],['Registra en la historia clínica',3,'p'],['Asegura el seguimiento',3,'s']],
+ claves:['Preguntar de rutina, a solas y con confidencialidad.','ANIMA: atención al escuchar, no juzgar y validar, informarse de las necesidades, mejorar la seguridad, apoyar.','Riesgo alto: amenazas de muerte, armas, estrangulamiento, escalada, embarazo, separación reciente.','La mujer adulta decide si denuncia; obligación de denunciar con lesiones graves o víctimas menores.','Línea 144 las 24 horas; 911 en la emergencia. Registrar el relato textual.'],
+ ref:'Cuadernillo · Ginecología · Violencia de género.'},
+
+{id:'panico',area:'sm',motivo:'Palpitaciones y sensación de ahogo',lugar:'Guardia',
+ pt:{n:'Lautaro',e:'23 años',av:{sex:'m',skin:1,hair:'messy',hc:'#3a2a1c',mood:'agitado',top:'#303F9F',sweat:1}},
+ sit:'Lautaro llega muy asustado, tomándose el pecho. Cree que tiene un infarto.',
+ tareas:['Hacer la anamnesis y descartar una causa orgánica.','Manejar la crisis.','Explicar el diagnóstico y el seguimiento.'],
+ abre:'¡Me late el corazón a mil, no puedo respirar! ¡Siento que me muero!',
+ guion:'Empezó hace 20 minutos en el colectivo, de golpe, y llegó al máximo en pocos minutos. Palpitaciones, ahogo, opresión en el pecho, hormigueo en las manos, temblor, mareo y miedo a morirse. Es el tercer episodio en un mes; los otros duraron media hora. Vive con miedo de que se repita y dejó de viajar en colectivo. Está rindiendo finales, duerme 4 horas, toma 4 cafés y bebidas energizantes por día. No consume drogas ni alcohol. Sin enfermedades del corazón ni asma; nadie en la familia murió joven de repente. No tiene ideas de hacerse daño.',
+ q:[['Crisis','¿Cuándo empezó, cómo empezó y qué sentís?','Hace 20 minutos, de golpe, en el colectivo. Palpitaciones, me ahogo, me hormiguean las manos, tiemblo.',0],
+    ['Crisis','¿Te pasó antes? ¿Cuánto duró?','Es la tercera vez en un mes. Las otras duraron media hora.',1],
+    ['Impacto','¿Vivís preocupado por que se repita? ¿Dejaste de hacer algo?','Sí, tengo miedo todo el tiempo. Dejé de viajar en colectivo.',1],
+    ['Orgánico','¿Tenés alguna enfermedad del corazón, asma o tiroides? ¿Alguien en tu familia murió joven de repente?','No, soy sano. En mi familia nadie.',2],
+    ['Sustancias','¿Tomás café, energizantes, alcohol? ¿Consumiste alguna droga o medicación?','Cuatro cafés y energizantes, estoy rindiendo finales. Drogas y alcohol no.',3],
+    ['Riesgo','¿Cómo venís de ánimo? ¿Pensaste en hacerte daño?','Estresado y durmiendo poco. Hacerme daño no.',4]],
+ x:[['Signos vitales y saturación','PA 130/80 · FC 110 regular · FR 24 · saturación 99 % · afebril.',5],
+    ['ECG','Taquicardia sinusal. Sin otras alteraciones.',6],
+    ['Glucemia capilar','95 mg/dl.',6],
+    ['Examen cardiovascular y respiratorio','Normal.',-1],
+    ['Troponina y TC de tórax','No están indicadas: joven sin factores de riesgo, con ECG y saturación normales.',-9]],
+ d:[['Lo llevo a un lugar tranquilo y le hablo con calma.','Correcto.',7],
+    ['Le explico: «Es una crisis de ansiedad. Es muy desagradable, pero no es peligrosa y va a pasar en unos minutos».','Correcto.',8],
+    ['Lo guío con respiración lenta: inspirar en 4 segundos y exhalar en 6.','Correcto.',9],
+    ['Si no cede, indico lorazepam 1 a 2 mg o clonazepam 0,25 a 0,5 mg sublingual.','Correcto: sólo si no cede.',10],
+    ['Antes del alta: le explico el círculo de la ansiedad, que reduzca el café y los energizantes, y lo derivo a salud mental.','Correcto: trastorno de pánico; primera línea, terapia cognitivo-conductual o ISRS.',11],
+    ['Le digo «no tenés nada, son nervios» y le doy el alta.','Error: minimiza y no da un plan.',-1,12],
+    ['Le indico respirar dentro de una bolsa de papel.','Error: ya no se recomienda.',-1,6],
+    ['Le receto clonazepam todos los días por tiempo indefinido.','Error: las benzodiacepinas son sólo un puente de 2 a 4 semanas.',-1,10]],
+ cot:[['Caracteriza la crisis (inicio, pico y síntomas)',8,'c'],['Pregunta episodios previos, preocupación anticipatoria y evitación',8,'c'],['Pregunta antecedentes cardíacos, respiratorios y familiares',8,'c'],['Pregunta cafeína, sustancias y fármacos',8,'c'],['Evalúa el ánimo y el riesgo suicida',8,'c'],['Controla signos vitales y saturación',6,'c'],['Pide ECG y glucemia',10,'k'],
+      ['Brinda un ambiente tranquilo y actitud calma',8,'h'],['Explica qué le pasa con palabras simples',10,'h'],['Guía la respiración',8,'k'],['Usa la benzodiacepina sólo si no cede',6,'k'],['Hace psicoeducación y deriva',12,'s']],
+ claves:['Crisis de pánico: pico en menos de 10 minutos, dura 20-30, con 4 o más de 13 síntomas.','Trastorno de pánico: crisis recurrentes + un mes de preocupación o evitación.','Primero descartar causas orgánicas: signos vitales, saturación, ECG y glucemia.','Crisis: ambiente tranquilo, explicación, respiración lenta; benzodiacepina si no cede.','Fondo: terapia cognitivo-conductual o ISRS a mitad de dosis. Benzodiacepinas sólo como puente.'],
+ ref:'Cuadernillo · Salud mental · Ansiedad y crisis de pánico.'},
+
+{id:'alcohol',area:'sm',motivo:'Ardor de estómago; la esposa pidió el turno',lugar:'Consultorio de un centro de salud',
+ pt:{n:'Ricardo',e:'49 años',av:{sex:'m',skin:2,hair:'short',hc:'#4a4038',mood:'neutral',top:'#303F9F',beard:1}},
+ sit:'Ricardo consulta por acidez. En la sala de espera, su esposa comentó que «toma mucho».',
+ tareas:['Hacer la entrevista y pesquisar el consumo.','Valorar el riesgo.','Hacer una intervención breve.'],
+ abre:'Vengo por la acidez, doctor. Mi señora exagera con otras cosas, pero bueno.',
+ guion:'Acidez hace meses. SOLO si preguntan sin juzgar: toma un litro de vino por día y más los fines de semana, desde hace 5 años. Intentó tomar menos y no pudo. Le molesta que su esposa lo critique. A veces siente culpa. Algunas mañanas toma una copa para que se le pase el temblor. Último trago: anoche. Nunca tuvo convulsiones ni alucinaciones al dejar de tomar. Maneja un camión de reparto. Ánimo bajo, sin ideas de muerte. No consume otras sustancias; fuma. Piensa que «no es para tanto», pero le preocupa perder el registro de conducir y que su esposa lo deje.',
+ q:[['Motivo','¿Qué le pasa con el estómago?','Acidez, hace meses. Sobre todo a la mañana.',-1],
+    ['Consumo','¿Le puedo preguntar por el alcohol? ¿Cuánto toma en un día habitual y desde cuándo?','Un litro de vino por día, más el fin de semana. Hace unos cinco años.',0],
+    ['CAGE','¿Intentó tomar menos? ¿Le molesta que lo critiquen? ¿Sintió culpa? ¿Toma a la mañana?','Intenté y no pude. Me molesta que mi señora me lo diga. Culpa a veces. Y sí, alguna mañana tomo una copa por el temblor.',1],
+    ['Abstinencia','¿Cuándo tomó por última vez? ¿Tuvo temblores, convulsiones o vio cosas raras al dejar de tomar?','Anoche. Tiemblo a la mañana. Convulsiones o ver cosas, nunca.',2],
+    ['Riesgo','¿Maneja o trabaja con máquinas? ¿Tuvo problemas en el trabajo o en casa por el alcohol?','Manejo un camión de reparto. En casa hay peleas.',3],
+    ['Ánimo','¿Cómo está de ánimo? ¿Consume otra sustancia?','Bajoneado, pero ideas raras no. Fumo, nada más.',4],
+    ['Motivación','¿Qué piensa usted de su consumo? ¿Hay algo que le preocupe?','No es para tanto… pero no quiero perder el registro ni que mi señora me deje.',5]],
+ x:[['Signos vitales y examen físico','PA 150/95 · FC 96. Temblor distal fino. Lúcido, sin ataxia ni nistagmo. Hepatomegalia leve.',6],
+    ['Laboratorio: hemograma, hepatograma con GGT','Se solicita.',-1]],
+ d:[['Le devuelvo con respeto que su consumo es de riesgo y que está afectando su salud.','Correcto: aconsejar sin confrontar.',7],
+    ['Uso lo que a él le preocupa (el registro, su pareja) para trabajar la motivación.','Correcto: entrevista motivacional; está en etapa de contemplación.',8],
+    ['Acordamos una meta y un plan con seguimiento cercano.','Correcto: acordar, ayudar y arreglar el seguimiento.',9],
+    ['Le explico que no deje de golpe sin supervisión, cuáles son los síntomas de abstinencia y cuándo ir a la guardia.','Correcto: toma a diario y tiene temblor matinal.',10],
+    ['Le aconsejo no manejar habiendo tomado, lo derivo al equipo de salud mental y le doy la línea 141.','Correcto.',11],
+    ['Le digo: «Usted es un alcohólico y si no deja hoy se va a morir».','Error: confrontar genera resistencia.',-1,12],
+    ['Le trato la acidez y no pregunto más por el alcohol.','Error: se pierde la oportunidad de intervenir.',-1,15]],
+ cot:[['Cuantifica el consumo sin juzgar',12,'c'],['Aplica una herramienta de pesquisa (CAGE o AUDIT)',10,'c'],['Pregunta síntomas y antecedentes de abstinencia',10,'c'],['Explora las consecuencias y las situaciones de riesgo',8,'c'],['Evalúa el ánimo y otras sustancias',6,'c'],['Explora la motivación y la etapa de cambio',8,'c'],['Controla signos vitales y busca signos de abstinencia',6,'c'],
+      ['Aconseja de forma clara y respetuosa',10,'h'],['Usa la entrevista motivacional',8,'h'],['Acuerda una meta y el seguimiento',8,'s'],['Advierte sobre la abstinencia',7,'k'],['Deriva y da recursos',7,'s']],
+ claves:['Pesquisa: AUDIT (8 o más) o CAGE (2 o más).','Intervención breve, las 5 A: averiguar, aconsejar, acordar, ayudar y arreglar el seguimiento.','Entrevista motivacional: empatía, discrepancia, no confrontar, autoeficacia.','Abstinencia: temblor a las 6-12 horas, convulsiones a las 12-48, delirium tremens a las 48-96. Benzodiacepinas y tiamina.','Tiamina antes de la glucosa. Línea 141.'],
+ ref:'Cuadernillo · Salud mental · Consumo problemático de alcohol y de otras sustancias.'},
+
+{id:'tabaco',area:'mf',motivo:'Quiere dejar de fumar',lugar:'Consultorio de medicina familiar',
+ pt:{n:'Daniel',e:'45 años',av:{sex:'m',skin:1,hair:'short',hc:'#55483c',mood:'neutral',top:'#1F6F6B',glasses:1}},
+ sit:'Daniel vino por un certificado y, al final, comenta que quiere dejar de fumar.',
+ tareas:['Evaluar el consumo y la motivación.','Hacer la intervención.','Indicar el tratamiento y el seguimiento.'],
+ abre:'Ya que estoy, doctor… nació mi nieta y quiero dejar el cigarrillo. ¿Hay algo que me ayude?',
+ guion:'Fuma 25 cigarrillos por día desde los 20 años. El primero lo prende a los 10 minutos de levantarse. Intentó dejar una vez, hace 3 años; aguantó 2 meses sin ayuda y volvió por estrés en el trabajo. Quiere dejar este mes. Su esposa también fuma. Fuma con el café y después de comer. Nunca tuvo convulsiones ni trastornos de la alimentación. No toma medicación. Tos a la mañana. Le preocupa engordar.',
+ q:[['Consumo','¿Cuántos cigarrillos fuma por día y desde cuándo?','Veinticinco por día, desde los 20 años.',0],
+    ['Dependencia','¿Cuánto tarda en prender el primero después de levantarse?','Diez minutos, antes del mate.',1],
+    ['Intentos','¿Intentó dejar antes? ¿Qué pasó?','Una vez, hace tres años. Aguanté dos meses y volví por el estrés.',2],
+    ['Motivación','¿Qué lo motiva ahora? ¿Está listo para poner una fecha?','Mi nieta. Sí, quiero dejar este mes.',3],
+    ['Contexto','¿En qué momentos fuma más? ¿Alguien más fuma en su casa? ¿Qué le preocupa de dejar?','Con el café y después de comer. Mi señora fuma. Me preocupa engordar.',4],
+    ['Antecedentes','¿Tuvo convulsiones o trastornos de la alimentación? ¿Toma medicación?','No, nada de eso.',5]],
+ x:[['Peso y presión arterial','84 kg · PA 130/80.',-1]],
+ d:[['Calculo la carga tabáquica: 31 paquetes-año, con dependencia alta.','Correcto: (25 ÷ 20) × 25 años; primer cigarrillo antes de los 30 minutos.',6],
+    ['Le doy un consejo claro y personalizado: dejar de fumar es lo más importante que puede hacer por su salud.','Correcto.',7],
+    ['Fijamos el día D dentro del mes.','Correcto.',8],
+    ['Trabajamos estrategias: identificar desencadenantes, sacar cigarrillos y ceniceros, avisar a la familia e invitar a su esposa a dejar, qué hacer ante el deseo.','Correcto.',9],
+    ['Indico parches de nicotina de 21 mg desde el día D, con chicles de rescate (o bupropión o vareniclina).','Correcto: fuma 10 o más por día y quiere dejar.',10],
+    ['Lo cito en la primera semana después del día D y al mes, y le doy la línea 0800-999-3040.','Correcto.',11],
+    ['Le recomiendo pasarse al cigarrillo electrónico.','Error: no se recomienda como método de cesación.',-1,12],
+    ['Le digo que con fuerza de voluntad alcanza y no indico fármacos.','Error: el tratamiento farmacológico está indicado y aumenta el éxito.',-1,8]],
+ cot:[['Cuantifica el consumo',8,'c'],['Evalúa la dependencia',8,'c'],['Pregunta intentos previos y causa de recaída',8,'c'],['Evalúa la motivación y la etapa de cambio',10,'c'],['Explora desencadenantes, entorno y temores',8,'c'],['Descarta contraindicaciones de los fármacos',6,'c'],
+      ['Calcula los paquetes-año',6,'k'],['Da un consejo claro y personalizado',10,'h'],['Fija el día D',10,'k'],['Trabaja estrategias conductuales',8,'h'],['Indica tratamiento farmacológico',10,'k'],['Programa el seguimiento',8,'s']],
+ claves:['Las 5 A: averiguar, aconsejar, asistir, ayudar y acompañar.','Paquetes-año = (cigarrillos por día ÷ 20) × años.','Dependencia alta: 20 o más por día o primer cigarrillo antes de los 30 minutos.','Fármacos con 10 o más cigarrillos por día: parches (21-14-7 mg), bupropión o vareniclina.','Bupropión: contraindicado con convulsiones y trastornos de la alimentación. Si no está listo: las 5 R.'],
+ ref:'Cuadernillo · Medicina familiar · Tabaquismo y obesidad.'}
 ];
+const ORDER=['cli','cir','uro','tra','ped','neo','obs','gin','sm','mf','urg','tr'];
+ST.sort((a,b)=>ORDER.indexOf(a.area)-ORDER.indexOf(b.area));
 
 /* ============ Avatares ============ */
-const SKIN=['#f6d2b8','#eebf9f','#d9a27c','#b97f58'];
+const SKIN=['#F2CDB1','#E2B28C','#C48B62','#96643F'];
+function mixHex(a,b,t){const p=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));const x=p(a),y=p(b);return '#'+x.map((v,i)=>Math.round(v+(y[i]-v)*t).toString(16).padStart(2,'0')).join('')}
+let avN=0;
 function avatar(a,big){
-  const s=SKIN[a.skin||0], h=a.hc||'#333', m=a.mood||'neutral', f=a.sex==='f';
-  const brow={neutral:['M72 96 q10 -5 20 0','M108 96 q10 -5 20 0'],angustia:['M72 98 q10 -9 20 -6','M108 92 q10 -3 20 6'],triste:['M72 99 q10 -8 20 -5','M108 94 q10 -3 20 5'],dolor:['M72 92 q10 3 20 8','M108 100 q10 -5 20 -8'],agitado:['M72 90 q10 -4 20 0','M108 90 q10 -4 20 0']}[m];
-  const mouth={neutral:'M88 138 q12 7 24 0',angustia:'M88 142 q12 -7 24 0',triste:'M88 143 q12 -8 24 0',dolor:'M86 139 q7 -6 14 0 q7 6 14 0',agitado:'M90 136 q10 12 20 0 q-10 -4 -20 0'}[m];
-  const hairBack=f&&(a.hair==='long')?`<path d="M54 104 q-8 62 6 86 h80 q14 -24 6 -86 z" fill="${h}"/>`:(a.hair==='pony'?`<path d="M140 92 q26 18 12 62 q-12 -18 -18 -44 z" fill="${h}"/>`:'');
-  const hairTop={long:`<path d="M54 106 q-4 -58 46 -58 q50 0 46 58 q-10 -30 -46 -32 q-36 2 -46 32z" fill="${h}"/>`,
-    bob:`<path d="M52 126 q-8 -78 48 -78 q56 0 48 78 q-6 -44 -48 -48 q-42 4 -48 48z" fill="${h}"/>`,
-    bun:`<circle cx="100" cy="42" r="15" fill="${h}"/><path d="M56 104 q-2 -54 44 -54 q46 0 44 54 q-10 -28 -44 -30 q-34 2 -44 30z" fill="${h}"/>`,
-    pony:`<path d="M56 104 q-2 -54 44 -54 q46 0 44 54 q-10 -28 -44 -30 q-34 2 -44 30z" fill="${h}"/>`,
-    short:`<path d="M58 100 q-2 -50 42 -50 q44 0 42 50 q-8 -26 -42 -28 q-34 2 -42 28z" fill="${h}"/>`,
-    messy:`<path d="M56 102 q-6 -40 10 -46 q4 -10 16 -6 q8 -8 18 -2 q12 -6 20 4 q14 0 14 14 q10 12 6 36 q-10 -26 -40 -28 q-34 2 -44 28z" fill="${h}"/>`,
-    thin:`<path d="M60 96 q0 -34 22 -42 q-12 14 -22 42z M140 96 q0 -34 -22 -42 q12 14 22 42z" fill="${h}"/>`}[a.hair||'short'];
-  const size=a.young?0.94:1;
-  return `<svg class="av ${m==='dolor'?'dolor':''} ${m==='agitado'?'agitado':''}" viewBox="0 0 200 220" role="img" aria-label="Paciente simulado" ${big?'':'width="76" height="84"'}>
-  <g class="body"><path d="M30 220 q0 -52 44 -58 h52 q44 6 44 58z" fill="${a.top||'#557'}"/><path d="M84 160 q16 14 32 0 v-14 h-32z" fill="${s}"/><path d="M84 162 q16 16 32 0 l-4 10 q-12 8 -24 0z" fill="color-mix(in oklab,${a.top||'#557'} 80%,#000)"/></g>
-  <g class="head" transform="translate(${100*(1-size)} ${110*(1-size)}) scale(${size})">${hairBack}
-   <ellipse cx="100" cy="108" rx="44" ry="50" fill="${s}"/><ellipse cx="55" cy="112" rx="6" ry="9" fill="${s}"/><ellipse cx="145" cy="112" rx="6" ry="9" fill="${s}"/>${hairTop}
-   ${a.old?'<path d="M70 124 q6 4 12 0 M118 124 q6 4 12 0 M84 152 q16 6 32 0" stroke="#0002" stroke-width="1.5" fill="none"/>':''}
-   <path d="${brow[0]}" stroke="${h==='#b9b3ab'?'#8a857e':'#2a2320'}" stroke-width="3.2" fill="none" stroke-linecap="round"/><path d="${brow[1]}" stroke="${h==='#b9b3ab'?'#8a857e':'#2a2320'}" stroke-width="3.2" fill="none" stroke-linecap="round"/>
-   <ellipse class="eye" cx="82" cy="110" rx="5" ry="${m==='dolor'?2.2:6}" fill="#221c1a"/><ellipse class="eye r" cx="118" cy="110" rx="5" ry="${m==='dolor'?2.2:6}" fill="#221c1a"/>
-   ${a.glasses?'<g fill="none" stroke="#3a3a3a" stroke-width="2.4"><rect x="68" y="99" width="28" height="22" rx="8"/><rect x="104" y="99" width="28" height="22" rx="8"/><path d="M96 109h8"/></g>':''}
-   <path d="M98 114 q-5 12 2 14" stroke="#0003" stroke-width="2" fill="none" stroke-linecap="round"/>
-   ${a.beard?`<path d="M62 124 q4 40 38 42 q34 -2 38 -42 q-10 22 -38 22 q-28 0 -38 -22z" fill="${h}" opacity=".9"/>`:''}
-   <path class="mouth" d="${mouth}" stroke="#7a2e2e" stroke-width="3.2" fill="${m==='agitado'?'#7a2e2e':'none'}" stroke-linecap="round"/>
-   ${(m==='angustia'||m==='triste')?'<path class="tear" d="M78 120 q-4 8 0 10 q4 -2 0 -10z" fill="#6bb7e8"/>':''}
-   ${a.sweat?'<path class="sweat" d="M136 84 q-4 8 0 10 q4 -2 0 -10z" fill="#8fd0f0"/>':''}
-   ${a.hives?'<g fill="#e2574c" opacity=".7"><circle cx="70" cy="132" r="4"/><circle cx="128" cy="128" r="3.4"/><circle cx="120" cy="90" r="3"/><circle cx="96" cy="170" r="3.4"/></g>':''}
+  const id='a'+(++avN), s=SKIN[a.skin||0], sh=mixHex(s,'#6b2f1a',.28), hi=mixHex(s,'#ffffff',.22), lip=mixHex(s,'#b0463f',a.sex==='f'?.62:.4), lip2=mixHex(lip,'#ffffff',.18);
+  const h=a.hc||'#333', hl=mixHex(h,'#ffffff',.22), brow=mixHex(h,'#1a1410',a.old?.25:.45), top=a.top||'#557', topd=mixHex(top,'#000000',.22);
+  const m=a.mood||'neutral', f=a.sex==='f', iris=a.iris||(a.skin>=2?'#4a2f1c':'#5b4630');
+  const jaw=f?'M58 104 C58 60 142 60 142 104 C142 132 131 153 116 162 Q100 171 84 162 C69 153 58 132 58 104Z':'M57 104 C57 60 143 60 143 104 C143 134 135 155 119 164 Q100 172 81 164 C65 155 57 134 57 104Z';
+  const B={neutral:['M70 100 Q80 95 91 99','M109 99 Q120 95 130 100'],angustia:['M70 102 Q80 94 91 94','M109 94 Q120 94 130 102'],triste:['M70 103 Q80 96 91 95','M109 95 Q120 96 130 103'],dolor:['M70 96 Q81 98 91 103','M109 103 Q119 98 130 96'],agitado:['M70 96 Q80 90 91 95','M109 95 Q120 90 130 96']}[m];
+  const bw=f?3:4.2;
+  const eye=(cx,cls)=>m==='dolor'
+    ?`<g class="eye ${cls}"><path d="M${cx-10} 114 Q${cx} 108 ${cx+10} 114" stroke="#2a1e19" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M${cx-9} 116 Q${cx} 113 ${cx+9} 116" stroke="${sh}" stroke-width="1.4" fill="none"/></g>`
+    :`<g class="eye ${cls}"><path d="M${cx-10.5} 113 Q${cx} ${m==='agitado'?100:103} ${cx+10.5} 113 Q${cx} ${m==='agitado'?122:121} ${cx-10.5} 113Z" fill="#fdfbf8"/><circle cx="${cx}" cy="112.6" r="4.7" fill="${iris}"/><circle cx="${cx}" cy="112.6" r="2.1" fill="#120c0a"/><circle cx="${cx-1.6}" cy="110.8" r="1.2" fill="#fff"/><path d="M${cx-11} 113 Q${cx} ${m==='agitado'?99.5:102.5} ${cx+11} 112.6" stroke="#2a1e19" stroke-width="${f?2.4:1.9}" fill="none" stroke-linecap="round"/>${f?`<path d="M${cx+(cls==='r'?10:-10)} 111.6 l${cls==='r'?3.2:-3.2} -2.6" stroke="#2a1e19" stroke-width="1.6" stroke-linecap="round"/>`:''}<path d="M${cx-8} 118.6 Q${cx} 121.6 ${cx+8} 118.6" stroke="${sh}" stroke-width="1" fill="none" opacity=".7"/></g>`;
+  const mouth={
+    neutral:`<path d="M88 146.5 Q94 143 100 145 Q106 143 112 146.5 Q100 149 88 146.5Z" fill="${lip}"/><path d="M89.5 147.2 Q100 155 110.5 147.2 Q100 149.6 89.5 147.2Z" fill="${lip2}"/><path d="M88 146.8 Q100 149 112 146.8" stroke="${mixHex(lip,'#3a1210',.5)}" stroke-width="1" fill="none"/>`,
+    triste:`<path d="M88 149.5 Q94 144 100 146 Q106 144 112 149.5 Q100 147.6 88 149.5Z" fill="${lip}"/><path d="M90.5 149 Q100 154.5 109.5 149 Q100 148.4 90.5 149Z" fill="${lip2}"/><path d="M88 149.6 Q100 146.6 112 149.6" stroke="${mixHex(lip,'#3a1210',.5)}" stroke-width="1" fill="none"/>`,
+    dolor:`<path d="M86 144 Q100 139 114 144 Q113 153 100 154 Q87 153 86 144Z" fill="#5a1d1d"/><path d="M89 144.4 Q100 141 111 144.4 L110.4 148 Q100 145.6 89.6 148Z" fill="#f7f3ee"/><path d="M86 144 Q100 139 114 144 Q113 153 100 154 Q87 153 86 144Z" fill="none" stroke="${lip}" stroke-width="2.2"/>`,
+    agitado:`<ellipse cx="100" cy="148" rx="8.5" ry="6.5" fill="#5a1d1d"/><path d="M93.5 145.6 Q100 143.4 106.5 145.6 L106 147.4 Q100 146 94 147.4Z" fill="#f7f3ee"/><ellipse cx="100" cy="148" rx="8.5" ry="6.5" fill="none" stroke="${lip}" stroke-width="2.4"/>`};
+  mouth.angustia=mouth.triste;
+  const backHair={long:`<path d="M49 100 C42 150 46 192 58 208 L142 208 C154 192 158 150 151 100Z" fill="${h}"/>`,bob:`<path d="M49 100 C45 132 49 152 58 160 L142 160 C151 152 155 132 151 100Z" fill="${h}"/>`,pony:`<path d="M138 84 C170 96 168 152 151 176 C152 142 146 116 134 100Z" fill="${h}"/>`,bun:`<circle cx="100" cy="43" r="17" fill="${h}"/><path d="M90 36 Q100 30 110 36" stroke="${hl}" stroke-width="2" fill="none" opacity=".5"/>`}[a.hair]||'';
+  const fTop=`<path d="M53 114 C46 56 78 48 100 48 C122 48 154 56 147 114 C143 94 133 81 113 77 Q96 74 84 81 C70 87 59 97 53 114Z" fill="${h}"/><path d="M70 66 Q92 54 120 62" stroke="${hl}" stroke-width="2.4" fill="none" opacity=".45" stroke-linecap="round"/>`;
+  const upTop=`<path d="M55 110 C50 58 78 52 100 52 C122 52 150 58 145 110 C141 89 127 77 100 77 C73 77 59 89 55 110Z" fill="${h}"/><path d="M72 66 Q100 56 128 66" stroke="${hl}" stroke-width="2.2" fill="none" opacity=".4" stroke-linecap="round"/>`;
+  const topHair={long:fTop,bob:fTop,bun:upTop,pony:upTop,
+    short:`<path d="M55 108 C50 58 78 50 100 50 C122 50 150 58 145 108 C142 91 135 81 123 77 Q100 70 77 77 C65 81 58 91 55 108Z" fill="${h}"/><path d="M74 64 Q100 54 126 64" stroke="${hl}" stroke-width="2.2" fill="none" opacity=".4" stroke-linecap="round"/>`,
+    messy:`<path d="M55 108 C48 70 60 55 73 57 C77 46 92 46 98 53 C106 44 123 47 127 57 C142 55 152 76 145 108 C141 91 133 81 121 79 L112 86 L104 77 L94 86 L86 77 L77 85 C66 85 59 93 55 108Z" fill="${h}"/>`,
+    thin:`<path d="M55 110 C52 88 57 74 67 67 C62 82 60 96 58 112Z M145 110 C148 88 143 74 133 67 C138 82 140 96 142 112Z" fill="${h}"/><path d="M72 66 Q100 58 128 66 Q100 63 72 66Z" fill="${h}" opacity=".28"/>`}[a.hair||'short'];
+  const cls=(m==='dolor'?'dolor ':'')+(m==='agitado'?'agitado':'');
+  return `<svg class="av ${cls}" viewBox="0 0 200 230" role="img" aria-label="Paciente simulado" ${big?'':'width="78" height="90"'}>
+  <defs><radialGradient id="${id}f" cx=".45" cy=".4" r=".75"><stop offset="0" stop-color="${hi}"/><stop offset=".55" stop-color="${s}"/><stop offset="1" stop-color="${mixHex(s,sh,.55)}"/></radialGradient><linearGradient id="${id}t" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${top}"/><stop offset="1" stop-color="${topd}"/></linearGradient></defs>
+  ${backHair&&a.hair!=='bun'?backHair:''}
+  <g class="body"><path d="M20 230 C20 194 48 178 80 174 L120 174 C152 178 180 194 180 230Z" fill="url(#${id}t)"/>
+   <path d="M85 150 L85 178 Q100 192 115 178 L115 150Z" fill="${mixHex(s,sh,.45)}"/><path d="M85 160 Q100 172 115 160 L115 150 L85 150Z" fill="${sh}" opacity=".55"/>
+   ${f?`<path d="M80 174 Q100 204 120 174 L115 176 Q100 190 85 176Z" fill="${topd}"/>`:`<path d="M82 174 L100 196 L118 174 L114 176 Q100 188 86 176Z" fill="${topd}"/><path d="M100 196 L100 230" stroke="${topd}" stroke-width="1.4" opacity=".6"/>`}</g>
+  <g class="head" ${a.young?'transform="translate(3 6) scale(.97)"':''}>
+   ${a.hair==='bun'?backHair:''}
+   <ellipse cx="56.5" cy="114" rx="7" ry="11" fill="${s}"/><path d="M55 108 q-3 6 1 12" stroke="${sh}" stroke-width="1.4" fill="none"/>
+   <ellipse cx="143.5" cy="114" rx="7" ry="11" fill="${s}"/><path d="M145 108 q3 6 -1 12" stroke="${sh}" stroke-width="1.4" fill="none"/>
+   <path d="${jaw}" fill="url(#${id}f)"/>
+   ${a.beard?`<path d="M59 118 C60 148 74 166 100 169 C126 166 140 148 141 118 C136 138 124 148 112 142 Q100 138 88 142 C76 148 64 138 59 118Z" fill="${h}" opacity=".88"/><path d="M86 141 Q100 135 114 141 Q100 139.5 86 141Z" fill="${h}"/>`:(!f&&!a.young?`<path d="M62 126 C64 150 76 164 100 167 C124 164 136 150 138 126 C134 146 120 154 100 154 C80 154 66 146 62 126Z" fill="#3a3330" opacity=".07"/>`:'')}
+   <ellipse cx="72" cy="131" rx="10" ry="6" fill="#e2675c" opacity="${f?.2:.11}"/><ellipse cx="128" cy="131" rx="10" ry="6" fill="#e2675c" opacity="${f?.2:.11}"/>
+   ${topHair}
+   ${a.old?`<path d="M80 86 Q100 82 120 86 M84 92 Q100 89 116 92" stroke="${sh}" stroke-width="1.1" fill="none" opacity=".6"/><path d="M66 118 l-5 -2 M66 121 l-5 2 M134 118 l5 -2 M134 121 l5 2" stroke="${sh}" stroke-width="1" opacity=".7"/><path d="M84 132 Q80 142 85 152 M116 132 Q120 142 115 152" stroke="${sh}" stroke-width="1.2" fill="none" opacity=".65"/>`:''}
+   <path d="${B[0]}" stroke="${brow}" stroke-width="${bw}" fill="none" stroke-linecap="round"/><path d="${B[1]}" stroke="${brow}" stroke-width="${bw}" fill="none" stroke-linecap="round"/>
+   ${eye(81,'')}${eye(119,'r')}
+   ${a.glasses?'<g fill="none" stroke="#2f2f33" stroke-width="2.4"><rect x="66" y="101" width="30" height="23" rx="9" fill="#ffffff" fill-opacity=".12"/><rect x="104" y="101" width="30" height="23" rx="9" fill="#ffffff" fill-opacity=".12"/><path d="M96 110 q4 -3 8 0 M66 109 l-8 -2 M134 109 l8 -2"/></g>':''}
+   <path d="M98 112 Q94 126 91.5 131.5 Q95 136.6 100 135.4 Q105 136.6 108.5 131.5" stroke="${sh}" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M93 132 q2 2.4 4.4 1.6 M107 132 q-2 2.4 -4.4 1.6" stroke="${mixHex(sh,'#2a120c',.4)}" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+   <g class="mouth">${mouth[m]}</g>
+   <path d="M95 158 Q100 160 105 158" stroke="${sh}" stroke-width="1" fill="none" opacity=".5"/>
+   ${(m==='angustia'||m==='triste')?'<path class="tear" d="M76 121 q-4 8 0 10.5 q4 -2.5 0 -10.5z" fill="#6bb7e8"/>':''}
+   ${a.sweat?'<path class="sweat" d="M134 84 q-4 8 0 10.5 q4 -2.5 0 -10.5z" fill="#8fd0f0"/><path class="sweat" d="M68 92 q-3 6 0 8 q3 -2 0 -8z" fill="#8fd0f0" style="animation-delay:1.9s"/>':''}
+   ${a.hives?'<g fill="#e2574c" opacity=".6"><circle cx="70" cy="140" r="4"/><circle cx="130" cy="136" r="3.4"/><circle cx="118" cy="90" r="3"/><circle cx="84" cy="94" r="2.6"/></g>':''}
   </g>
-  ${a.baby?`<g class="baby"><ellipse cx="150" cy="188" rx="34" ry="24" fill="#fff6e6" stroke="#0001"/><circle cx="134" cy="176" r="15" fill="${SKIN[a.skin||0]}"/><path d="M128 176 q2 -2 4 0 M137 176 q2 -2 4 0" stroke="#221c1a" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M131 183 q3 2 6 0" stroke="#7a2e2e" stroke-width="1.6" fill="none" stroke-linecap="round"/></g>`:''}
+  ${a.hives?'<g fill="#e2574c" opacity=".6"><circle cx="96" cy="176" r="3"/><circle cx="108" cy="170" r="2.4"/></g>':''}
+  ${a.baby?`<g class="baby"><path d="M112 206 C112 184 132 176 156 180 C182 184 190 204 180 222 C150 230 124 226 112 206Z" fill="#fff8ea" stroke="#0000001a"/><path d="M118 204 Q150 190 182 214" stroke="#e9dcc0" stroke-width="2" fill="none"/><circle cx="136" cy="186" r="15.5" fill="${SKIN[a.skin||0]}"/><path d="M122 182 Q136 166 150 182 Q136 174 122 182Z" fill="#fff8ea"/><path d="M129 187 q2.6 -2.2 5.2 0 M139 187 q2.6 -2.2 5.2 0" stroke="#2a1e19" stroke-width="1.7" fill="none" stroke-linecap="round"/><ellipse cx="128" cy="192" rx="3" ry="2" fill="#e2675c" opacity=".3"/><ellipse cx="145" cy="192" rx="3" ry="2" fill="#e2675c" opacity=".3"/><path d="M133.5 194 q3 2 6 0" stroke="#a04a44" stroke-width="1.6" fill="none" stroke-linecap="round"/></g>`:''}
   </svg>`;
 }
 
@@ -720,24 +1233,23 @@ let store={};try{store=JSON.parse(localStorage.getItem('ecoe-sim')||'{}')}catch(
 const save=()=>{try{localStorage.setItem('ecoe-sim',JSON.stringify(store))}catch(e){}};
 store.best=store.best||{};
 let cur=null, run=null, tick=null, sample=null, filter='all';
+const inClaude=!!(window.claude&&claude.use);
 
-/* tema */
 function setTheme(t){document.documentElement.dataset.theme=t;$('themeBtn').textContent=t==='dark'?'Modo diurno':'Modo nocturno';store.theme=t;save()}
 $('themeBtn').onclick=()=>{const dark=document.documentElement.dataset.theme?document.documentElement.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;setTheme(dark?'light':'dark')};
 if(store.theme)setTheme(store.theme);else if(matchMedia('(prefers-color-scheme: dark)').matches)$('themeBtn').textContent='Modo diurno';
 
 /* ============ Pasillo ============ */
-function pct(st,sc){return Math.round(100*sc/st.cot.reduce((a,c)=>a+c[1],0))}
 function renderHall(){
   const done=ST.filter(s=>store.best[s.id]!=null);
   $('sDone').textContent=done.length+'/'+ST.length;
   $('sAvg').textContent=done.length?Math.round(done.reduce((a,s)=>a+store.best[s.id],0)/done.length)+' %':'–';
   $('sWeak').textContent=done.length?done.filter(s=>store.best[s.id]<60).length:'–';
-  const used=[...new Set(ST.map(s=>s.area))];
-  $('filters').innerHTML=`<button class="chip" data-f="all" aria-pressed="${filter==='all'}">Todas</button>`+used.map(a=>`<button class="chip" data-f="${a}" aria-pressed="${filter===a}">${AREAS[a][0]}</button>`).join('');
+  const used=ORDER.filter(a=>ST.some(s=>s.area===a));
+  $('filters').innerHTML=`<button class="chip" data-f="all" aria-pressed="${filter==='all'}">Todas (${ST.length})</button>`+used.map(a=>`<button class="chip" data-f="${a}" aria-pressed="${filter===a}">${AREAS[a][0]} (${ST.filter(s=>s.area===a).length})</button>`).join('');
   $('grid').innerHTML=ST.filter(s=>filter==='all'||s.area===filter).map((s,i)=>{
-    const b=store.best[s.id], cls=b==null?'':(b>=75?'ok':b>=60?'warn':'bad');
-    return `<button class="door" data-id="${s.id}" data-c style="--c:${AREAS[s.area][1]};animation-delay:${i*.03}s">
+    const b=store.best[s.id], cls=b==null?'':(b>=70?'ok':b>=60?'warn':'bad');
+    return `<button class="door" data-id="${s.id}" data-c style="--c:${AREAS[s.area][1]};animation-delay:${Math.min(i,14)*.03}s">
       ${avatar(s.pt.av)}
       <span style="display:flex;flex-direction:column;gap:3px;min-width:0">
         <span class="eyebrow">${AREAS[s.area][0]} ${s.real?'<span class="real">estación real</span>':''}</span>
@@ -748,20 +1260,23 @@ function renderHall(){
 }
 $('filters').onclick=e=>{const b=e.target.closest('[data-f]');if(b){filter=b.dataset.f;renderHall()}};
 $('grid').onclick=e=>{const b=e.target.closest('[data-id]');if(b)openStation(b.dataset.id)};
-$('rndBtn').onclick=()=>{const pool=ST.filter(s=>store.best[s.id]==null);const l=pool.length?pool:ST;openStation(l[Math.floor(Math.random()*l.length)].id)};
+$('rndBtn').onclick=()=>{const base=ST.filter(s=>filter==='all'||s.area===filter);const pool=base.filter(s=>store.best[s.id]==null);const l=pool.length?pool:base;openStation(l[Math.floor(Math.random()*l.length)].id)};
+$('resetBtn').onclick=()=>{const b=$('resetBtn');
+  if(b.dataset.arm){clearTimeout(b._t);delete b.dataset.arm;store.best={};save();renderHall();b.textContent='Progreso borrado';b._t=setTimeout(()=>b.textContent='Borrar progreso',2500);return}
+  b.dataset.arm=1;b.textContent='¿Seguro? Tocá de nuevo';b._t=setTimeout(()=>{delete b.dataset.arm;b.textContent='Borrar progreso'},4000)};
 $('homeBtn').onclick=goHome;
 function goHome(){stopTimer();cur=null;$('station').hidden=true;$('hall').style.display='flex';$('homeBtn').hidden=true;renderHall();scrollTo(0,0)}
 
 /* ============ Estación ============ */
 function openStation(id){
   cur=ST.find(s=>s.id===id);run={asked:new Set(),exam:new Set(),done:new Set(),chat:[],left:480,phase:'door',mode:sample?'free':'guided',ticks:{}};
-  $('hall').style.display='none';$('station').hidden=false;$('homeBtn').hidden=false;
+  $('hall').style.display='none';$('station').hidden=false;$('homeBtn').hidden=false;$('aiPanel').hidden=true;
   $('room').style.setProperty('--c',AREAS[cur.area][1]);
   $('avBox').innerHTML=avatar(cur.pt.av,true);$('ptName').textContent=cur.pt.n;$('ptMeta').textContent=cur.pt.e;
   $('bubble').hidden=true;$('clock').textContent='8:00';$('clock').classList.remove('low');$('timerBox').classList.remove('running');
   $('phase').textContent='Leé la consigna. El reloj arranca cuando entrás.';
   $('startBtn').hidden=false;$('startBtn').textContent='Entrar a la estación';$('endBtn').hidden=true;$('work').hidden=true;$('review').hidden=true;$('sheet').hidden=false;
-  $('sheet').innerHTML=`<div class="eyebrow">Instrucciones para el estudiante ${cur.real?'<span class="real">estación real</span>':''}</div>
+  $('sheet').innerHTML=`<div class="eyebrow">${AREAS[cur.area][0]} · Instrucciones para el estudiante ${cur.real?'<span class="real">estación real</span>':''}</div>
     <h2>${esc(cur.motivo)}</h2>
     <p><b>Lugar:</b> ${esc(cur.lugar)}</p><p><b>Paciente:</b> ${esc(cur.pt.n)}, ${esc(cur.pt.e)}</p>
     <p>${esc(cur.sit)}</p><p><b>Tenés 8 minutos para:</b></p><ol>${cur.tareas.map(t=>`<li>${esc(t)}</li>`).join('')}</ol>`;
@@ -774,31 +1289,33 @@ $('startBtn').onclick=()=>{
   if(run.phase==='review'){openStation(cur.id);return}
   run.phase='run';$('startBtn').hidden=true;$('endBtn').hidden=false;$('work').hidden=false;$('timerBox').classList.add('running');
   $('phase').textContent='Dentro de la estación';say(cur.abre);renderWork();
-  tick=setInterval(()=>{run.left--;$('clock').textContent=fmt(Math.max(0,run.left));if(run.left<=60)$('clock').classList.add('low');if(run.left<=0){$('phase').textContent='Sonó el timbre: pasá a la corrección.';finish()}},1000);
+  tick=setInterval(()=>{run.left--;$('clock').textContent=fmt(Math.max(0,run.left));if(run.left<=60)$('clock').classList.add('low');if(run.left<=0)finish(true)},1000);
 };
-$('endBtn').onclick=finish;
+$('endBtn').onclick=()=>finish(false);
 
-/* pestañas */
 document.querySelector('.tabs').onclick=e=>{const b=e.target.closest('.tab');if(!b)return;document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected',t===b));['ask','exam','do'].forEach(t=>$('tab-'+t).hidden=t!==b.dataset.t)};
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function counts(){$('nExam').textContent=run.exam.size?' '+run.exam.size:'';$('nDo').textContent=run.done.size?' '+run.done.size:''}
 function renderWork(){
   document.querySelectorAll('.tab').forEach((t,i)=>t.setAttribute('aria-selected',i===0));['ask','exam','do'].forEach((t,i)=>$('tab-'+t).hidden=i!==0);
   document.querySelector('[data-t="exam"]').hidden=!cur.x.length;
-  $('modeRow').hidden=!sample;setMode(run.mode);
+  setMode(sample?run.mode:'guided');
   $('chat').innerHTML=`<div class="msg pt">${esc(cur.abre)}</div>`;$('freeMsg').textContent='';
   $('askOpts').innerHTML=cur.q.map((q,i)=>`<button class="opt" data-k="${i}"><span class="cat">${esc(q[0])}</span>${esc(q[1])}</button>`).join('');
-  $('examOpts').innerHTML=cur.x.map((x,i)=>`<button class="opt" data-k="${i}">${esc(x[0])}</button>`).join('');
-  run.order=shuffle(cur.d.map((_,i)=>i));
-  $('doOpts').innerHTML=run.order.map(i=>`<button class="opt" data-k="${i}">${esc(cur.d[i][0])}</button>`).join('');
+  $('examOpts').innerHTML=cur.x.map((x,i)=>`<button class="opt pick" data-k="${i}" aria-pressed="false"><span>${esc(x[0])}</span></button>`).join('');
+  $('doOpts').innerHTML=shuffle(cur.d.map((_,i)=>i)).map(i=>`<button class="opt pick" data-k="${i}" aria-pressed="false"><span>${esc(cur.d[i][0])}</span></button>`).join('');
+  counts();
 }
-function setMode(m){run.mode=m;$('mFree').setAttribute('aria-pressed',m==='free');$('mGuided').setAttribute('aria-pressed',m==='guided');$('freeBox').hidden=m!=='free';$('askOpts').hidden=m!=='guided'}
+function setMode(m){run.mode=m;$('modeRow').hidden=!sample;$('aiHint').hidden=!!sample||inClaude;$('mFree').setAttribute('aria-pressed',m==='free');$('mGuided').setAttribute('aria-pressed',m==='guided');$('freeBox').hidden=m!=='free';$('askOpts').hidden=m!=='guided'}
 $('mFree').onclick=()=>setMode('free');$('mGuided').onclick=()=>setMode('guided');
-function reveal(btn,text){if(btn.querySelector('.ans'))return;btn.classList.add('used');const s=document.createElement('span');s.className='ans';s.textContent=text;btn.appendChild(s)}
-$('askOpts').onclick=e=>{const b=e.target.closest('.opt');if(!b||run.phase!=='run')return;const i=+b.dataset.k;run.asked.add(i);reveal(b,cur.q[i][2]);say(cur.q[i][2])};
-$('examOpts').onclick=e=>{const b=e.target.closest('.opt');if(!b||run.phase!=='run')return;const i=+b.dataset.k;run.exam.add(i);reveal(b,cur.x[i][1])};
-$('doOpts').onclick=e=>{const b=e.target.closest('.opt');if(!b||run.phase!=='run')return;const i=+b.dataset.k;run.done.add(i);b.classList.add('used')};
+$('askOpts').onclick=e=>{const b=e.target.closest('.opt');if(!b||run.phase!=='run')return;const i=+b.dataset.k;run.asked.add(i);if(!b.querySelector('.ans')){b.classList.add('used');const s=document.createElement('span');s.className='ans';s.textContent=cur.q[i][2];b.appendChild(s)}say(cur.q[i][2])};
+$('examOpts').onclick=e=>{const b=e.target.closest('.opt');if(!b||run.phase!=='run')return;const i=+b.dataset.k,box=b.lastElementChild;
+  if(run.exam.has(i)){run.exam.delete(i);b.classList.remove('used');b.setAttribute('aria-pressed','false');const a=box.querySelector('.ans');if(a)a.remove()}
+  else{run.exam.add(i);b.classList.add('used');b.setAttribute('aria-pressed','true');const s=document.createElement('span');s.className='ans';s.textContent=cur.x[i][1];box.appendChild(s)}
+  counts()};
+$('doOpts').onclick=e=>{const b=e.target.closest('.opt');if(!b||run.phase!=='run')return;const i=+b.dataset.k;const on=!run.done.has(i);on?run.done.add(i):run.done.delete(i);b.classList.toggle('used',on);b.setAttribute('aria-pressed',on);counts()};
 
-/* entrevista libre con Claude */
+/* entrevista libre */
 function patientPrompt(){return `Sos un PACIENTE SIMULADO en una estación de examen clínico (ECOE) para un estudiante de Medicina en la Argentina. Interpretás a: ${cur.pt.n}, ${cur.pt.e}. Lugar: ${cur.lugar}.
 GUION (es todo lo que sabés): ${cur.guion}
 REGLAS: respondé SIEMPRE en primera persona, en español rioplatense, con 1 a 3 oraciones, como una persona real y con la emoción del guion. Contestá sólo lo que te preguntan; los datos marcados como «SOLO si preguntan» no los ofrezcas espontáneamente. Si te preguntan algo que no está en el guion, respondé de forma verosímil y neutra («no», «no sé», «normal»). No uses términos médicos, no des diagnósticos ni consejos, no salgas del personaje y no menciones que sos una IA ni que hay un guion. Si el estudiante te explica algo o te contiene, reaccioná como lo haría el paciente.`}
@@ -806,63 +1323,64 @@ $('askForm').onsubmit=async e=>{
   e.preventDefault();const t=$('askIn').value.trim();if(!t||run.phase!=='run'||!sample||run.busy)return;
   $('askIn').value='';run.chat.push({role:'user',content:t});
   const c=$('chat');c.insertAdjacentHTML('beforeend',`<div class="msg me">${esc(t)}</div><div class="msg pt" id="pend">…</div>`);c.scrollTop=c.scrollHeight;
-  run.busy=true;$('askBtn').disabled=true;
+  run.busy=true;$('askBtn').disabled=true;$('freeMsg').textContent='';
   try{
     const msgs=run.chat.map((m,i)=>i===0?{role:'user',content:patientPrompt()+'\n\nEl estudiante dice: '+m.content}:m);
-    const r=await sample(msgs);
+    const r=await sample(msgs,{modelTier:'quick',cache:false});
     const ans=(r&&r.text||'').trim()||'…';run.chat.push({role:'assistant',content:ans});const p=$('pend');if(p){p.textContent=ans;p.removeAttribute('id')}say(ans);
   }catch(err){
     run.chat.pop();const p=$('pend');if(p)p.remove();
-    $('freeMsg').textContent=err&&err.code==='rate_limited'?'Demasiadas consultas seguidas. Esperá un momento o pasá a la entrevista guiada.':'El paciente no pudo responder. Pasá a la entrevista guiada.';
-    if(err&&err.code==='bad_key')$('freeMsg').textContent='La clave o el modelo no son válidos. Revisalos en «Configurar IA» o pasá a la entrevista guiada.';
+    $('freeMsg').textContent=err&&err.code==='rate_limited'?'Llegaste al límite de consultas por minuto. Esperá un momento o pasá a la entrevista guiada.':err&&err.code==='bad_key'?'La clave o el modelo no son válidos. Revisalos en «Configurar IA» o pasá a la entrevista guiada.':'El paciente no pudo responder. Pasá a la entrevista guiada.';
+    if(err&&err.code==='not_granted'){sample=null;setMode('guided')}
   }
-  run.busy=false;$('askBtn').disabled=false;$('askIn').focus();
+  run.busy=false;$('askBtn').disabled=false;c.scrollTop=c.scrollHeight;$('askIn').focus();
 };
 $('askIn').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('askForm').requestSubmit()}};
 
 /* ============ Corrección ============ */
-function finish(){
+function finish(bell){
   if(!cur||run.phase!=='run')return;run.phase='review';stopTimer();
-  $('work').hidden=true;$('endBtn').hidden=true;$('startBtn').hidden=false;$('startBtn').textContent='Repetir la estación';
-  $('phase').textContent='Estación terminada en '+fmt(480-Math.max(0,run.left))+'.';
-  run.ticks={};
-  run.asked.forEach(i=>{const it=cur.q[i][3];if(it>=0)run.ticks[it]=true});
-  run.exam.forEach(i=>{const it=cur.x[i][2];if(it>=0)run.ticks[it]=true});
-  run.done.forEach(i=>{const it=cur.d[i][2];if(it>=0)run.ticks[it]=true});
+  $('work').hidden=true;$('endBtn').hidden=true;$('startBtn').hidden=false;$('startBtn').textContent='Repetir la estación';$('bubble').hidden=true;
+  run.used=480-Math.max(0,run.left);$('phase').textContent=bell?'Sonó el timbre.':'Estación terminada.';
+  run.ticks={};run.auto={};
+  const hit=it=>{if(it>=0){run.ticks[it]=true;run.auto[it]=true}};
+  run.asked.forEach(i=>hit(cur.q[i][3]));run.exam.forEach(i=>hit(cur.x[i][2]));run.done.forEach(i=>hit(cur.d[i][2]));
   renderReview();
   if(sample&&run.chat.length)gradeChat();
 }
-function errors(){return [...run.done].filter(i=>cur.d[i][2]===-1).map(i=>cur.d[i])}
-function extraTests(){return [...run.exam].filter(i=>cur.x[i][2]===-9).map(i=>cur.x[i])}
-function total(){return cur.cot.reduce((a,c)=>a+c[1],0)}
-function score(){let s=cur.cot.reduce((a,c,i)=>a+(run.ticks[i]?c[1]:0),0);errors().forEach(d=>s-=d[3]||0);return Math.max(0,s)}
+const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+const errs=()=>[...run.done].filter(i=>cur.d[i][2]===-1).map(i=>cur.d[i]);
+const extras=()=>[...run.exam].filter(i=>cur.x[i][2]===-9).map(i=>cur.x[i]);
+const total=()=>cur.cot.reduce((a,c)=>a+c[1],0);
+const minus=()=>errs().reduce((a,d)=>a+(d[3]||0),0)+extras().length*3;
+const score=()=>Math.max(0,cur.cot.reduce((a,c,i)=>a+(run.ticks[i]?c[1]:0),0)-minus());
 function renderReview(){
   const r=$('review');r.hidden=false;$('sheet').hidden=true;
-  const groups=[...new Set(cur.cot.map(c=>c[2]))];
-  const errs=errors(), ext=extraTests(), good=[...run.done].filter(i=>cur.d[i][2]!==-1).map(i=>cur.d[i]);
-  const missed=cur.d.filter((d,i)=>d[2]!==-1&&!run.done.has(i));
-  r.innerHTML=`<div class="eyebrow">Lista de cotejo del examinador</div>
-   <div class="score"><b id="scNum">0</b><div style="flex:1;min-width:160px"><div id="scTxt" class="muted"></div><div class="bar" style="margin-top:6px"><i id="scBar" style="width:0"></i></div></div></div>
-   <p class="muted small">Los ítems que hiciste en la simulación ya están marcados. Marcá a mano lo que dijiste o hiciste en voz alta y la simulación no registró (sobre todo comunicación). Sé estricto: el examinador sólo puntúa lo que ve y escucha.</p>
+  const groups=Object.keys(G).filter(g=>cur.cot.some(c=>c[2]===g));
+  const E=errs(), X=extras(), right=cur.d.map((d,i)=>[d,i]).filter(([d])=>d[2]!==-1);
+  r.innerHTML=`<div class="eyebrow">Corrección · ${esc(cur.motivo)}</div>
+   <div class="res"><b id="scNum">0 %</b><div class="verdict" id="scVer"></div><div><div class="bar"><i id="scBar" style="width:0"></i></div></div></div>
+   <div class="facts" id="facts"></div>
    <div class="note info" id="aiNote" hidden></div>
-   ${errs.length?`<div class="note bad"><b>Errores que descuentan</b><ul class="keys">${errs.map(d=>`<li>${esc(d[0])} <b>−${d[3]}</b><br>${esc(d[1])}</li>`).join('')}</ul></div>`:''}
-   ${ext.length?`<div class="note bad"><b>Estudios que no correspondían</b><ul class="keys">${ext.map(x=>`<li>${esc(x[0])}: ${esc(x[1])}</li>`).join('')}</ul></div>`:''}
-   <div class="cot" data-c style="--c:${AREAS[cur.area][1]}">${groups.map(g=>`<h3>${G[g]}</h3>`+cur.cot.map((c,i)=>c[2]!==g?'':`<div class="ci ${run.ticks[i]?'hit':''}"><input type="checkbox" id="ck${i}" data-i="${i}" ${run.ticks[i]?'checked':''}><label for="ck${i}">${esc(c[0])}</label><span class="pts">${c[1]} pts</span></div>`).join('')).join('')}</div>
-   <div><div class="eyebrow" style="margin-bottom:6px">Evaluación global (autoevaluación)</div><div class="glob" id="glob">${['Insuficiente','Limítrofe','Suficiente','Superior'].map((t,i)=>`<button data-g="${i+1}" aria-pressed="false">${i+1} · ${t}</button>`).join('')}</div></div>
-   ${good.length?`<details><summary><b>Lo que indicaste bien</b></summary><ul class="keys" style="margin-top:8px">${good.map(d=>`<li>${esc(d[0])}<br><span class="muted small">${esc(d[1])}</span></li>`).join('')}</ul></details>`:''}
-   ${missed.length?`<details open><summary><b>Conductas que te faltaron</b></summary><ul class="keys" style="margin-top:8px">${missed.map(d=>`<li>${esc(d[0])}<br><span class="muted small">${esc(d[1])}</span></li>`).join('')}</ul></details>`:''}
-   <div class="note ok"><b>Lo que hay que saber de esta estación</b><ul class="keys" style="margin-top:6px">${cur.claves.map(k=>`<li>${esc(k)}</li>`).join('')}</ul></div>
+   <div>
+     <div class="row" style="justify-content:space-between;margin-bottom:8px"><h3>Lista de cotejo</h3><span class="muted small">Tildá lo que dijiste en voz alta y no quedó registrado.</span></div>
+     <div data-c style="--c:${AREAS[cur.area][1]}" id="cot">${groups.map(g=>`<div class="grp"><header><span>${G[g]}</span><span class="mono" data-g="${g}"></span></header>${cur.cot.map((c,i)=>c[2]!==g?'':`<label class="ci ${run.ticks[i]?'hit':''}"><input type="checkbox" data-i="${i}" ${run.ticks[i]?'checked':''}><span class="t">${esc(c[0])}</span><span class="pts">${c[1]}</span></label>`).join('')}</div>`).join('')}</div>
+   </div>
+   ${E.length||X.length?`<div class="minus"><header>Descuentos</header>${E.map(d=>`<div class="mi"><span>${esc(d[0])}</span><span class="pts">−${d[3]}</span><span class="why">${esc(cap(d[1].replace(/^Error( grave)?: /,'')))}</span></div>`).join('')}${X.map(x=>`<div class="mi"><span>${esc(x[0])}</span><span class="pts">−3</span><span class="why">${esc(x[1])}</span></div>`).join('')}</div>`:''}
+   <details class="fold" open><summary>Lo que hay que saber de esta estación</summary><ul>${cur.claves.map(k=>`<li>${esc(k)}</li>`).join('')}</ul></details>
+   ${right.length?`<details class="fold"><summary>Conductas correctas y su fundamento</summary><ul>${right.map(([d,i])=>`<li class="${run.done.has(i)?'got':'miss'}">${run.done.has(i)?'✓ ':''}${esc(d[0])}<span class="why">${esc(cap(d[1].replace(/^(Correcto|Bien)[.:]?\s*/,'')))}</span></li>`).join('')}</ul></details>`:''}
    <p class="muted small">Bibliografía: ${esc(cur.ref)}</p>
    <div class="row"><button class="btn primary" id="again">Repetir la estación</button><button class="btn" id="back2">Volver al pasillo</button></div>`;
-  r.querySelector('.cot').onchange=e=>{const i=e.target.dataset.i;if(i==null)return;run.ticks[i]=e.target.checked;e.target.closest('.ci').classList.toggle('hit',e.target.checked);updScore()};
-  $('glob').onclick=e=>{const b=e.target.closest('[data-g]');if(!b)return;$('glob').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b))};
+  $('cot').onchange=e=>{const i=e.target.dataset.i;if(i==null)return;run.ticks[i]=e.target.checked;e.target.closest('.ci').classList.toggle('hit',e.target.checked);updScore()};
   $('again').onclick=()=>openStation(cur.id);$('back2').onclick=goHome;
   updScore();r.scrollIntoView({behavior:'smooth',block:'start'});
 }
 function updScore(){
-  const s=score(),t=total(),p=Math.round(100*s/t);
+  const s=score(),t=total(),p=Math.round(100*s/t),n=cur.cot.filter((c,i)=>run.ticks[i]).length,m=minus();
   $('scNum').textContent=p+' %';$('scBar').style.width=p+'%';
-  $('scTxt').textContent=`${s} de ${t} puntos · ${p>=75?'Bien resuelta':p>=60?'En el límite: repasá lo que faltó':'Por debajo del corte: repetila mañana'}`;
+  $('scVer').textContent=p>=85?'Superior':p>=70?'Suficiente':p>=60?'Limítrofe':'Insuficiente';
+  $('facts').innerHTML=`<span class="fact">${s} de ${t} puntos</span><span class="fact">${n} de ${cur.cot.length} ítems</span>${m?`<span class="fact bad">−${m} por errores</span>`:''}<span class="fact">${fmt(run.used)} de 8:00</span>`;
+  document.querySelectorAll('#cot [data-g]').forEach(el=>{const g=el.dataset.g;const got=cur.cot.reduce((a,c,i)=>a+(c[2]===g&&run.ticks[i]?c[1]:0),0),all=cur.cot.reduce((a,c)=>a+(c[2]===g?c[1]:0),0);el.textContent=got+' / '+all});
   if(store.best[cur.id]==null||p>store.best[cur.id]){store.best[cur.id]=p;save()}
 }
 async function gradeChat(){
@@ -871,17 +1389,15 @@ async function gradeChat(){
     const tr=run.chat.map(m=>(m.role==='user'?'ESTUDIANTE: ':'PACIENTE: ')+m.content).join('\n');
     const items=cur.cot.map((c,i)=>i+'. '+c[0]).join('\n');
     const res=await sample.json(`Sos examinador de un ECOE de Medicina. Corregí de forma estricta la entrevista: un ítem se cumple sólo si el estudiante lo hizo o lo dijo de manera explícita.\nLISTA DE COTEJO:\n${items}\n\nENTREVISTA:\n${tr}\n\nDevolvé sólo JSON con esta forma: {"cumplidos":[números de ítem cumplidos en la entrevista],"comentario":"dos oraciones en español rioplatense sobre lo mejor y lo que faltó"}`,{modelTier:'default'});
-    (res.cumplidos||[]).forEach(i=>{if(cur.cot[i]){run.ticks[i]=true;const c=$('ck'+i);if(c){c.checked=true;c.closest('.ci').classList.add('hit')}}});
-    n.textContent='Corrección de la entrevista: '+(res.comentario||'ítems marcados según lo que dijiste.');updScore();
-  }catch(e){n.textContent='No se pudo corregir la entrevista automáticamente. Marcá los ítems a mano.'}
+    (res.cumplidos||[]).forEach(i=>{if(cur.cot[i]){run.ticks[i]=true;const c=document.querySelector('#cot input[data-i="'+i+'"]');if(c){c.checked=true;c.closest('.ci').classList.add('hit')}}});
+    n.textContent='Devolución de la entrevista: '+(res.comentario||'se marcaron los ítems según lo que dijiste.');updScore();
+  }catch(e){n.textContent='No se pudo corregir la entrevista automáticamente. Tildá los ítems a mano.'}
 }
 
-/* ============ Inicio ============ */
-renderHall();
-/* ============ IA externa (clave propia de cada usuario) ============ */
+/* ============ IA con clave propia (versión web) ============ */
 const PROV={
- gemini:{model:'gemini-3.5-flash-lite',help:'Sacá la clave gratis en <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> (con tu cuenta de Google, sin tarjeta).'},
- groq:{model:'openai/gpt-oss-120b',help:'Sacá la clave gratis en <a href="https://console.groq.com/keys" target="_blank" rel="noopener">console.groq.com/keys</a>.'}};
+ gemini:{model:'gemini-3.5-flash-lite',steps:['Entrá a <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> con tu cuenta de Google.','Tocá el botón para crear una clave de API («Create API key») y aceptá los términos si te los pide. Es gratis y no pide tarjeta.','Copiá la clave que aparece.','Pegala acá abajo y tocá «Guardar y probar». Si avisa que llegaste al límite gratuito, esperá un minuto y seguí.']},
+ groq:{model:'openai/gpt-oss-120b',steps:['Entrá a <a href="https://console.groq.com/keys" target="_blank" rel="noopener">console.groq.com/keys</a> y creá una cuenta.','Creá una clave de API y copiala.','Pegala acá abajo y tocá «Guardar y probar».']}};
 function aiErr(status,msg){const e=new Error(msg||('HTTP '+status));e.code=status===429?'rate_limited':(status===400||status===401||status===403||status===404)?'bad_key':'failed';return e}
 async function aiCall(cfg,msgs,maxTok){
   let res,data;
@@ -907,17 +1423,19 @@ async function aiModels(prov,key){
     if(prov==='gemini'){const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models?pageSize=200',{headers:{'x-goog-api-key':key}});if(!r.ok)return[];const d=await r.json();
       return (d.models||[]).filter(m=>(m.supportedGenerationMethods||[]).includes('generateContent')).map(m=>m.name.replace('models/','')).filter(n=>/^gemini/.test(n)&&!/tts|image|live|audio|embed/.test(n))}
     const r=await fetch('https://api.groq.com/openai/v1/models',{headers:{'Authorization':'Bearer '+key}});if(!r.ok)return[];const d=await r.json();
-    return (d.data||[]).map(m=>m.id).filter(n=>!/whisper|tts|guard|safeguard|orpheus/.test(n));
+    return (d.data||[]).map(m=>m.id).filter(n=>!/whisper|tts|guard|orpheus/.test(n));
   }catch(e){return[]}
 }
 function aiUI(){
-  const c=store.ai||{};$('aiProv').value=c.prov||'gemini';$('aiKey').value=c.key||'';$('aiModel').value=c.model||PROV[$('aiProv').value].model;
-  $('aiHelp').innerHTML=PROV[$('aiProv').value].help;$('aiBtn').textContent=sample?'IA activada':'Configurar IA';
+  const c=store.ai||{},p=$('aiProv').value=c.prov||$('aiProv').value||'gemini';$('aiKey').value=c.key||$('aiKey').value;if(!$('aiModel').value)$('aiModel').value=c.model||PROV[p].model;
+  $('aiSteps').innerHTML=PROV[p].steps.map(s=>`<li>${s}</li>`).join('');$('aiBtn').textContent=sample?'IA activada ✓':'Configurar IA';
 }
-$('aiBtn').onclick=()=>{$('aiPanel').hidden=!$('aiPanel').hidden;aiUI();if(!$('aiPanel').hidden)$('aiPanel').scrollIntoView({block:'nearest'})};
+function openAI(){$('aiPanel').hidden=false;aiUI();$('aiPanel').scrollIntoView({behavior:'smooth',block:'start'})}
+$('aiBtn').onclick=()=>{if($('aiPanel').hidden)openAI();else $('aiPanel').hidden=true};
+$('aiHintBtn').onclick=openAI;
 $('aiClose').onclick=()=>{$('aiPanel').hidden=true};
-$('aiProv').onchange=()=>{const p=$('aiProv').value;$('aiModel').value=PROV[p].model;$('aiHelp').innerHTML=PROV[p].help;$('aiModels').innerHTML=''};
-$('aiDel').onclick=()=>{delete store.ai;save();sample=null;$('aiKey').value='';$('aiMsg').textContent='Clave borrada de este navegador.';aiUI();if(run&&run.phase==='run'){$('modeRow').hidden=true;setMode('guided')}};
+$('aiProv').onchange=()=>{const p=$('aiProv').value;$('aiModel').value=PROV[p].model;$('aiModels').innerHTML='';$('aiSteps').innerHTML=PROV[p].steps.map(s=>`<li>${s}</li>`).join('')};
+$('aiDel').onclick=()=>{delete store.ai;save();sample=null;$('aiKey').value='';$('aiMsg').textContent='Clave borrada de este navegador.';aiUI();if(run&&run.phase==='run')setMode('guided')};
 $('aiSave').onclick=async()=>{
   const cfg={prov:$('aiProv').value,key:$('aiKey').value.trim(),model:$('aiModel').value.trim()||PROV[$('aiProv').value].model};
   if(!cfg.key){$('aiMsg').textContent='Falta pegar la clave.';return}
@@ -926,16 +1444,19 @@ $('aiSave').onclick=async()=>{
   try{
     await aiCall(cfg,[{role:'user',content:'Respondé solo: listo'}],200);
     store.ai=cfg;save();sample=makeAI(cfg);$('aiMsg').textContent='Funciona. La entrevista libre ya está disponible en todas las estaciones.';
-    if(run&&run.phase==='run'){$('modeRow').hidden=false}
+    if(run&&run.phase==='run')setMode(run.mode);
   }catch(e){
-    $('aiMsg').textContent=e.code==='rate_limited'?'La clave es válida, pero llegaste al límite gratuito por ahora. Probá en unos minutos o elegí otro modelo.':
+    $('aiMsg').textContent=e.code==='rate_limited'?'La clave es válida, pero llegaste al límite gratuito por ahora. Probá en un minuto o elegí otro modelo.':
       e.code==='bad_key'?('No funcionó con esa clave y ese modelo ('+(e.message||'').slice(0,140)+').'+(list.length?' Modelos disponibles con tu clave: '+list.slice(0,8).join(', ')+'.':' Revisá que la clave esté completa.')):
       'No se pudo conectar con el proveedor. Revisá tu conexión e intentá de nuevo.';
   }
   $('aiSave').disabled=false;aiUI();
 };
-if(store.ai&&store.ai.key)sample=makeAI(store.ai);
-aiUI();
+
+/* ============ Inicio ============ */
+renderHall();
+if(inClaude){claude.use('sample').then(s=>{sample=s||null;if(sample&&run&&run.phase==='door')run.mode='free'}).catch(()=>{})}
+else{$('aiBtn').hidden=false;if(store.ai&&store.ai.key)sample=makeAI(store.ai);aiUI()}
 </script>
 </body>
 </html>
