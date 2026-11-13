@@ -60,11 +60,11 @@ header{display:flex;justify-content:space-between;align-items:flex-start;gap:12p
 .chip[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 [data-c]{--cc:color-mix(in oklab,var(--c) calc(100% - var(--mixp)),var(--mixc));--cct:color-mix(in oklab,var(--cc) 78%,var(--ink))}
 /* pasillo */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
-.door{background:color-mix(in oklab,var(--cc) 6%,var(--surface));border:1px solid color-mix(in oklab,var(--cc) 35%,var(--line));border-left:5px solid var(--cc);border-radius:12px;padding:12px 14px;display:grid;grid-template-columns:78px minmax(0,1fr);gap:12px;text-align:left;align-items:center;transition:transform .2s,box-shadow .2s;animation:rise .5s cubic-bezier(.2,.8,.2,1) both}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.door{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:grid;grid-template-columns:64px minmax(0,1fr);gap:12px;text-align:left;align-items:center;transition:transform .2s,box-shadow .2s;animation:rise .5s cubic-bezier(.2,.8,.2,1) both}
 .door:hover{transform:translateY(-2px);box-shadow:0 10px 24px -14px color-mix(in oklab,var(--cc) 70%,transparent)}
-.door .av{width:78px;height:90px}
-.door h3{color:var(--cct)}
+.door .av{width:64px;height:74px}
+.door h3{color:var(--ink);font-size:1rem}
 .door .meta{font-size:.84rem;color:var(--muted)}
 .badge{font-family:var(--f-mono);font-size:.76rem;border-radius:99px;padding:1px 8px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
 .badge.ok{background:var(--ok-soft);color:var(--ok);border-color:var(--ok)} .badge.warn{background:var(--warn-soft);color:var(--warn);border-color:var(--warn)} .badge.bad{background:var(--bad-soft);color:var(--bad);border-color:var(--bad)}
@@ -72,10 +72,10 @@ header{display:flex;justify-content:space-between;align-items:flex-start;gap:12p
 @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 /* consultorio */
 .room{display:grid;grid-template-columns:1fr;gap:20px;align-items:start}
-@media (min-width:920px){.room{grid-template-columns:minmax(300px,360px) minmax(0,1fr)}.left{position:sticky;top:16px}}
+@media (min-width:920px){.room{grid-template-columns:minmax(280px,330px) minmax(0,1fr)}.left{position:sticky;top:92px}}
 .left{display:flex;flex-direction:column;gap:14px}
 .stage{align-items:center;text-align:center;border-color:color-mix(in oklab,var(--cc) 45%,var(--line))}
-.stage .av{width:190px;height:218px}
+.stage .av{width:170px;height:196px}
 .bubble{position:relative;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:12px 14px;text-align:left;width:100%;min-height:64px;animation:rise .3s ease-out}
 .bubble::before{content:"";position:absolute;top:-8px;left:50%;width:14px;height:14px;background:var(--bg);border-left:1px solid var(--line);border-top:1px solid var(--line);transform:translateX(-50%) rotate(45deg)}
 .clock{font-family:var(--f-num);font-size:clamp(2.6rem,10vw,3.6rem);line-height:1;font-variant-numeric:tabular-nums;transition:color .4s}
@@ -115,6 +115,7 @@ header{display:flex;justify-content:space-between;align-items:flex-start;gap:12p
 .grp{border:1px solid var(--line);border-radius:10px;overflow:hidden}
 .grp+.grp{margin-top:10px}
 .grp header{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 12px;background:color-mix(in oklab,var(--cc) 10%,var(--surface));flex-wrap:nowrap}
+.grp:first-child{margin-top:0}
 .grp header span:first-child{font-weight:600;color:var(--cct)}
 .grp header .mono{font-size:.84rem;color:var(--muted);white-space:nowrap}
 .ci{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 12px;border-top:1px solid var(--line);cursor:pointer}
@@ -140,6 +141,43 @@ details.fold li.miss{color:var(--ink)} details.fold li.got::marker{color:var(--o
 .cfg label{display:flex;flex-direction:column;gap:4px;font-size:.86rem;color:var(--muted);font-weight:600}
 .cfg input,.cfg select{font:inherit;font-weight:400;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 10px;min-width:0}
 .steps{margin:0;padding:12px 14px 12px 34px;background:var(--accent-soft);border-radius:10px;display:flex;flex-direction:column;gap:4px;font-size:.94rem}
+/* distribución */
+.hall{display:grid;grid-template-columns:1fr;gap:20px;align-items:start}
+.side{gap:16px}
+.prog{display:flex;flex-direction:column;gap:6px}
+.prog>b{font-family:var(--f-num);font-weight:400;font-size:2.6rem;line-height:1;color:var(--accent)}
+.mini{display:flex;justify-content:space-between;gap:10px;font-size:.88rem;color:var(--muted)}
+.mini b{color:var(--ink);font-family:var(--f-mono);font-weight:600}
+#filters{display:flex;flex-wrap:wrap;gap:6px}
+.sec{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:none;border-radius:99px;padding:4px 10px;font-size:.88rem;color:var(--ink);text-align:left}
+.sec .dot{width:10px;height:10px;border-radius:50%;background:var(--cc);flex:none}
+.sec .cnt{font-family:var(--f-mono);font-size:.76rem;color:var(--muted);margin-left:auto;padding-left:6px}
+.sec[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);font-weight:600}
+.btn.ghost{background:none;color:var(--muted);font-weight:500}
+.btn.big{padding:12px 22px;font-size:1.05rem}
+.main{display:flex;flex-direction:column;gap:22px;min-width:0}
+.block>header{display:flex;align-items:center;gap:10px;margin-bottom:10px;justify-content:flex-start;flex-wrap:nowrap}
+.block>header .dot{width:12px;height:12px;border-radius:50%;background:var(--cc)}
+.block>header h2{color:var(--cct);font-size:1.15rem}
+.block>header .mono{font-size:.8rem;color:var(--muted)}
+.block>header::after{content:"";flex:1;height:1px;background:var(--line)}
+@media (min-width:980px){.hall{grid-template-columns:260px minmax(0,1fr)}.side{position:sticky;top:16px}#filters{flex-direction:column;flex-wrap:nowrap;gap:2px}.sec{border-radius:8px;border-color:transparent;padding:6px 8px;width:100%}.sec:hover{background:var(--accent-soft)}}
+.doorview{max-width:820px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr;gap:18px;padding:24px;border-top:6px solid var(--cc)}
+.doorview .av{width:150px;height:172px;margin:0 auto}
+.doorview .sheet,.left .sheet{border:0;display:flex;flex-direction:column;gap:10px}
+.doorgo{grid-column:1/-1;justify-content:center;border-top:1px solid var(--line);padding-top:16px}
+@media (min-width:640px){.doorview{grid-template-columns:170px minmax(0,1fr);align-items:start}}
+#roomWrap{display:flex;flex-direction:column;gap:16px}
+.topbar{position:sticky;top:8px;z-index:5;flex-direction:row;align-items:center;gap:14px;padding:10px 16px;border-left:6px solid var(--cc);box-shadow:0 8px 20px -16px color-mix(in oklab,var(--ink) 60%,transparent)}
+.topbar .tbt{flex:1;min-width:0}
+.tbtitle{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar .clock{font-size:clamp(1.8rem,6vw,2.4rem)}
+#review{display:flex;flex-direction:column;gap:16px}
+.revhead{display:grid;grid-template-columns:1fr;gap:14px;border-top:6px solid var(--cc)}
+.revgrid{display:grid;grid-template-columns:1fr;gap:16px;align-items:start}
+.revgrid .col{display:flex;flex-direction:column;gap:14px;min-width:0}
+@media (min-width:980px){.revhead{grid-template-columns:minmax(0,1fr) auto;align-items:center}.revgrid{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}}
+details.fold{background:var(--surface)}
 [hidden]{display:none!important}
 /* avatar */
 .av{display:block}
@@ -176,8 +214,6 @@ details.fold li.miss{color:var(--ink)} details.fold li.got::marker{color:var(--o
       <button class="btn" id="homeBtn" hidden>← Volver al pasillo</button>
       <button class="btn" id="aiBtn" hidden>Configurar IA</button>
       <button class="btn" id="themeBtn">Modo nocturno</button>
-      <button class="btn" id="loginBtn" hidden>Iniciar sesión con Google</button>
-      <span id="syncMsg" style="align-self:center;font-size:.85em;opacity:.75"></span>
     </div>
   </header>
 
@@ -195,43 +231,44 @@ details.fold li.miss{color:var(--ink)} details.fold li.got::marker{color:var(--o
     <p class="muted small">La clave queda guardada solo en este navegador y se envía únicamente al proveedor elegido. No la compartas con nadie.</p>
   </section>
 
-  <section id="hall" style="display:flex;flex-direction:column;gap:20px">
-    <div class="strip">
-      <div class="stat"><b id="sDone">0</b><span>estaciones practicadas</span></div>
-      <div class="stat"><b id="sAvg">–</b><span>puntaje promedio</span></div>
-      <div class="stat"><b id="sWeak">–</b><span>estaciones por debajo de 60 %</span></div>
-    </div>
-    <div class="panel">
-      <div class="row" style="justify-content:space-between">
-        <h2>Pasillo de estaciones</h2>
-        <span class="row"><button class="btn" id="resetBtn">Borrar progreso</button><button class="btn primary" id="rndBtn">Estación al azar</button></span>
+  <section id="hall" class="hall">
+    <aside class="panel side">
+      <div class="prog">
+        <b id="sDone">0</b>
+        <span class="muted small">estaciones practicadas</span>
+        <div class="bar"><i id="sBar" style="width:0"></i></div>
+        <div class="mini"><span>Promedio <b id="sAvg">–</b></span><span>Bajo 60 % <b id="sWeak">–</b></span></div>
       </div>
-      <p class="muted small">Cada tarjeta es la puerta de una estación: leés la consigna, entrás y tenés 8 minutos. Al salir, corregís con la lista de cotejo. Bibliografía: tu Cuadernillo ECOE.</p>
-      <div class="row" id="filters"></div>
-      <div class="grid" id="grid"></div>
-    </div>
+      <button class="btn primary" id="rndBtn">Estación al azar</button>
+      <nav id="filters" aria-label="Secciones"></nav>
+      <button class="btn ghost" id="resetBtn">Borrar progreso</button>
+    </aside>
+    <div class="main" id="grid"></div>
   </section>
 
-  <section id="station" hidden>
-    <div class="room" id="room" data-c>
-      <div class="left">
-        <div class="panel stage" id="stage">
-          <div id="avBox"></div>
-          <div><h2 id="ptName"></h2><p class="muted small" id="ptMeta"></p></div>
-          <div class="bubble" id="bubble" hidden></div>
-        </div>
-        <div class="panel timer" id="timerBox" style="align-items:center;text-align:center">
-          <div class="clock" id="clock">8:00</div>
-          <p class="muted small" id="phase"></p>
-          <div class="row" style="justify-content:center">
-            <button class="btn primary" id="startBtn">Entrar a la estación</button>
-            <button class="btn" id="endBtn" hidden>Salir y corregir</button>
-          </div>
-        </div>
+  <section id="station" hidden data-c>
+    <div class="panel doorview" id="door">
+      <div id="doorAv"></div>
+      <div class="sheet" id="sheet"></div>
+      <div class="row doorgo"><button class="btn primary big" id="startBtn">Entrar a la estación</button><span class="muted small">El reloj de 8 minutos arranca al entrar.</span></div>
+    </div>
+
+    <div id="roomWrap" hidden>
+      <div class="panel topbar" id="timerBox">
+        <div class="tbt"><div class="eyebrow" id="tbArea"></div><div class="tbtitle" id="tbTitle"></div></div>
+        <div class="clock" id="clock">8:00</div>
+        <button class="btn" id="endBtn">Salir y corregir</button>
       </div>
-      <div style="display:flex;flex-direction:column;gap:14px;min-width:0">
-        <div class="panel sheet" id="sheet"></div>
-        <div class="panel" id="work" hidden>
+      <div class="room">
+        <div class="left">
+          <div class="panel stage" id="stage">
+            <div id="avBox"></div>
+            <div><h2 id="ptName"></h2><p class="muted small" id="ptMeta"></p></div>
+            <div class="bubble" id="bubble" hidden></div>
+          </div>
+          <details class="fold"><summary>Ver la consigna</summary><div class="sheet" id="sheet2" style="padding-bottom:12px"></div></details>
+        </div>
+        <div class="panel" id="work">
           <div class="tabs" role="tablist">
             <button class="tab" role="tab" data-t="ask" aria-selected="true">Preguntar</button>
             <button class="tab" role="tab" data-t="exam" aria-selected="false">Examinar y pedir<span class="n" id="nExam"></span></button>
@@ -257,9 +294,10 @@ details.fold li.miss{color:var(--ink)} details.fold li.got::marker{color:var(--o
           <div id="tab-exam" hidden><p class="muted small" style="margin-bottom:8px">Elegí qué examinás y qué pedís. Tocá de nuevo para deseleccionar. Los estudios innecesarios descuentan.</p><div class="opts" id="examOpts"></div></div>
           <div id="tab-do" hidden><p class="muted small" style="margin-bottom:8px">Marcá lo que dirías o indicarías. Tocá de nuevo para deseleccionar. Hay opciones incorrectas que descuentan.</p><div class="opts" id="doOpts"></div></div>
         </div>
-        <div class="panel" id="review" hidden></div>
       </div>
     </div>
+
+    <div id="review" hidden></div>
   </section>
 </div>
 
@@ -1232,7 +1270,7 @@ function avatar(a,big){
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let store={};try{store=JSON.parse(localStorage.getItem('ecoe-sim')||'{}')}catch(e){}
-const save=()=>{try{localStorage.setItem('ecoe-sim',JSON.stringify(store))}catch(e){};if(window.cloudSave)window.cloudSave()};
+const save=()=>{try{localStorage.setItem('ecoe-sim',JSON.stringify(store))}catch(e){}};
 store.best=store.best||{};
 let cur=null, run=null, tick=null, sample=null, filter='all';
 const inClaude=!!(window.claude&&claude.use);
@@ -1244,21 +1282,21 @@ if(store.theme)setTheme(store.theme);else if(matchMedia('(prefers-color-scheme: 
 /* ============ Pasillo ============ */
 function renderHall(){
   const done=ST.filter(s=>store.best[s.id]!=null);
-  $('sDone').textContent=done.length+'/'+ST.length;
+  $('sDone').textContent=done.length+'/'+ST.length;$('sBar').style.width=Math.round(100*done.length/ST.length)+'%';
   $('sAvg').textContent=done.length?Math.round(done.reduce((a,s)=>a+store.best[s.id],0)/done.length)+' %':'–';
   $('sWeak').textContent=done.length?done.filter(s=>store.best[s.id]<60).length:'–';
   const used=ORDER.filter(a=>ST.some(s=>s.area===a));
-  $('filters').innerHTML=`<button class="chip" data-f="all" aria-pressed="${filter==='all'}">Todas (${ST.length})</button>`+used.map(a=>`<button class="chip" data-f="${a}" aria-pressed="${filter===a}">${AREAS[a][0]} (${ST.filter(s=>s.area===a).length})</button>`).join('');
-  $('grid').innerHTML=ST.filter(s=>filter==='all'||s.area===filter).map((s,i)=>{
+  const cnt=a=>{const l=ST.filter(s=>a==='all'||s.area===a);return l.filter(s=>store.best[s.id]!=null).length+'/'+l.length};
+  $('filters').innerHTML=`<button class="sec" data-f="all" data-c style="--c:#0B8A63" aria-pressed="${filter==='all'}"><span class="dot"></span>Todas<span class="cnt">${cnt('all')}</span></button>`+used.map(a=>`<button class="sec" data-f="${a}" data-c style="--c:${AREAS[a][1]}" aria-pressed="${filter===a}"><span class="dot"></span>${AREAS[a][0]}<span class="cnt">${cnt(a)}</span></button>`).join('');
+  $('grid').innerHTML=used.filter(a=>filter==='all'||a===filter).map(a=>`<div class="block" data-c style="--c:${AREAS[a][1]}"><header><span class="dot"></span><h2>${AREAS[a][0]}</h2><span class="mono">${cnt(a)}</span></header><div class="grid">`+ST.filter(s=>s.area===a).map(s=>{
     const b=store.best[s.id], cls=b==null?'':(b>=70?'ok':b>=60?'warn':'bad');
-    return `<button class="door" data-id="${s.id}" data-c style="--c:${AREAS[s.area][1]};animation-delay:${Math.min(i,14)*.03}s">
+    return `<button class="door" data-id="${s.id}">
       ${avatar(s.pt.av)}
-      <span style="display:flex;flex-direction:column;gap:3px;min-width:0">
-        <span class="eyebrow">${AREAS[s.area][0]} ${s.real?'<span class="real">estación real</span>':''}</span>
+      <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
         <h3>${esc(s.motivo)}</h3>
-        <span class="meta">${esc(s.pt.n)} · ${esc(s.pt.e)}</span>
-        <span class="row" style="margin-top:2px"><span class="badge ${cls}">${b==null?'sin practicar':'mejor: '+b+' %'}</span></span>
-      </span></button>`}).join('');
+        <span class="meta">${esc(s.pt.n)}</span>
+        <span class="row" style="margin-top:3px"><span class="badge ${cls}">${b==null?'sin practicar':b+' %'}</span>${s.real?'<span class="real">estación real</span>':''}</span>
+      </span></button>`}).join('')+'</div></div>').join('');
 }
 $('filters').onclick=e=>{const b=e.target.closest('[data-f]');if(b){filter=b.dataset.f;renderHall()}};
 $('grid').onclick=e=>{const b=e.target.closest('[data-id]');if(b)openStation(b.dataset.id)};
@@ -1267,30 +1305,31 @@ $('resetBtn').onclick=()=>{const b=$('resetBtn');
   if(b.dataset.arm){clearTimeout(b._t);delete b.dataset.arm;store.best={};save();renderHall();b.textContent='Progreso borrado';b._t=setTimeout(()=>b.textContent='Borrar progreso',2500);return}
   b.dataset.arm=1;b.textContent='¿Seguro? Tocá de nuevo';b._t=setTimeout(()=>{delete b.dataset.arm;b.textContent='Borrar progreso'},4000)};
 $('homeBtn').onclick=goHome;
-function goHome(){stopTimer();cur=null;$('station').hidden=true;$('hall').style.display='flex';$('homeBtn').hidden=true;renderHall();scrollTo(0,0)}
+function goHome(){stopTimer();cur=null;$('station').hidden=true;$('hall').style.display='';$('homeBtn').hidden=true;renderHall();scrollTo(0,0)}
 
 /* ============ Estación ============ */
 function openStation(id){
   cur=ST.find(s=>s.id===id);run={asked:new Set(),exam:new Set(),done:new Set(),chat:[],left:480,phase:'door',mode:sample?'free':'guided',ticks:{}};
-  $('hall').style.display='none';$('station').hidden=false;$('homeBtn').hidden=false;$('aiPanel').hidden=true;
-  $('room').style.setProperty('--c',AREAS[cur.area][1]);
-  $('avBox').innerHTML=avatar(cur.pt.av,true);$('ptName').textContent=cur.pt.n;$('ptMeta').textContent=cur.pt.e;
-  $('bubble').hidden=true;$('clock').textContent='8:00';$('clock').classList.remove('low');$('timerBox').classList.remove('running');
-  $('phase').textContent='Leé la consigna. El reloj arranca cuando entrás.';
-  $('startBtn').hidden=false;$('startBtn').textContent='Entrar a la estación';$('endBtn').hidden=true;$('work').hidden=true;$('review').hidden=true;$('sheet').hidden=false;
-  $('sheet').innerHTML=`<div class="eyebrow">${AREAS[cur.area][0]} · Instrucciones para el estudiante ${cur.real?'<span class="real">estación real</span>':''}</div>
+  stopTimer();$('hall').style.display='none';$('station').hidden=false;$('homeBtn').hidden=false;$('aiPanel').hidden=true;
+  $('station').style.setProperty('--c',AREAS[cur.area][1]);
+  $('door').hidden=false;$('roomWrap').hidden=true;$('review').hidden=true;
+  $('doorAv').innerHTML=avatar(cur.pt.av,true);
+  const sheet=`<div class="eyebrow">${AREAS[cur.area][0]} · Instrucciones para el estudiante ${cur.real?'<span class="real">estación real</span>':''}</div>
     <h2>${esc(cur.motivo)}</h2>
     <p><b>Lugar:</b> ${esc(cur.lugar)}</p><p><b>Paciente:</b> ${esc(cur.pt.n)}, ${esc(cur.pt.e)}</p>
     <p>${esc(cur.sit)}</p><p><b>Tenés 8 minutos para:</b></p><ol>${cur.tareas.map(t=>`<li>${esc(t)}</li>`).join('')}</ol>`;
+  $('sheet').innerHTML=sheet;$('sheet2').innerHTML=sheet.replace(/<div class="eyebrow">.*?<\/div>/s,'');
+  $('tbArea').textContent=AREAS[cur.area][0];$('tbTitle').textContent=cur.motivo;
+  $('avBox').innerHTML=avatar(cur.pt.av,true);$('ptName').textContent=cur.pt.n;$('ptMeta').textContent=cur.pt.e;
+  $('bubble').hidden=true;$('clock').textContent='8:00';$('clock').classList.remove('low');
   scrollTo(0,0);
 }
 function say(text){const b=$('bubble');b.hidden=false;b.textContent=text;const av=$('avBox').firstElementChild;av.classList.add('talk');clearTimeout(say.t);say.t=setTimeout(()=>av.classList.remove('talk'),Math.min(4500,900+text.length*28))}
 function fmt(s){return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}
 function stopTimer(){clearInterval(tick);tick=null;$('timerBox').classList.remove('running')}
 $('startBtn').onclick=()=>{
-  if(run.phase==='review'){openStation(cur.id);return}
-  run.phase='run';$('startBtn').hidden=true;$('endBtn').hidden=false;$('work').hidden=false;$('timerBox').classList.add('running');
-  $('phase').textContent='Dentro de la estación';say(cur.abre);renderWork();
+  run.phase='run';$('door').hidden=true;$('roomWrap').hidden=false;$('timerBox').classList.add('running');
+  say(cur.abre);renderWork();scrollTo(0,0);
   tick=setInterval(()=>{run.left--;$('clock').textContent=fmt(Math.max(0,run.left));if(run.left<=60)$('clock').classList.add('low');if(run.left<=0)finish(true)},1000);
 };
 $('endBtn').onclick=()=>finish(false);
@@ -1342,8 +1381,7 @@ $('askIn').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('
 /* ============ Corrección ============ */
 function finish(bell){
   if(!cur||run.phase!=='run')return;run.phase='review';stopTimer();
-  $('work').hidden=true;$('endBtn').hidden=true;$('startBtn').hidden=false;$('startBtn').textContent='Repetir la estación';$('bubble').hidden=true;
-  run.used=480-Math.max(0,run.left);$('phase').textContent=bell?'Sonó el timbre.':'Estación terminada.';
+  $('roomWrap').hidden=true;run.used=480-Math.max(0,run.left);run.bell=bell;
   run.ticks={};run.auto={};
   const hit=it=>{if(it>=0){run.ticks[it]=true;run.auto[it]=true}};
   run.asked.forEach(i=>hit(cur.q[i][3]));run.exam.forEach(i=>hit(cur.x[i][2]));run.done.forEach(i=>hit(cur.d[i][2]));
@@ -1357,25 +1395,34 @@ const total=()=>cur.cot.reduce((a,c)=>a+c[1],0);
 const minus=()=>errs().reduce((a,d)=>a+(d[3]||0),0)+extras().length*3;
 const score=()=>Math.max(0,cur.cot.reduce((a,c,i)=>a+(run.ticks[i]?c[1]:0),0)-minus());
 function renderReview(){
-  const r=$('review');r.hidden=false;$('sheet').hidden=true;
+  const r=$('review');r.hidden=false;
   const groups=Object.keys(G).filter(g=>cur.cot.some(c=>c[2]===g));
   const E=errs(), X=extras(), right=cur.d.map((d,i)=>[d,i]).filter(([d])=>d[2]!==-1);
-  r.innerHTML=`<div class="eyebrow">Corrección · ${esc(cur.motivo)}</div>
-   <div class="res"><b id="scNum">0 %</b><div class="verdict" id="scVer"></div><div><div class="bar"><i id="scBar" style="width:0"></i></div></div></div>
-   <div class="facts" id="facts"></div>
-   <div class="note info" id="aiNote" hidden></div>
-   <div>
-     <div class="row" style="justify-content:space-between;margin-bottom:8px"><h3>Lista de cotejo</h3><span class="muted small">Tildá lo que dijiste en voz alta y no quedó registrado.</span></div>
-     <div data-c style="--c:${AREAS[cur.area][1]}" id="cot">${groups.map(g=>`<div class="grp"><header><span>${G[g]}</span><span class="mono" data-g="${g}"></span></header>${cur.cot.map((c,i)=>c[2]!==g?'':`<label class="ci ${run.ticks[i]?'hit':''}"><input type="checkbox" data-i="${i}" ${run.ticks[i]?'checked':''}><span class="t">${esc(c[0])}</span><span class="pts">${c[1]}</span></label>`).join('')}</div>`).join('')}</div>
+  r.innerHTML=`<div class="panel revhead">
+     <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
+       <div class="eyebrow">${AREAS[cur.area][0]} · Corrección${run.bell?' · sonó el timbre':''}</div>
+       <h2>${esc(cur.motivo)}</h2>
+       <div class="res"><b id="scNum">0 %</b><div class="verdict" id="scVer"></div><div><div class="bar"><i id="scBar" style="width:0"></i></div></div></div>
+       <div class="facts" id="facts"></div>
+       <div class="note info" id="aiNote" hidden></div>
+     </div>
+     <div class="row"><button class="btn primary" id="again">Repetir la estación</button><button class="btn" id="back2">Volver al pasillo</button></div>
    </div>
-   ${E.length||X.length?`<div class="minus"><header>Descuentos</header>${E.map(d=>`<div class="mi"><span>${esc(d[0])}</span><span class="pts">−${d[3]}</span><span class="why">${esc(cap(d[1].replace(/^Error( grave)?: /,'')))}</span></div>`).join('')}${X.map(x=>`<div class="mi"><span>${esc(x[0])}</span><span class="pts">−3</span><span class="why">${esc(x[1])}</span></div>`).join('')}</div>`:''}
-   <details class="fold" open><summary>Lo que hay que saber de esta estación</summary><ul>${cur.claves.map(k=>`<li>${esc(k)}</li>`).join('')}</ul></details>
-   ${right.length?`<details class="fold"><summary>Conductas correctas y su fundamento</summary><ul>${right.map(([d,i])=>`<li class="${run.done.has(i)?'got':'miss'}">${run.done.has(i)?'✓ ':''}${esc(d[0])}<span class="why">${esc(cap(d[1].replace(/^(Correcto|Bien)[.:]?\s*/,'')))}</span></li>`).join('')}</ul></details>`:''}
-   <p class="muted small">Bibliografía: ${esc(cur.ref)}</p>
-   <div class="row"><button class="btn primary" id="again">Repetir la estación</button><button class="btn" id="back2">Volver al pasillo</button></div>`;
+   <div class="revgrid">
+     <div class="panel">
+       <div><h3>Lista de cotejo</h3><p class="muted small">Tildá lo que dijiste en voz alta y no quedó registrado.</p></div>
+       <div id="cot">${groups.map(g=>`<div class="grp"><header><span>${G[g]}</span><span class="mono" data-g="${g}"></span></header>${cur.cot.map((c,i)=>c[2]!==g?'':`<label class="ci ${run.ticks[i]?'hit':''}"><input type="checkbox" data-i="${i}" ${run.ticks[i]?'checked':''}><span class="t">${esc(c[0])}</span><span class="pts">${c[1]}</span></label>`).join('')}</div>`).join('')}</div>
+     </div>
+     <div class="col">
+       ${E.length||X.length?`<div class="minus"><header>Descuentos</header>${E.map(d=>`<div class="mi"><span>${esc(d[0])}</span><span class="pts">−${d[3]}</span><span class="why">${esc(cap(d[1].replace(/^Error( grave)?: /,'')))}</span></div>`).join('')}${X.map(x=>`<div class="mi"><span>${esc(x[0])}</span><span class="pts">−3</span><span class="why">${esc(x[1])}</span></div>`).join('')}</div>`:''}
+       <details class="fold" open><summary>Lo que hay que saber de esta estación</summary><ul>${cur.claves.map(k=>`<li>${esc(k)}</li>`).join('')}</ul></details>
+       ${right.length?`<details class="fold"><summary>Conductas correctas y su fundamento</summary><ul>${right.map(([d,i])=>`<li class="${run.done.has(i)?'got':'miss'}">${run.done.has(i)?'✓ ':''}${esc(d[0])}<span class="why">${esc(cap(d[1].replace(/^(Correcto|Bien)[.:]?\s*/,'')))}</span></li>`).join('')}</ul></details>`:''}
+       <p class="muted small">Bibliografía: ${esc(cur.ref)}</p>
+     </div>
+   </div>`;
   $('cot').onchange=e=>{const i=e.target.dataset.i;if(i==null)return;run.ticks[i]=e.target.checked;e.target.closest('.ci').classList.toggle('hit',e.target.checked);updScore()};
   $('again').onclick=()=>openStation(cur.id);$('back2').onclick=goHome;
-  updScore();r.scrollIntoView({behavior:'smooth',block:'start'});
+  updScore();scrollTo(0,0);
 }
 function updScore(){
   const s=score(),t=total(),p=Math.round(100*s/t),n=cur.cot.filter((c,i)=>run.ticks[i]).length,m=minus();
@@ -1459,73 +1506,6 @@ $('aiSave').onclick=async()=>{
 renderHall();
 if(inClaude){claude.use('sample').then(s=>{sample=s||null;if(sample&&run&&run.phase==='door')run.mode='free'}).catch(()=>{})}
 else{$('aiBtn').hidden=false;if(store.ai&&store.ai.key)sample=makeAI(store.ai);aiUI()}
-</script>
-<script type="module">
-/* ============ Cuenta de Google + progreso en la nube (Firebase) ============
-   Pegá acá la configuración de tu proyecto de Firebase
-   (Consola de Firebase → Configuración del proyecto → Tus apps → SDK config).
-   Mientras quede vacía, el botón de inicio de sesión no aparece y todo
-   funciona como antes, guardando sólo en este navegador. */
-const firebaseConfig = {
-  apiKey: "AIzaSyDsx19z7Vn27LcNAINw8osBELbyUvLPqH0",
-  authDomain: "ecoe-final.firebaseapp.com",
-  projectId: "ecoe-final",
-  storageBucket: "ecoe-final.firebasestorage.app",
-  messagingSenderId: "577496590506",
-  appId: "1:577496590506:web:7244710b6d85e5fbb208d3"
-};
-
-if (firebaseConfig.apiKey && !(window.claude && claude.use)) {
-  const V = '10.12.2', base = `https://www.gstatic.com/firebasejs/${V}/`;
-  const { initializeApp } = await import(base + 'firebase-app.js');
-  const { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signInWithRedirect, signOut } = await import(base + 'firebase-auth.js');
-  const { getFirestore, doc, getDoc, setDoc } = await import(base + 'firebase-firestore.js');
-
-  const app = initializeApp(firebaseConfig), auth = getAuth(app), db = getFirestore(app);
-  const btn = $('loginBtn'), msg = $('syncMsg');
-  let user = null, ready = false, timer = null;
-  btn.hidden = false;
-
-  const pack = () => JSON.parse(JSON.stringify({ best: store.best || {}, theme: store.theme || null, ai: store.ai || null }));
-  const push = async () => {
-    if (!user || !ready) return;
-    try { await setDoc(doc(db, 'users', user.uid), { data: pack(), updated: Date.now() }); msg.textContent = 'Progreso guardado ✓'; }
-    catch (e) { msg.textContent = 'No se pudo guardar en la nube'; console.error(e); }
-  };
-  window.cloudSave = () => { if (!user || !ready) return; clearTimeout(timer); msg.textContent = 'Guardando…'; timer = setTimeout(push, 800); };
-
-  btn.onclick = async () => {
-    if (user) { await signOut(auth); return; }
-    const prov = new GoogleAuthProvider(); prov.setCustomParameters({ prompt: 'select_account' });
-    try { await signInWithPopup(auth, prov); }
-    catch (e) {
-      if (e.code === 'auth/popup-blocked' || e.code === 'auth/operation-not-supported-in-this-environment') signInWithRedirect(auth, prov);
-      else if (e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request') { msg.textContent = 'No se pudo iniciar sesión'; console.error(e); }
-    }
-  };
-
-  onAuthStateChanged(auth, async u => {
-    user = u; ready = false;
-    if (!u) { btn.textContent = 'Iniciar sesión con Google'; msg.textContent = ''; return; }
-    btn.textContent = 'Cerrar sesión'; msg.textContent = 'Sincronizando…';
-    try {
-      const snap = await getDoc(doc(db, 'users', u.uid));
-      const c = (snap.exists() && snap.data().data) || {};
-      // Fusión: por estación queda el mejor puntaje entre este navegador y la nube.
-      const best = { ...(c.best || {}) };
-      for (const [k, v] of Object.entries(store.best || {})) if (best[k] == null || v > best[k]) best[k] = v;
-      store.best = best;
-      if (c.theme) store.theme = c.theme;
-      if (c.ai && c.ai.key) store.ai = c.ai;
-      try { localStorage.setItem('ecoe-sim', JSON.stringify(store)); } catch (e) {}
-      if (store.theme) setTheme(store.theme);
-      renderHall();
-      if (store.ai && store.ai.key) { sample = makeAI(store.ai); aiUI(); }
-      ready = true; await push();
-      msg.textContent = (u.displayName ? u.displayName.split(' ')[0] + ' · ' : '') + 'progreso sincronizado ✓';
-    } catch (e) { msg.textContent = 'No se pudo leer el progreso de la nube'; console.error(e); }
-  });
-}
 </script>
 </body>
 </html>
