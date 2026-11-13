@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simulador ECOE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Shrikhand&family=Gloock&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: pasillo de estaciones (tarjetas con la consigna de la puerta) → consultorio en dos columnas: paciente y reloj a la izquierda, preguntar / examinar / indicar a la derecha → lista de cotejo. */
+:root{
+  --bg:#E8E6E1; --surface:#F7F6F3; --ink:#1F2430; --muted:#5A6070; --line:#D3D0C8;
+  --accent:#2F5D8A; --accent-ink:#ffffff; --accent-soft:#DCE5EF;
+  --g1:#2F5D8A; --g2:#F2B48A; --g3:#7FA3C9; --g4:#E8C46A;
+  --ok:#1d7a3e; --ok-soft:#dfecd9; --warn:#8a5a00; --warn-soft:#f1e6cc; --bad:#b3261e; --bad-soft:#f1dcd3; --mixc:var(--ink); --mixp:0%;
+  --f-display:"Gloock",Georgia,serif; --f-body:"Fredoka",system-ui,sans-serif; --f-mono:"JetBrains Mono",ui-monospace,monospace; --f-num:"Shrikhand","Gloock",Georgia,serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E121A; --surface:#171D28; --ink:#E6EAF2; --muted:#9AA5B8; --line:#29324A;
+  --accent:#8DB6E6; --accent-ink:#000000; --accent-soft:#1C2A3E;
+  --g1:#2F5D8A; --g2:#F2955F; --g3:#3B6EA5; --g4:#8DB6E6;
+  --ok:#6fd38f; --ok-soft:#12301d; --warn:#e2b257; --warn-soft:#33280f; --bad:#f08a80; --bad-soft:#3a1715; --mixp:45%; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E121A; --surface:#171D28; --ink:#E6EAF2; --muted:#9AA5B8; --line:#29324A;
+  --accent:#8DB6E6; --accent-ink:#000000; --accent-soft:#1C2A3E;
+  --g1:#2F5D8A; --g2:#F2955F; --g3:#3B6EA5; --g4:#8DB6E6;
+  --ok:#6fd38f; --ok-soft:#12301d; --warn:#e2b257; --warn-soft:#33280f; --bad:#f08a80; --bad-soft:#3a1715; --mixp:45%; color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5}
+body::before,body::after{content:"";position:fixed;inset:-12vh -12vw;z-index:-1;pointer-events:none}
+body::before{background:radial-gradient(55vw 45vh at 88% 14%,color-mix(in oklab,var(--g1) 26%,transparent),transparent 70%),radial-gradient(50vw 45vh at 78% 92%,color-mix(in oklab,var(--g3) 24%,transparent),transparent 70%);animation:bgA 13s ease-in-out infinite alternate}
+body::after{background:radial-gradient(45vw 55vh at 6% 55%,color-mix(in oklab,var(--g2) 30%,transparent),transparent 70%),radial-gradient(35vw 35vh at 34% 8%,color-mix(in oklab,var(--g4) 26%,transparent),transparent 70%);animation:bgB 11s ease-in-out infinite alternate}
+@keyframes bgA{to{transform:translate(-7vw,6vh) scale(1.08)}}
+@keyframes bgB{from{transform:scale(1.05)}to{transform:translate(8vw,-5vh) scale(.97)}}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(24px,5vw,48px) clamp(16px,4vw,48px) 64px;display:flex;flex-direction:column;gap:24px}
+h1,h2,h3{font-family:var(--f-display);font-weight:400;text-wrap:balance;margin:0;line-height:1.15}
+h1{font-size:clamp(2.2rem,7vw,3.1rem);color:var(--accent)} h2{font-size:1.35rem} h3{font-size:1.05rem}
+p{margin:0}
+.eyebrow{font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)} .small{font-size:.88rem}
+button{font:inherit;cursor:pointer;color:inherit}
+button:focus-visible,input:focus-visible,summary:focus-visible,textarea:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:9px 14px;font-weight:600;transition:transform .15s,border-color .15s,box-shadow .2s}
+.btn:hover{border-color:var(--accent);transform:translateY(-1px);box-shadow:0 6px 16px -10px color-mix(in oklab,var(--ink) 45%,transparent)}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn[disabled]{opacity:.5;cursor:not-allowed;transform:none}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center;display:flex;flex-direction:column;gap:2px;align-items:center}
+.stat b{font-family:var(--f-num);font-weight:400;font-size:clamp(1.8rem,6vw,2.4rem);line-height:1.05;color:var(--accent)}
+.stat span{color:var(--muted);font-size:.92rem}
+.chip{border:1px solid var(--line);background:none;color:var(--muted);border-radius:99px;padding:4px 12px;font-size:.86rem;transition:background-color .15s,color .15s}
+.chip[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--cc);flex:none}
+/* color por sección */
+[data-c]{--cc:color-mix(in oklab,var(--c) calc(100% - var(--mixp)),var(--mixc));--cct:color-mix(in oklab,var(--cc) 78%,var(--ink))}
+/* pasillo */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
+.door{background:color-mix(in oklab,var(--cc) 7%,var(--surface));border:1px solid color-mix(in oklab,var(--cc) 40%,var(--line));border-left:5px solid var(--cc);border-radius:12px;padding:14px;display:grid;grid-template-columns:76px minmax(0,1fr);gap:12px;text-align:left;align-items:center;transition:transform .2s,box-shadow .2s;animation:rise .5s cubic-bezier(.2,.8,.2,1) both}
+.door:hover{transform:translateY(-2px);box-shadow:0 10px 24px -14px color-mix(in oklab,var(--cc) 70%,transparent)}
+.door .av{width:76px;height:84px}
+.door h3{color:var(--cct)}
+.door .meta{font-size:.84rem;color:var(--muted)}
+.badge{font-family:var(--f-mono);font-size:.76rem;border-radius:99px;padding:1px 8px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.badge.ok{background:var(--ok-soft);color:var(--ok);border-color:var(--ok)} .badge.warn{background:var(--warn-soft);color:var(--warn);border-color:var(--warn)} .badge.bad{background:var(--bad-soft);color:var(--bad);border-color:var(--bad)}
+.real{font-size:.7rem;font-weight:600;border-radius:99px;padding:0 7px;background:var(--accent-soft);color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 35%,transparent);white-space:nowrap}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+/* consultorio */
+.room{display:grid;grid-template-columns:1fr;gap:20px;align-items:start}
+@media (min-width:920px){.room{grid-template-columns:minmax(300px,380px) minmax(0,1fr)}.left{position:sticky;top:16px}}
+.left{display:flex;flex-direction:column;gap:14px}
+.stage{align-items:center;text-align:center;border-color:color-mix(in oklab,var(--cc) 45%,var(--line))}
+.stage .av{width:190px;height:210px}
+.bubble{position:relative;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:12px 14px;text-align:left;width:100%;min-height:64px;animation:rise .3s ease-out}
+.bubble::before{content:"";position:absolute;top:-8px;left:50%;width:14px;height:14px;background:var(--bg);border-left:1px solid var(--line);border-top:1px solid var(--line);transform:translateX(-50%) rotate(45deg)}
+.clock{font-family:var(--f-num);font-size:clamp(2.6rem,10vw,3.6rem);line-height:1;font-variant-numeric:tabular-nums;transition:color .4s}
+.clock.low{color:var(--bad)}
+.timer.running{animation:glow 3.2s ease-in-out infinite}
+@keyframes glow{50%{box-shadow:0 0 0 6px color-mix(in oklab,var(--accent) 14%,transparent)}}
+.sheet{border-left:5px solid var(--cc)}
+.sheet ol,.sheet ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:10px}
+.tab{border:1px solid var(--line);background:none;border-radius:8px;padding:7px 12px;font-weight:600;color:var(--muted)}
+.tab[aria-selected="true"]{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:block;width:100%;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 12px;transition:border-color .15s,background-color .15s,transform .1s}
+.opt:hover{border-color:var(--accent)} .opt:active{transform:scale(.99)}
+.opt.used{background:var(--accent-soft);border-color:color-mix(in oklab,var(--accent) 50%,var(--line))}
+.opt .ans{display:block;margin-top:6px;font-size:.93rem;color:var(--ink);border-top:1px dashed var(--line);padding-top:6px;animation:rise .25s ease-out}
+.opt .cat{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;display:block}
+.chat{display:flex;flex-direction:column;gap:8px;max-height:420px;overflow:auto;padding:4px}
+.msg{max-width:85%;padding:8px 12px;border-radius:12px;font-size:.95rem;animation:rise .25s ease-out;white-space:pre-wrap}
+.msg.me{align-self:flex-end;background:var(--accent);color:var(--accent-ink)}
+.msg.pt{align-self:flex-start;background:var(--bg);border:1px solid var(--line)}
+.ask{display:flex;gap:8px}
+.ask textarea{flex:1;min-width:0;min-height:46px;max-height:140px;font:inherit;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px;resize:vertical}
+.cot{display:flex;flex-direction:column;gap:2px}
+.cot h3{margin-top:10px;color:var(--cct)}
+.ci{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 4px;border-top:1px solid var(--line)}
+.ci input{width:20px;height:20px;accent-color:var(--cc)}
+.ci .pts{font-family:var(--f-mono);font-size:.82rem;color:var(--muted)}
+.ci.hit label{font-weight:500}
+.score{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.score b{font-family:var(--f-num);font-weight:400;font-size:3rem;line-height:1;color:var(--accent)}
+.bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .9s cubic-bezier(.2,.8,.2,1)}
+.note{border-radius:10px;padding:10px 12px;font-size:.93rem}
+.note.bad{background:var(--bad-soft);color:var(--bad)} .note.ok{background:var(--ok-soft);color:var(--ok)} .note.info{background:var(--accent-soft)}
+.keys{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+.glob{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.glob button{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:8px 4px;font-size:.84rem}
+.glob button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.cfg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.cfg label{display:flex;flex-direction:column;gap:4px;font-size:.86rem;color:var(--muted);font-weight:600}
+.cfg input,.cfg select{font:inherit;font-weight:400;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 10px;min-width:0}
+#aiHelp a{color:var(--accent)}
+[hidden]{display:none!important}
+/* avatar */
+.av{display:block}
+.av .body{animation:breathe 4.2s ease-in-out infinite;transform-origin:100px 200px}
+.av .eye{animation:blink 5s infinite;transform-box:fill-box;transform-origin:center}
+.av .eye.r{animation-delay:.03s}
+.av .mouth{transform-box:fill-box;transform-origin:center}
+.av.talk .mouth{animation:talk .28s ease-in-out infinite alternate}
+.av .tear{animation:tear 2.6s ease-in infinite}
+.av .sweat{animation:tear 3.4s ease-in infinite .8s}
+.av.dolor .head{animation:wince 2.8s ease-in-out infinite;transform-origin:100px 150px}
+.av.agitado .head{animation:shake .5s ease-in-out infinite alternate;transform-origin:100px 150px}
+.av .baby{animation:rock 3s ease-in-out infinite alternate;transform-origin:150px 190px}
+@keyframes breathe{50%{transform:scaleY(1.018) translateY(-1px)}}
+@keyframes blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+@keyframes talk{from{transform:scaleY(.5)}to{transform:scaleY(1.7)}}
+@keyframes tear{0%{opacity:0;transform:translateY(0)}20%{opacity:1}100%{opacity:0;transform:translateY(22px)}}
+@keyframes wince{0%,60%,100%{transform:rotate(0)}70%{transform:rotate(-3deg)}85%{transform:rotate(2deg)}}
+@keyframes shake{from{transform:rotate(-2deg)}to{transform:rotate(2deg)}}
+@keyframes rock{from{transform:rotate(-3deg)}to{transform:rotate(3deg)}}
+@media (max-width:600px){.strip{grid-template-columns:1fr 1fr}.strip .stat:last-child{grid-column:1/-1}.glob{grid-template-columns:1fr 1fr}}
+@media (prefers-reduced-motion:reduce){*,body::before,body::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <div class="eyebrow">Examen Final de Carrera · Medicina UNS</div>
+      <h1>Simulador ECOE</h1>
+    </div>
+    <div class="row">
+      <button class="btn" id="homeBtn" hidden>← Volver al pasillo</button>
+      <button class="btn" id="aiBtn">Configurar IA</button>
+      <button class="btn" id="themeBtn">Modo nocturno</button>
+    </div>
+  </header>
+
+  <section class="panel" id="aiPanel" hidden>
+    <h2>Paciente con inteligencia artificial</h2>
+    <p class="muted small">Opcional. Con una clave gratuita, el paciente responde lo que le escribas y la entrevista se corrige sola. Sin clave, el simulador funciona igual con las preguntas sugeridas. La clave queda guardada solo en este navegador y se envía únicamente al proveedor que elijas.</p>
+    <div class="cfg">
+      <label>Proveedor<select id="aiProv"><option value="gemini">Google Gemini</option><option value="groq">Groq</option></select></label>
+      <label>Clave de API<input id="aiKey" type="password" autocomplete="off" spellcheck="false" placeholder="Pegá tu clave"></label>
+      <label>Modelo<input id="aiModel" list="aiModels" spellcheck="false"><datalist id="aiModels"></datalist></label>
+    </div>
+    <p class="small" id="aiHelp"></p>
+    <div class="row"><button class="btn primary" id="aiSave">Guardar y probar</button><button class="btn" id="aiDel">Borrar la clave</button><button class="btn" id="aiClose">Cerrar</button></div>
+    <p class="small" id="aiMsg" role="status"></p>
+  </section>
+
+  <!-- PASILLO -->
+  <section id="hall" style="display:flex;flex-direction:column;gap:20px">
+    <div class="strip">
+      <div class="stat"><b id="sDone">0</b><span id="sDoneL">estaciones practicadas</span></div>
+      <div class="stat"><b id="sAvg">–</b><span>puntaje promedio</span></div>
+      <div class="stat"><b id="sWeak">–</b><span>estaciones por debajo de 60 %</span></div>
+    </div>
+    <div class="panel">
+      <div class="row" style="justify-content:space-between">
+        <h2>Pasillo de estaciones</h2>
+        <button class="btn primary" id="rndBtn">Estación al azar</button>
+      </div>
+      <p class="muted small">Cada tarjeta es la puerta de una estación: leés la consigna, entrás y tenés 8 minutos. Al salir, corregís con la lista de cotejo. Bibliografía: tu Cuadernillo ECOE.</p>
+      <div class="row" id="filters"></div>
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+
+  <!-- CONSULTORIO -->
+  <section id="station" hidden>
+    <div class="room" id="room" data-c>
+      <div class="left">
+        <div class="panel stage" id="stage">
+          <div id="avBox"></div>
+          <div><h2 id="ptName"></h2><p class="muted small" id="ptMeta"></p></div>
+          <div class="bubble" id="bubble" hidden></div>
+        </div>
+        <div class="panel timer" id="timerBox" style="align-items:center;text-align:center">
+          <div class="clock" id="clock">8:00</div>
+          <p class="muted small" id="phase">Leé la consigna. El reloj arranca cuando entrás.</p>
+          <div class="row" style="justify-content:center">
+            <button class="btn primary" id="startBtn">Entrar a la estación</button>
+            <button class="btn" id="endBtn" hidden>Salir y corregir</button>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px;min-width:0">
+        <div class="panel sheet" id="sheet"></div>
+        <div class="panel" id="work" hidden>
+          <div class="tabs" role="tablist">
+            <button class="tab" role="tab" data-t="ask" aria-selected="true">Preguntar</button>
+            <button class="tab" role="tab" data-t="exam" aria-selected="false">Examinar y pedir</button>
+            <button class="tab" role="tab" data-t="do" aria-selected="false">Decir e indicar</button>
+          </div>
+          <div id="tab-ask">
+            <div class="row" id="modeRow" hidden style="margin-bottom:10px">
+              <span class="muted small">Entrevista:</span>
+              <button class="chip" id="mFree" aria-pressed="true">Libre (el paciente responde con IA)</button>
+              <button class="chip" id="mGuided" aria-pressed="false">Guiada (preguntas sugeridas)</button>
+            </div>
+            <div id="freeBox" hidden>
+              <div class="chat" id="chat"></div>
+              <form class="ask" id="askForm" style="margin-top:10px">
+                <textarea id="askIn" placeholder="Escribí lo que le dirías o le preguntarías al paciente…" aria-label="Tu pregunta al paciente"></textarea>
+                <button class="btn primary" id="askBtn">Decir</button>
+              </form>
+              <p class="muted small" id="freeMsg" style="margin-top:6px"></p>
+            </div>
+            <div class="opts" id="askOpts"></div>
+          </div>
+          <div id="tab-exam" hidden><div class="opts" id="examOpts"></div></div>
+          <div id="tab-do" hidden><p class="muted small" style="margin-bottom:8px">Elegí lo que dirías o indicarías. Hay opciones incorrectas: descuentan.</p><div class="opts" id="doOpts"></div></div>
+        </div>
+        <div class="panel" id="review" hidden></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+/* ============ Secciones (mismos colores que el cuadernillo) ============ */
+const AREAS={cli:['Clínica médica','#1F4E79'],cir:['Cirugía general','#2E6B34'],uro:['Urología','#8A6400'],tra:['Traumatología','#6D4C41'],ped:['Pediatría','#BF5B0A'],neo:['Neonatología','#A61E5B'],obs:['Obstetricia','#6A2C91'],gin:['Ginecología','#00767F'],sm:['Salud mental','#303F9F'],urg:['Urgencias','#B3261E'],tr:['Transversales','#4E5B1E']};
+
+/* ============ Estaciones ============
+ q: [categoría, pregunta, respuesta del paciente, ítem de cotejo (-1 = no puntúa)]
+ x: [examen o estudio, resultado, ítem]
+ d: [conducta, devolución, ítem (-1 = error que descuenta), puntos que descuenta]
+ cot: [ítem, puntos, grupo] */
+const G={c:'Cuidado de pacientes',k:'Conocimiento médico',s:'Aprendizaje basado en el sistema',p:'Profesionalismo',h:'Comunicación'};
+const ST=[
+{id:'ive',area:'obs',real:1,motivo:'Test de embarazo positivo',lugar:'Consultorio de orientación · Hospital Menor de Ingeniero White',
+ pt:{n:'Patricia',e:'30 años',av:{sex:'f',skin:2,hair:'long',hc:'#3b2a20',mood:'angustia',top:'#7b5ea7'}},
+ sit:'Participás en un consultorio de orientación. Hacés una primera valoración, que puede derivar a turnos programados, espontáneos o de guardia. Consulta Patricia, angustiada por un test de embarazo positivo.',
+ tareas:['Realizar la anamnesis, dar una contención inicial y organizar el acceso a la atención médica específica.'],
+ abre:'Hola… Me hice un test de embarazo y me dio positivo. No sé qué hacer.',
+ guion:'Vive con su hija de 3 años. Sin obra social. Secretaria 4 horas en un consultorio odontológico. Angustiada, no esperaba el resultado. SOLO si preguntan específicamente: embarazo no planificado y no deseado; un embarazo previo (hija de 3 años); sin antecedentes médicos ni quirúrgicos; no recuerda la FUM, calcula mediados de septiembre; ciclos regulares; grupo A positivo; sin alergias; quiere interrumpir el embarazo pero no sabe si es posible; teme que su familia (muy tradicional, militan contra la legalización del aborto) se entere y la obligue a continuar; una amiga la va a acompañar en lo que decida; relación consentida con pareja no estable, sin contacto posterior; no usó preservativo, aunque es su método preferido y a veces no lo usa.',
+ q:[['Motivo','¿Qué te trae hoy? Contame con tus palabras.','Me hice un test de farmacia y dio positivo. No me lo esperaba para nada.',0],
+    ['Motivo','¿Era un embarazo que estabas buscando?','No. No fue planificado y no lo deseo.',0],
+    ['Antecedentes','¿Cuándo fue tu última menstruación?','No me acuerdo bien… calculo que a mediados de septiembre. Soy regular.',1],
+    ['Antecedentes','¿Tuviste otros embarazos? ¿Alguna enfermedad u operación?','Un embarazo, mi hija tiene 3 años. No tengo enfermedades ni operaciones. Soy A positivo.',-1],
+    ['Contexto','¿Con quién vivís? ¿Tenés a alguien que te acompañe en esto?','Vivo con mi hija. Mi familia es muy tradicional, están en contra del aborto. Tengo una amiga que me va a acompañar en lo que decida.',2],
+    ['Contexto','¿Qué es lo que más te preocupa o te asusta?','Quiero interrumpir el embarazo, pero no sé si puedo. Y tengo miedo de que mi familia se entere y me obligue a seguir.',3],
+    ['Hábitos','¿Usás algún método anticonceptivo?','Preservativo, es el que prefiero. Pero a veces la situación no da para usarlo. Esta vez no lo usé.',4],
+    ['Hábitos','¿La relación fue con una pareja estable? ¿Te hiciste alguna vez estudios de infecciones de transmisión sexual?','Fue consentida, con alguien que no es pareja estable. No volvimos a hablar. Nunca me hice estudios.',5],
+    ['Antecedentes','¿Tenés alergias? ¿Tomás alguna medicación?','No, nada.',-1],
+    ['Hábitos','¿Fumás o tomás alcohol?','No, nada de eso.',-1]],
+ x:[],
+ d:[['Le explico que la Ley 27.610 le da derecho a decidir la interrupción voluntaria hasta la semana 14 inclusive, sin dar motivos.','Correcto: IVE hasta la semana 14 inclusive; después, ILE por causales. Con una FUM de mediados de septiembre conviene no demorar.',6],
+    ['Le digo que acceder a la IVE es su derecho, que la práctica es gratuita y que debe garantizarse dentro de los 10 días corridos.','Correcto: derecho, gratuidad y plazo máximo de 10 días corridos desde el pedido.',7],
+    ['Le explico que la voy a contactar con un equipo que la va a acompañar en la decisión que tome, sea cual sea.','Correcto: consejería y acompañamiento sin juzgar; también si decide continuar.',8],
+    ['Le ofrezco un turno espontáneo en el consultorio ambulatorio para iniciar la atención hoy o mañana.','Correcto: es la acción que organiza el acceso. Por la edad gestacional no corresponde un turno programado lejano ni la guardia.',9],
+    ['Le aseguro que la consulta es confidencial y que nadie de su familia va a ser informado sin su consentimiento.','Correcto: es su principal temor. Confidencialidad y secreto profesional.',10],
+    ['Le digo que primero necesita la autorización de un juez o la firma de un familiar.','Error: no se requiere autorización judicial ni de terceros. Es adulta y decide por sí misma.',-1,10],
+    ['Le digo que lo piense bien porque puede arrepentirse, y que debería hablar con su familia.','Error: es una valoración personal que juzga y presiona. Se respeta su autonomía.',-1,10],
+    ['Le doy un turno programado para dentro de un mes con ginecología.','Error: la demora puede hacerle perder el plazo de la semana 14. La ley fija un máximo de 10 días.',-1,10],
+    ['Le ofrezco testeo de VIH y sífilis y consejería en anticoncepción para después.','Bien: hubo una relación sin preservativo. Anticoncepción inmediata posevento.',5]],
+ cot:[['Interroga el motivo de consulta',2,'c'],['Interroga sobre la FUM',8,'c'],['Explora las redes sociales de Patricia',8,'c'],['Permite que exprese sus temores y dudas',6,'c'],['Interroga sobre anticoncepción',8,'c'],['Interroga el riesgo de ITS',8,'c'],
+      ['Demuestra conocimiento sobre la ley vigente',10,'k'],['Expone el concepto de derecho a la práctica de IVE',8,'k'],['Explica que se la puede contactar con profesionales que la acompañen en su decisión',7,'k'],
+      ['Ofrece un turno espontáneo en consultorio ambulatorio',15,'s'],['Garantiza la confidencialidad',15,'p'],
+      ['Muestra respeto por el motivo de consulta',5,'h'],['Muestra empatía',5,'h'],['Tranquiliza y contiene',5,'h']],
+ claves:['IVE: hasta la semana 14 inclusive, sin explicar motivos. ILE: sin límite, por violación (declaración jurada) o riesgo para la vida o la salud.','Plazo máximo de 10 días corridos; gratuita; no requiere autorización judicial. La objeción de conciencia es individual y obliga a derivar.','En la estación puntúan sobre todo el acceso (turno espontáneo, 15 puntos) y la confidencialidad (15 puntos), más que el tratamiento.','Agenda oculta: el temor a la familia sólo aparece si se pregunta qué le preocupa.','No olvidar la FUM, las redes de apoyo, la anticoncepción y el riesgo de ITS.'],
+ ref:'Cuadernillo · Obstetricia · Interrupción del embarazo (Ley 27.610). Estación real: ECOE Ciclo Inicial UNS, diciembre de 2025.'},
+
+{id:'iam',area:'cli',motivo:'Dolor en el pecho desde hace 40 minutos',lugar:'Guardia de un hospital sin hemodinamia (centro con angioplastia a 3 horas)',
+ pt:{n:'Rubén',e:'58 años',av:{sex:'m',skin:1,hair:'short',hc:'#8a8a8a',mood:'dolor',top:'#4c6a8a',sweat:1}},
+ sit:'Rubén llega a la guardia con dolor de pecho. Enfermería ya colocó una vía y monitor.',
+ tareas:['Hacer una anamnesis dirigida.','Pedir e interpretar los estudios iniciales.','Indicar el tratamiento y definir la estrategia de reperfusión.'],
+ abre:'Doctor, me aprieta el pecho… me agarró mirando la tele. Estoy todo transpirado.',
+ guion:'Dolor opresivo retroesternal de 40 minutos, intensidad 9/10, irradia al brazo izquierdo y la mandíbula, con sudoración y náuseas, comenzó en reposo. Hipertenso, fuma 20 cigarrillos por día hace 30 años, padre fallecido de infarto a los 55. Toma enalapril. Sin alergias. SOLO si preguntan: no tuvo ACV, cirugías ni sangrados recientes; no toma anticoagulantes; no tomó sildenafil. No tiene disnea ni dolor al respirar.',
+ q:[['Dolor','¿Cómo es el dolor, dónde lo siente y hacia dónde se corre?','Es como una opresión en el medio del pecho. Se me va al brazo izquierdo y a la mandíbula.',0],
+    ['Dolor','¿Cuándo empezó y qué estaba haciendo? ¿Cuánto le duele de 1 a 10?','Hace unos 40 minutos, estaba sentado. Un 9, nunca me dolió así.',0],
+    ['Dolor','¿Tiene falta de aire, náuseas o sudoración?','Náuseas y transpiro mucho. Falta de aire no.',1],
+    ['Antecedentes','¿Tiene presión alta, diabetes o colesterol? ¿Fuma? ¿Alguien de la familia con problemas del corazón?','Presión alta, tomo enalapril. Fumo un atado por día hace 30 años. Mi viejo murió de un infarto a los 55.',2],
+    ['Antecedentes','¿Tuvo un ACV, una operación o un sangrado en los últimos meses? ¿Toma anticoagulantes?','No, nada de eso.',3],
+    ['Antecedentes','¿Tomó sildenafil o algo parecido en los últimos dos días?','No.',4],
+    ['Antecedentes','¿Es alérgico a algún medicamento?','No que yo sepa.',-1],
+    ['Dolor','¿Le cambia el dolor al respirar hondo o al moverse?','No, es igual todo el tiempo.',-1]],
+ x:[['Signos vitales','PA 150/90 en ambos brazos · FC 96 · FR 20 · saturación 96 % · afebril.',5],
+    ['ECG de 12 derivaciones en los primeros 10 minutos','Ritmo sinusal. Supradesnivel del ST de 3 mm en V1 a V4. Sin bloqueo de rama.',6],
+    ['Examen cardiovascular y respiratorio','R1 y R2 normales, sin soplos ni R3. Buena entrada de aire, sin rales. Pulsos simétricos.',-1],
+    ['Troponina y laboratorio','Se extrae la muestra. El resultado tarda una hora.',-1],
+    ['Rx de tórax','Sin ensanchamiento mediastínico ni neumotórax.',-1]],
+ d:[['Interpreto: IAM con elevación del ST de cara anterior (descendente anterior).','Correcto: V1 a V4 = cara anterior.',7],
+    ['Indico aspirina 162-325 mg masticada.','Correcto, también si ya la tomaba.',8],
+    ['Indico clopidogrel 300 mg y anticoagulación con enoxaparina.','Correcto con fibrinolíticos en menores de 75 años.',9],
+    ['Como la angioplastia está a más de 120 minutos, indico fibrinolíticos en menos de 30 minutos y traslado posterior.','Correcto: estrategia farmacoinvasiva. Antes se repasan las contraindicaciones.',10],
+    ['Indico nitroglicerina para el dolor y morfina si persiste.','Correcto: la PA lo permite y no tomó sildenafil.',-2],
+    ['Espero el resultado de la troponina antes de tratar.','Error: con supradesnivel del ST no se espera la troponina. Tiempo es músculo.',-1,15],
+    ['Indico oxígeno con máscara a alto flujo.','Error: satura 96 %. Oxígeno sólo con saturación menor de 90 %.',-1,5],
+    ['Le explico qué tiene y qué vamos a hacer, con palabras simples.','Bien: informar y contener también puntúa.',11]],
+ cot:[['Caracteriza el dolor (tipo, localización, irradiación, tiempo de evolución)',10,'c'],['Pregunta síntomas asociados',5,'c'],['Pregunta factores de riesgo cardiovascular',8,'c'],['Descarta contraindicaciones de fibrinolíticos',10,'c'],['Pregunta por sildenafil antes de dar nitratos',5,'c'],['Controla signos vitales (PA en ambos brazos, saturación)',7,'c'],
+      ['Pide el ECG en los primeros 10 minutos',15,'k'],['Interpreta IAMCEST anterior',10,'k'],['Indica aspirina masticada',10,'k'],['Indica segundo antiagregante y anticoagulación',5,'k'],['Define reperfusión: fibrinolíticos en menos de 30 minutos y traslado',10,'s'],['Explica al paciente lo que ocurre y lo que se va a hacer',5,'h']],
+ claves:['ECG en 10 minutos. No se espera la troponina para tratar un IAMCEST.','Angioplastia primaria si se llega en menos de 120 minutos; si no, fibrinolíticos en menos de 30 minutos y traslado.','Aspirina 162-325 mg masticada + P2Y12 + anticoagulante + estatina de alta intensidad. Betabloqueante oral en las primeras 24 horas.','Oxígeno sólo con saturación menor de 90 %. Nitratos: no con PAS menor de 90, infarto de ventrículo derecho o sildenafil.','V1-V4 anterior; DI, aVL, V5-V6 lateral; DII, DIII, aVF inferior.'],
+ ref:'Cuadernillo · Clínica médica · Dolor torácico, síndrome coronario agudo e interpretación del ECG.'},
+
+{id:'hta',area:'cli',motivo:'Le encontraron la presión alta en un control laboral',lugar:'Consultorio de un centro de salud',
+ pt:{n:'Marta',e:'54 años',av:{sex:'f',skin:1,hair:'bob',hc:'#6b4a2f',mood:'neutral',top:'#2f7f86',glasses:1}},
+ sit:'Marta trae un registro de 152/94 del control laboral de la semana pasada. Hoy enfermería le tomó 150/96 y 148/94.',
+ tareas:['Completar la anamnesis.','Definir si tiene hipertensión y qué estudios pedir.','Indicar el plan inicial.'],
+ abre:'Buen día, doctor. Me dijeron en el trabajo que tenía la presión alta, pero yo me siento bien.',
+ guion:'Asintomática. Sin cefalea, dolor de pecho, disnea ni alteraciones visuales. No fuma. Come con mucha sal, usa caldos en cubo y fiambres. Sedentaria. Toma ibuprofeno casi todos los días por dolor de rodillas. Madre hipertensa con ACV a los 70. No tiene diabetes conocida. Menopausia a los 50. Toma dos copas de vino los fines de semana. Peso 82 kg, talla 1,60 m.',
+ q:[['Motivo','¿Tuvo dolor de cabeza fuerte, dolor de pecho, falta de aire o visión borrosa?','No, nada. Me siento perfecta.',0],
+    ['Antecedentes','¿Le habían tomado la presión antes? ¿Algún valor alto?','Hace años que no me controlo.',-1],
+    ['Hábitos','¿Cómo es su alimentación? ¿Usa mucha sal?','Cocino con caldos en cubo y como fiambre casi todos los días. Le pongo sal a todo.',1],
+    ['Hábitos','¿Fuma? ¿Toma alcohol? ¿Hace actividad física?','No fumo. Dos copas de vino los fines de semana. No hago nada de ejercicio.',1],
+    ['Fármacos','¿Toma algún medicamento, aunque sea de venta libre?','Ibuprofeno casi todos los días, por las rodillas.',2],
+    ['Antecedentes','¿Tiene diabetes, colesterol alto o problemas de riñón? ¿Algún familiar con presión, infartos o ACV?','Que yo sepa no. Mi mamá era hipertensa y tuvo un ACV a los 70.',3],
+    ['Antecedentes','¿Ronca o se queda dormida de día?','Mi marido dice que ronco un poco.',-1]],
+ x:[['Tomo la presión con técnica correcta, dos veces, y promedio','150/94 mmHg (promedio). Segunda consulta en días distintos, con dos tomas cada una: se confirma el diagnóstico.',4],
+    ['Peso, talla, IMC y perímetro de cintura','82 kg · 1,60 m · IMC 32 · cintura 98 cm.',5],
+    ['Examen cardiovascular, pulsos y edemas','Normal. Sin soplos carotídeos ni abdominales.',-1],
+    ['Pido ECG, creatinina con filtrado y relación albúmina/creatinina en orina','Son los tres estudios de daño de órgano de la guía nacional. Se suman glucemia, perfil lipídico e ionograma.',6],
+    ['Pido fondo de ojo, ecodoppler de vasos de cuello y ergometría','No se piden de rutina.',-9]],
+ d:[['Le confirmo el diagnóstico de hipertensión: 140/90 o más en dos consultas con dos tomas cada una.','Correcto.',7],
+    ['Indico losartán 25 mg + amlodipina 2,5 mg desde hoy, junto con los cambios de hábitos.','Correcto: dos fármacos a dosis bajas, sin demorar.',8],
+    ['Indico bajar la sal a menos de 5 g por día, actividad física 150 minutos por semana y descenso de peso.','Correcto: medidas concretas y medibles.',9],
+    ['Le pido que deje el ibuprofeno y busco otra opción para el dolor de rodillas.','Correcto: los AINE elevan la presión y dañan el riñón.',10],
+    ['La cito en un mes para ajustar el tratamiento. Meta: menos de 140/90.','Correcto: control mensual hasta alcanzar la meta.',11],
+    ['Indico enalapril + losartán.','Error: nunca se combinan IECA y ARA II.',-1,10],
+    ['Le digo que pruebe sólo con dieta durante 6 meses y vuelva.','Error: la guía 2026 indica no demorar el tratamiento farmacológico.',-1,8],
+    ['Indico aspirina 100 mg para prevenir.','Error: aspirina sólo con enfermedad cardiovascular establecida.',-1,5]],
+ cot:[['Descarta síntomas de daño agudo de órgano',6,'c'],['Interroga alimentación, sal, alcohol y actividad física',8,'c'],['Detecta el consumo de AINE',8,'c'],['Pregunta antecedentes y factores de riesgo',6,'c'],['Toma la presión con técnica correcta y dos mediciones',10,'c'],['Mide peso, talla, IMC y cintura',5,'c'],
+      ['Pide ECG, creatinina con FGe y RACo',12,'k'],['Explica el criterio diagnóstico',8,'k'],['Indica dos fármacos a dosis bajas (losartán + amlodipina)',12,'k'],['Da pautas concretas de estilo de vida',10,'k'],['Indica suspender el AINE',5,'k'],['Cita a control mensual y explica la meta',10,'s']],
+ claves:['Diagnóstico: 140/90 o más en 2 consultas con 2 tomas promediadas en cada una.','Inicio con dos fármacos a dosis bajas: losartán 25 + amlodipina 2,5; luego 50 + 5, 100 + 10 y se agrega hidroclorotiazida 25.','Estudios: ECG, creatinina con FGe y RACo. El fondo de ojo no es de rutina.','Sal menos de 5 g por día. Nunca IECA + ARA II. Aspirina sólo en prevención secundaria.','Buscar siempre AINE, anticonceptivos, descongestivos y corticoides.'],
+ ref:'Cuadernillo · Clínica médica · Hipertensión arterial (GPC Nacional 2026).'},
+
+{id:'apend',area:'cir',motivo:'Dolor abdominal de 18 horas',lugar:'Guardia',
+ pt:{n:'Lucía',e:'22 años',av:{sex:'f',skin:3,hair:'pony',hc:'#1f1a17',mood:'dolor',top:'#2e6b34'}},
+ sit:'Lucía consulta por dolor abdominal que empezó ayer.',
+ tareas:['Hacer la anamnesis del dolor.','Examinar y pedir los estudios que correspondan.','Decir el diagnóstico presuntivo y la conducta.'],
+ abre:'Me duele mucho la panza desde ayer a la tarde. No puedo ni caminar derecha.',
+ guion:'El dolor empezó alrededor del ombligo y hace 8 horas se corrió a la parte de abajo a la derecha. Continuo, aumenta al caminar y al toser. No tiene hambre desde ayer, náuseas y un vómito. Temperatura 37,8. Sin diarrea ni síntomas urinarios. FUM hace 10 días, ciclos regulares, usa preservativo, sin flujo. Sin cirugías previas. Sin alergias. Última comida hace 14 horas.',
+ q:[['Dolor','¿Dónde empezó el dolor y dónde lo sentís ahora?','Empezó alrededor del ombligo y ahora lo tengo acá abajo, a la derecha.',0],
+    ['Dolor','¿Es continuo o va y viene? ¿Qué lo empeora?','Continuo. Me duele más al caminar y al toser.',0],
+    ['Asociados','¿Tenés ganas de comer? ¿Náuseas, vómitos, fiebre?','No tengo hambre desde ayer. Vomité una vez. Me tomé la fiebre y tenía 37,8.',1],
+    ['Asociados','¿Diarrea? ¿Ardor al orinar?','No, nada.',-1],
+    ['Gineco','¿Cuándo fue tu última menstruación? ¿Usás algún método? ¿Flujo?','Hace 10 días. Soy regular. Uso preservativo. Flujo no.',2],
+    ['Antecedentes','¿Te operaron alguna vez? ¿Alergias? ¿A qué hora comiste por última vez?','Nunca me operaron. Sin alergias. Comí hace unas 14 horas.',3]],
+ x:[['Signos vitales','PA 110/70 · FC 98 · temperatura 37,9 °C · FR 18.',4],
+    ['Examen abdominal completo','Dolor en el punto de McBurney, con defensa. Blumberg positivo. Rovsing positivo. Ruidos disminuidos. Orificios herniarios libres.',5],
+    ['Subunidad beta de hCG','Negativa.',6],
+    ['Hemograma y orina completa','Leucocitos 14.800 con 85 % de neutrófilos. Orina normal.',7],
+    ['Ecografía abdominal','Apéndice de 9 mm, no compresible, con líquido periapendicular.',-1],
+    ['Rx de abdomen de pie','Sin niveles hidroaéreos ni neumoperitoneo. No aporta en este cuadro.',-9]],
+ d:[['Diagnóstico presuntivo: apendicitis aguda (Alvarado de 9).','Correcto: migración, anorexia, vómitos, dolor en fosa ilíaca derecha, Blumberg, fiebre, leucocitosis y neutrofilia.',8],
+    ['Indico ayuno, vía periférica, hidratación y analgesia.','Correcto: la analgesia no enmascara el diagnóstico.',9],
+    ['Llamo a cirugía para apendicectomía y dejo la profilaxis antibiótica.','Correcto.',10],
+    ['Le explico el diagnóstico y la cirugía, y pido el consentimiento informado.','Correcto: procedimiento quirúrgico = consentimiento por escrito.',11],
+    ['No le doy analgésicos hasta que la vea el cirujano.','Error: demorar la analgesia no está justificado.',-1,8],
+    ['Le doy el alta con antiespasmódicos y control en 48 horas.','Error: tiene un cuadro quirúrgico.',-1,20]],
+ cot:[['Interroga inicio, migración y características del dolor',10,'c'],['Pregunta anorexia, náuseas, vómitos y fiebre',8,'c'],['Pregunta FUM, anticoncepción y flujo',10,'c'],['Pregunta cirugías, alergias y última ingesta',6,'c'],['Controla signos vitales',6,'c'],['Examina el abdomen con las maniobras específicas y los orificios herniarios',12,'c'],
+      ['Pide hCG',10,'k'],['Pide hemograma y orina',6,'k'],['Formula el diagnóstico de apendicitis aguda',10,'k'],['Indica ayuno, hidratación y analgesia',8,'k'],['Interconsulta con cirugía',8,'s'],['Explica y pide el consentimiento informado',6,'h']],
+ claves:['Toda mujer en edad fértil con dolor abdominal: FUM y hCG.','Apendicitis: dolor periumbilical que migra a fosa ilíaca derecha, anorexia, febrícula; McBurney, Blumberg, Rovsing.','Alvarado: 7 o más, conducta quirúrgica; 5-6, observación e imagen.','Analgesia precoz: no enmascara el diagnóstico.','Cirugía = consentimiento informado por escrito.'],
+ ref:'Cuadernillo · Cirugía general · Abdomen agudo.'},
+
+{id:'colico',area:'uro',motivo:'Dolor lumbar intenso de inicio brusco',lugar:'Guardia',
+ pt:{n:'Sergio',e:'41 años',av:{sex:'m',skin:2,hair:'short',hc:'#2a211c',mood:'dolor',top:'#8A6400',beard:1,sweat:1}},
+ sit:'Sergio llega caminando encorvado, sin poder quedarse quieto.',
+ tareas:['Hacer la anamnesis dirigida.','Definir si hay criterios de urgencia urológica.','Indicar el tratamiento y las pautas de alta.'],
+ abre:'¡No aguanto más! Me agarró un dolor en la cintura, del lado derecho, que no me deja estar quieto.',
+ guion:'Dolor lumbar derecho de 3 horas, cólico, 10/10, irradia a la ingle y al testículo derecho. Náuseas y dos vómitos. Orina rojiza una vez. Sin fiebre ni escalofríos. Orina normalmente en cantidad. Tuvo un episodio igual hace 2 años y expulsó un cálculo. Tiene los dos riñones, nunca lo operaron. Toma poca agua, trabaja de chofer. Sin alergias, sin problemas de riñón ni úlcera.',
+ q:[['Dolor','¿Dónde le duele y hacia dónde se corre? ¿Cómo empezó?','En la cintura derecha, de golpe, hace 3 horas. Se me va a la ingle y al testículo.',0],
+    ['Asociados','¿Tuvo fiebre o escalofríos?','No, fiebre no.',1],
+    ['Asociados','¿Está orinando? ¿De qué color? ¿Náuseas?','Orino bien de cantidad, una vez salió rojiza. Vomité dos veces.',2],
+    ['Antecedentes','¿Le pasó antes? ¿Tiene los dos riñones? ¿Alguna enfermedad del riñón?','Hace dos años largué una piedrita. Tengo los dos riñones, que yo sepa sanos.',3],
+    ['Antecedentes','¿Es alérgico a algún medicamento? ¿Úlcera o problemas de estómago?','No, nada.',4],
+    ['Hábitos','¿Cuánta agua toma por día?','Poca, soy chofer y no quiero parar a cada rato.',-1]],
+ x:[['Signos vitales con temperatura','PA 140/85 · FC 100 · 36,7 °C.',5],
+    ['Puñopercusión lumbar y examen abdominal y genital','Puñopercusión derecha positiva. Abdomen blando, sin defensa. Testículos normales.',6],
+    ['Orina completa','Hematíes abundantes. Sin leucocitos ni nitritos.',7],
+    ['Creatinina','0,9 mg/dl.',7],
+    ['TC sin contraste (o ecografía renovesical)','Cálculo de 6 mm en el uréter distal derecho, con dilatación leve.',8]],
+ d:[['Indico un AINE parenteral (diclofenaco 75 mg IM o ketorolaco) y un antiemético.','Correcto: los AINE son la primera línea; opioides de rescate.',9],
+    ['Como no tiene fiebre, es birreno, orina y tiene creatinina normal, puede manejarse en forma ambulatoria.','Correcto: no hay criterios de urgencia urológica.',10],
+    ['Al alta: AINE reglado, tamsulosina 0,4 mg por día, filtrar la orina y control con imagen en 2-4 semanas.','Correcto: cálculo distal de 5 a 10 mm.',11],
+    ['Le explico las pautas de alarma: fiebre, dolor que no cede, vómitos o dejar de orinar.','Correcto.',12],
+    ['Indico hidratación forzada con 3 litros de suero.','Error: no se fuerza la hidratación en el cólico.',-1,6],
+    ['Indico antibiótico por las dudas.','Error: sin fiebre, leucocitos ni nitritos no hay indicación.',-1,6]],
+ cot:[['Caracteriza el dolor y su irradiación',8,'c'],['Pregunta por fiebre y escalofríos',10,'c'],['Pregunta por diuresis y hematuria',6,'c'],['Pregunta episodios previos y si es monorreno',8,'c'],['Pregunta alergias y contraindicaciones de AINE',5,'c'],['Controla la temperatura y los signos vitales',8,'c'],['Realiza puñopercusión y examen abdominal y genital',8,'c'],
+      ['Pide orina y creatinina',8,'k'],['Pide la imagen adecuada',7,'k'],['Indica AINE como primera línea',10,'k'],['Reconoce que no hay criterios de derivación urgente',8,'s'],['Indica tamsulosina, filtrado de la orina y control',8,'k'],['Da pautas de alarma',6,'h']],
+ claves:['Cólico + fiebre = obstrucción infectada: derivación urinaria urgente.','Urgencia también con monorreno, anuria, insuficiencia renal o dolor refractario.','AINE primero. No forzar la hidratación.','Tamsulosina 0,4 mg en cálculos distales de 5 a 10 mm; menos de 5 mm se expulsan solos en la mayoría.','Prevención: diuresis mayor de 2 litros, poca sal y proteína animal, calcio normal.'],
+ ref:'Cuadernillo · Urología · Cólico renal y litiasis urinaria.'},
+
+{id:'escroto',area:'uro',motivo:'Dolor testicular que lo despertó',lugar:'Guardia',
+ pt:{n:'Tomás',e:'15 años, con su mamá',av:{sex:'m',skin:1,hair:'messy',hc:'#5a3b22',mood:'dolor',top:'#c08a1e',young:1}},
+ sit:'Tomás entra con su mamá. Camina con dificultad.',
+ tareas:['Hacer la anamnesis dirigida.','Examinar.','Decir la conducta y explicarla a Tomás y a su mamá.'],
+ abre:'Me duele mucho acá abajo… el testículo izquierdo. Me desperté con el dolor.',
+ guion:'Dolor testicular izquierdo de inicio brusco hace 2 horas, lo despertó a las 5 de la mañana. Muy intenso, con náuseas y un vómito. Hace un mes tuvo un dolor parecido que se fue solo en 20 minutos. Sin golpes. Sin fiebre ni ardor al orinar. No tuvo relaciones sexuales. Sin alergias. Última comida anoche a las 22.',
+ q:[['Dolor','¿A qué hora empezó exactamente y cómo empezó?','Me despertó a las 5, hace dos horas. De golpe.',0],
+    ['Dolor','¿Te pasó algo parecido antes?','Hace un mes me dolió igual, pero se me pasó solo en 20 minutos.',1],
+    ['Asociados','¿Náuseas o vómitos? ¿Fiebre? ¿Ardor al orinar?','Vomité una vez. Fiebre y ardor no.',2],
+    ['Antecedentes','¿Te golpeaste? ¿Tuviste relaciones sexuales? (pregunto a solas si hace falta)','No me golpeé. No tuve relaciones.',3],
+    ['Antecedentes','¿Alergias? ¿A qué hora comiste por última vez?','No tengo. Cené anoche a las 10.',4]],
+ x:[['Examen escrotal de pie y acostado','Testículo izquierdo ascendido y horizontalizado, muy doloroso. Signo de Prehn negativo (no alivia al elevarlo).',5],
+    ['Reflejo cremastérico','Ausente del lado izquierdo; presente del derecho.',6],
+    ['Examen del abdomen y de las regiones inguinales','Sin hernias. Abdomen blando.',-1],
+    ['Orina completa','Normal.',-1],
+    ['Ecografía Doppler (el ecografista llega en 3 horas)','No está disponible ahora. Esperarla demora la cirugía.',-9]],
+ d:[['Diagnóstico presuntivo: torsión testicular. Es una urgencia quirúrgica dependiente del tiempo.','Correcto: adolescente, inicio brusco, testículo alto y horizontal, cremastérico ausente.',7],
+    ['Llamo a urología ahora para exploración quirúrgica, sin esperar la ecografía.','Correcto: la ventana es de 6 horas.',8],
+    ['Indico ayuno, vía y analgesia.','Correcto.',9],
+    ['Les explico a Tomás y a su mamá que hay que operar ya, que se fijan los dos testículos, y pido el consentimiento.','Correcto: orquidopexia bilateral; riesgo de pérdida del testículo si se demora.',10],
+    ['Indico antibiótico, antiinflamatorio y control en 48 horas.','Error grave: es tratar una orquiepididimitis que no tiene. Puede perder el testículo.',-1,25],
+    ['Espero la ecografía Doppler para confirmar.','Error: con sospecha clínica alta, la ecografía no debe demorar la cirugía.',-1,15]],
+ cot:[['Pregunta la hora y la forma de inicio',12,'c'],['Pregunta por episodios previos',6,'c'],['Pregunta síntomas asociados',6,'c'],['Pregunta traumatismo y actividad sexual con privacidad',6,'c'],['Pregunta alergias y última ingesta',5,'c'],['Examina el escroto (posición, eje, Prehn)',10,'c'],['Busca el reflejo cremastérico',10,'c'],
+      ['Formula el diagnóstico de torsión testicular',12,'k'],['Interconsulta urgente sin esperar la ecografía',15,'s'],['Indica ayuno, vía y analgesia',6,'k'],['Explica al paciente y a su madre y pide el consentimiento',12,'h']],
+ claves:['Dolor escrotal agudo en un adolescente = torsión hasta demostrar lo contrario.','Testículo ascendido y horizontal, cremastérico ausente, Prehn negativo.','Ventana de 6 horas: la ecografía no debe demorar la cirugía.','Orquidopexia bilateral.','Orquiepididimitis: inicio gradual, cremastérico presente, Prehn positivo; ceftriaxona + doxiciclina en menores de 35 años.'],
+ ref:'Cuadernillo · Urología · Escroto agudo.'},
+
+{id:'lumbar',area:'tra',motivo:'Dolor de cintura hace 5 días',lugar:'Consultorio de demanda espontánea',
+ pt:{n:'Carlos',e:'38 años',av:{sex:'m',skin:2,hair:'short',hc:'#3a2c22',mood:'neutral',top:'#6D4C41'}},
+ sit:'Carlos es albañil. Consulta por dolor lumbar y pide una radiografía y una resonancia.',
+ tareas:['Hacer la anamnesis buscando banderas rojas.','Examinar.','Indicar el plan y explicar por qué pide o no pide estudios.'],
+ abre:'Doctor, me quedé duro de la cintura levantando una bolsa de cemento. Quiero que me haga una resonancia.',
+ guion:'Dolor lumbar bajo desde hace 5 días tras un esfuerzo. Empeora al moverse y mejora acostado. No baja por la pierna más allá del glúteo. Sin debilidad ni hormigueos. Orina y mueve el intestino normalmente, sin pérdida de sensibilidad en la zona genital. Sin fiebre ni pérdida de peso. Sin cáncer, sin corticoides, no usa drogas. No lo despierta de noche. Le preocupa perder días de trabajo: cobra por jornal.',
+ q:[['Dolor','¿Cómo empezó? ¿Qué lo empeora y qué lo alivia?','Levantando una bolsa. Me duele al moverme y se alivia acostado.',0],
+    ['Dolor','¿El dolor baja por la pierna? ¿Hasta dónde?','Hasta la nalga, más no.',1],
+    ['Banderas rojas','¿Perdió fuerza en las piernas? ¿Hormigueos?','No.',2],
+    ['Banderas rojas','¿Tiene problemas para orinar o retener? ¿Siente adormecida la zona entre las piernas?','No, todo normal.',3],
+    ['Banderas rojas','¿Fiebre, pérdida de peso, antecedente de cáncer, corticoides o drogas inyectables?','No, nada de eso.',4],
+    ['Banderas rojas','¿El dolor lo despierta de noche o le duele en reposo?','No, de noche duermo bien.',4],
+    ['Contexto','¿En qué trabaja? ¿Qué es lo que más le preocupa?','Soy albañil y cobro por día. Si no trabajo, no cobro.',5]],
+ x:[['Inspección, palpación y movilidad de la columna','Contractura paravertebral. Sin dolor puntual en las apófisis espinosas.',6],
+    ['Maniobra de Lasègue','Negativa en ambos lados.',7],
+    ['Marcha en puntas y talones, fuerza, sensibilidad y reflejos','Normales. Rotulianos y aquíleos presentes y simétricos.',7],
+    ['Rx y resonancia de columna lumbar','Sin banderas rojas no se piden en las primeras 4 a 6 semanas.',-9]],
+ d:[['Le explico que es una lumbalgia mecánica, sin signos de gravedad, y que suele mejorar en pocas semanas.','Correcto.',8],
+    ['Le explico por qué hoy no hacen falta radiografía ni resonancia.','Correcto: no cambian la evolución y muestran hallazgos sin relevancia.',9],
+    ['Indico mantenerse activo, calor local y un AINE por pocos días.','Correcto: evitar el reposo en cama.',10],
+    ['Le doy pautas de alarma (pérdida de fuerza, problemas para orinar, fiebre) y control en 2 a 4 semanas.','Correcto.',11],
+    ['Acuerdo con él un certificado breve y la vuelta progresiva al trabajo.','Bien: aborda su preocupación laboral.',5],
+    ['Indico reposo absoluto en cama por 10 días.','Error: el reposo en cama retrasa la recuperación.',-1,10],
+    ['Indico corticoides inyectables y un opioide.','Error: no están indicados en la lumbalgia inespecífica.',-1,8]],
+ cot:[['Interroga el mecanismo y el ritmo del dolor',6,'c'],['Pregunta la irradiación',6,'c'],['Pregunta por déficit motor o sensitivo',8,'c'],['Pregunta por esfínteres y anestesia perineal',12,'c'],['Pregunta por fiebre, peso, cáncer, corticoides, drogas y dolor nocturno',12,'c'],['Explora el contexto laboral y las preocupaciones',6,'c'],['Examina la columna',6,'c'],['Realiza Lasègue y el examen neurológico',10,'c'],
+      ['Explica el diagnóstico y el pronóstico',8,'h'],['Explica por qué no pide imágenes',10,'k'],['Indica actividad, calor y AINE',8,'k'],['Da pautas de alarma y control',8,'s']],
+ claves:['Sin banderas rojas: sin imágenes por 4 a 6 semanas.','Banderas rojas: cáncer, fiebre, traumatismo, déficit progresivo, dolor nocturno, cola de caballo.','Cola de caballo: retención urinaria y anestesia en silla de montar; resonancia y cirugía urgentes.','L5: dorsiflexión del hallux, sin reflejo. S1: flexión plantar y reflejo aquíleo.','Mantenerse activo; el reposo en cama empeora.'],
+ ref:'Cuadernillo · Traumatología · Lumbalgia y lumbociatalgia.'},
+
+{id:'deshid',area:'ped',motivo:'Diarrea y vómitos en un lactante',lugar:'Guardia pediátrica',
+ pt:{n:'Sofía (mamá de Benjamín, 10 meses)',e:'Benjamín pesa 9 kg',av:{sex:'f',skin:2,hair:'bun',hc:'#2b1d16',mood:'angustia',top:'#BF5B0A',baby:1}},
+ sit:'Sofía trae a Benjamín, de 10 meses, con diarrea desde hace dos días.',
+ tareas:['Interrogar a la mamá.','Examinar a Benjamín y clasificar la deshidratación.','Indicar el plan de hidratación y las pautas.'],
+ abre:'Doctor, Benja está con diarrea desde antes de ayer y hoy lo veo muy decaído.',
+ guion:'Seis deposiciones líquidas por día desde hace 2 días, sin sangre ni moco. Tres vómitos hoy. Fiebre de 38. Toma el pecho con ganas, con mucha sed. El último pañal mojado fue hace 6 horas, con poca orina. Está irritable. Pesaba 9,5 kg hace una semana. Vacunas completas, incluida rotavirus. Va a un jardín maternal donde hay otros chicos con diarrea. No comió carne mal cocida. Le dio té y gaseosa sin gas.',
+ q:[['Cuadro','¿Cuántas deposiciones hace por día y cómo son? ¿Tienen sangre?','Seis por día, líquidas. Sangre no.',0],
+    ['Cuadro','¿Vomita? ¿Tiene fiebre?','Vomitó tres veces hoy. Tuvo 38.',1],
+    ['Hidratación','¿Cuándo fue el último pañal mojado? ¿Toma el pecho? ¿Tiene sed?','Hace como 6 horas, y poquito. Toma el pecho desesperado.',2],
+    ['Hidratación','¿Cuánto pesaba antes?','Hace una semana, 9 kilos y medio.',3],
+    ['Antecedentes','¿Tiene las vacunas? ¿Va al jardín? ¿Comió carne o algo fuera de lo habitual?','Vacunas completas. En el jardín hay otros con diarrea. Carne no comió.',4],
+    ['Cuadro','¿Qué le estuvo dando?','Té y gaseosa sin gas.',5]],
+ x:[['Peso y signos vitales','9 kg (perdió el 5 %) · FC 140 · FR 34 · 37,8 °C.',6],
+    ['Estado general, ojos, mucosas, lágrimas y fontanela','Irritable, con sed. Ojos hundidos, llora sin lágrimas, mucosas secas, fontanela algo deprimida.',7],
+    ['Pliegue cutáneo y relleno capilar','El pliegue vuelve lento (menos de 2 segundos). Relleno capilar de 2 a 3 segundos. Pulsos llenos.',7],
+    ['Ionograma y estado ácido-base','No están indicados en una deshidratación moderada sin sospecha de alteración del sodio.',-9]],
+ d:[['Clasifico: deshidratación leve a moderada. Corresponde el plan B.','Correcto.',8],
+    ['Indico sales de rehidratación oral 50 a 100 ml/kg en 4 horas (450 a 900 ml), en tomas pequeñas y frecuentes, en la guardia.','Correcto. Si vomita, esperar 10 minutos y seguir más lento; gastroclisis si no tolera.',9],
+    ['Indico continuar con el pecho y no suspender la alimentación.','Correcto.',10],
+    ['Le explico a la mamá que no le dé gaseosas, jugos ni té, y cómo preparar las sales.','Correcto: un sobre en un litro de agua segura; dura 24 horas.',11],
+    ['Reevalúo a las 4 horas y doy pautas de alarma: sangre en la materia fecal, no orina, vómitos persistentes, decaimiento.','Correcto.',12],
+    ['Indico vía endovenosa con solución fisiológica de entrada.','Error: tolera la vía oral y no está en shock.',-1,10],
+    ['Indico loperamida y un antibiótico.','Error: los antidiarreicos están contraindicados y no hay indicación de antibiótico.',-1,12]],
+ cot:[['Interroga número y características de las deposiciones, y sangre',8,'c'],['Pregunta vómitos y fiebre',5,'c'],['Pregunta diuresis, sed y tolerancia oral',10,'c'],['Pregunta el peso previo',5,'c'],['Pregunta vacunas, contactos y alimentos',5,'c'],['Pregunta qué líquidos recibió',5,'c'],['Pesa y controla signos vitales',7,'c'],['Evalúa los signos de deshidratación (al menos cuatro)',12,'c'],
+      ['Clasifica la deshidratación e indica el plan B',10,'k'],['Calcula el volumen de sales (50 a 100 ml/kg en 4 horas)',10,'k'],['Indica continuar la lactancia',8,'k'],['Explica la preparación de las sales y qué no dar',8,'h'],['Reevalúa y da pautas de alarma',7,'s']],
+ claves:['Plan A: 10 ml/kg tras cada deposición. Plan B: 50 a 100 ml/kg en 4 horas. Plan C: 20 ml/kg en bolo y luego 25 ml/kg/h.','No suspender la lactancia ni la alimentación.','No antidiarreicos. Antibióticos sólo en disentería con compromiso general, menores de 3 meses o inmunosuprimidos.','Diarrea con sangre en un menor de 5 años: pensar en SUH; no dar antibióticos de entrada.','Laboratorio sólo en la deshidratación grave o con sospecha de alteración del sodio.'],
+ ref:'Cuadernillo · Pediatría · Diarrea aguda, deshidratación y SUH.'},
+
+{id:'convul',area:'ped',motivo:'Convulsión con fiebre',lugar:'Guardia pediátrica',
+ pt:{n:'Diego (papá de Emma, 18 meses)',e:'Emma ya no convulsiona',av:{sex:'m',skin:1,hair:'short',hc:'#1d1d1d',mood:'angustia',top:'#d9772b',baby:1}},
+ sit:'Diego trae a Emma en brazos. Convulsionó en su casa hace 20 minutos. Ahora está despierta y llora.',
+ tareas:['Interrogar al papá.','Examinar a Emma y definir si necesita estudios.','Informar y dar pautas.'],
+ abre:'¡Doctor, la nena se puso dura, revoleó los ojos y temblaba toda! Pensé que se moría.',
+ guion:'Emma, 18 meses. La convulsión duró unos 3 minutos, de todo el cuerpo, con los ojos hacia arriba. Fue una sola. Después quedó dormida 10 minutos y ahora está despierta y lo reconoce. Tenía 39,5 de fiebre, que empezó hoy, con mocos y tos desde ayer. Es la primera vez. El papá tuvo convulsiones con fiebre de chico. Vacunas completas. Desarrollo normal, camina y dice palabras. No recibió antibióticos. No vomita.',
+ q:[['Episodio','¿Cuánto duró? ¿Se movía todo el cuerpo o un solo lado?','Unos 3 minutos. Todo el cuerpo.',0],
+    ['Episodio','¿Tuvo una sola o más de una? ¿Cómo quedó después?','Una sola. Se durmió 10 minutos y ahora está bien, me reconoce.',1],
+    ['Fiebre','¿Desde cuándo tiene fiebre? ¿Qué otros síntomas tiene?','Desde hoy, llegó a 39,5. Mocos y tos desde ayer.',2],
+    ['Antecedentes','¿Le había pasado antes? ¿Alguien en la familia con convulsiones?','Nunca. Yo tuve convulsiones con fiebre de chico.',3],
+    ['Antecedentes','¿Tiene las vacunas completas? ¿Camina, habla? ¿Tomó antibióticos?','Todas las vacunas. Camina y dice palabras. Antibióticos no.',4]],
+ x:[['Signos vitales y glucemia capilar','38,6 °C · FC 140 · saturación 98 % · glucemia 92 mg/dl.',5],
+    ['Examen neurológico, fontanela y signos meníngeos','Alerta, conectada. Fontanela normotensa. Sin rigidez de nuca. Sin déficit focal.',6],
+    ['Búsqueda del foco: oídos, fauces, pulmón, piel','Rinorrea, fauces congestivas. Tímpanos normales. Sin petequias.',7],
+    ['Punción lumbar','No está indicada: convulsión simple, examen normal y vacunas completas.',-9],
+    ['EEG y TC de cerebro','No están indicados en una convulsión febril simple.',-9]],
+ d:[['Le digo al papá que fue una convulsión febril simple: generalizada, de menos de 15 minutos y única.','Correcto.',8],
+    ['Le explico que es benigna, que no deja daño en el cerebro y que el riesgo de epilepsia es casi igual al de cualquier chico.','Correcto: 1 a 2 %.',9],
+    ['Le aviso que puede repetirse en uno de cada tres chicos y que los antitérmicos alivian pero no la previenen.','Correcto. No se indican anticonvulsivantes preventivos.',10],
+    ['Le enseño qué hacer si se repite: de costado, no meterle nada en la boca, mirar el reloj y venir si dura más de 5 minutos.','Correcto.',11],
+    ['Indico antitérmico (paracetamol 10 a 15 mg/kg o ibuprofeno 5 a 10 mg/kg), observación y control en 24 horas.','Correcto.',12],
+    ['Indico fenobarbital preventivo.','Error: no se indica profilaxis.',-1,10],
+    ['Le digo que se quede tranquilo y le doy el alta sin explicarle nada más.','Error: la información a la familia es la tarea central de esta estación.',-1,10]],
+ cot:[['Interroga duración y tipo de convulsión',10,'c'],['Pregunta si fue única y el estado posterior',8,'c'],['Interroga la fiebre y el foco',6,'c'],['Pregunta antecedentes personales y familiares',6,'c'],['Pregunta vacunas, desarrollo y antibióticos previos',6,'c'],['Controla signos vitales y glucemia',6,'c'],['Examina el estado neurológico y los signos meníngeos',10,'c'],['Busca el foco de la fiebre',6,'c'],
+      ['Clasifica como convulsión febril simple',10,'k'],['Explica la benignidad',10,'h'],['Explica la recurrencia y que los antitérmicos no la previenen',8,'h'],['Enseña qué hacer ante un nuevo episodio',8,'h'],['Indica antitérmico y control, sin estudios innecesarios',6,'s']],
+ claves:['Simple: generalizada, menos de 15 minutos, una en 24 horas, entre los 6 meses y los 5 años.','Simple con examen normal: sin laboratorio, punción lumbar, EEG ni imágenes.','Punción lumbar: signos meníngeos o sensorio que no se recupera; considerar entre los 6 y los 12 meses con vacunas incompletas.','Recurre en un tercio; riesgo de epilepsia de 1 a 2 %; sin profilaxis.','Si llega convulsionando: ABC, glucemia y benzodiacepina a los 5 minutos (diazepam rectal 0,5 mg/kg).'],
+ ref:'Cuadernillo · Pediatría · Fiebre sin foco y convulsión febril.'},
+
+{id:'icter',area:'neo',motivo:'Recién nacido amarillo',lugar:'Consultorio de control posalta',
+ pt:{n:'Camila (mamá de Lola, 4 días)',e:'Lola nació de término, 3200 g',av:{sex:'f',skin:1,hair:'long',hc:'#a0672f',mood:'angustia',top:'#A61E5B',baby:1}},
+ sit:'Control a las 48 horas del alta. Camila nota a Lola amarilla desde ayer.',
+ tareas:['Interrogar a la mamá.','Examinar a Lola y pedir lo necesario.','Decidir la conducta y aconsejar.'],
+ abre:'La veo amarillita desde ayer, doctor. ¿Es normal? Mi suegra dice que la ponga al sol.',
+ guion:'Lola nació a las 39 semanas, parto vaginal, 3200 g, Apgar 9/10. La ictericia empezó al tercer día. Toma pecho exclusivo cada 4 a 5 horas, se duerme en el pecho, 5 a 6 mamadas por día. Moja 3 pañales por día. Deposiciones verdosas, dos por día. Orina clara. Camila es grupo O positivo; Lola es A positivo, Coombs directa negativa. Es su primera hija. Sin fiebre.',
+ q:[['Ictericia','¿Cuándo empezó a verla amarilla?','Ayer, al tercer día.',0],
+    ['Nacimiento','¿De cuántas semanas nació y cuánto pesó?','39 semanas, 3 kilos 200. Parto normal.',1],
+    ['Grupo','¿Sabés tu grupo y factor y los de Lola?','Yo soy O positivo. Ella es A positivo, me dijeron que el Coombs dio negativo.',2],
+    ['Alimentación','¿Cómo se alimenta? ¿Cada cuánto toma y cuánto dura?','Pecho solo. Cada 4 o 5 horas, se me duerme enseguida. Cinco o seis veces por día.',3],
+    ['Alimentación','¿Cuántos pañales moja? ¿De qué color son la caca y el pis?','Tres pañales por día. La caca es verdosa, dos veces. El pis es clarito.',4],
+    ['Antecedentes','¿Tuviste otros hijos con ictericia? ¿Tiene fiebre o la notás decaída?','Es la primera. Fiebre no, duerme mucho.',-1]],
+ x:[['Peso','2880 g: descendió el 10 % respecto del nacimiento.',5],
+    ['Examen con luz natural: extensión de la ictericia, hidratación, tono y succión','Ictericia hasta el abdomen. Mucosas algo secas. Tono normal, succión presente pero se cansa. Sin hepatoesplenomegalia.',6],
+    ['Bilirrubina total y directa, hematocrito','Bilirrubina total 15 mg/dl, directa 0,4. Hematocrito 52 %. A las 96 horas de vida queda por debajo del umbral de luminoterapia para un recién nacido de término sin factores de riesgo.',7],
+    ['Observo una mamada','Prendida superficial: toma sólo el pezón, labio inferior hacia adentro. A Camila le duele.',8]],
+ d:[['Le explico que es una ictericia de inicio después de las 24 horas, favorecida por un aporte insuficiente de leche.','Correcto: ictericia por lactancia insuficiente (descenso de peso del 10 %, pocas mamadas, pocos pañales).',9],
+    ['Corrijo la prendida y la posición, e indico pecho a demanda, 8 a 12 veces por día, despertándola si hace falta.','Correcto: es el tratamiento.',10],
+    ['Le explico que no la ponga al sol y que no hace falta suspender el pecho.','Correcto.',11],
+    ['Cito a control de peso y bilirrubina en 24 horas y doy pautas de alarma.','Correcto: se extiende a piernas o plantas, succión débil, somnolencia, menos de 4 pañales, orina oscura o caca blanca.',12],
+    ['Indico suspender la lactancia y dar fórmula.','Error: no se suspende la lactancia.',-1,12],
+    ['Le digo que es normal y que vuelva al mes.','Error: necesita bilirrubina, control de peso y seguimiento en 24 horas.',-1,15]],
+ cot:[['Pregunta las horas de vida al inicio de la ictericia',10,'c'],['Pregunta edad gestacional y peso de nacimiento',5,'c'],['Pregunta grupo y factor de la madre y de la niña, y Coombs',10,'c'],['Interroga frecuencia y duración de las mamadas',8,'c'],['Pregunta pañales, color de la orina y de la materia fecal',8,'c'],['Pesa y calcula el descenso',7,'c'],['Examina la extensión, la hidratación y el tono',7,'c'],
+      ['Pide bilirrubina total y directa y la ubica según las horas de vida',10,'k'],['Observa una mamada',8,'c'],['Explica el diagnóstico',6,'h'],['Corrige la técnica e indica pecho a demanda',10,'k'],['Desaconseja el sol y la suspensión del pecho',5,'h'],['Cita en 24 horas con pautas de alarma',6,'s']],
+ claves:['Ictericia en las primeras 24 horas = patológica (hemólisis). Después de las 24 horas, pico al día 3 a 5.','Madre O con hijo A o B: incompatibilidad ABO; Coombs directa.','Directa mayor de 1 mg/dl o 20 % de la total, coluria y acolia: colestasis; descartar atresia biliar.','La luminoterapia se decide con curvas por horas de vida, edad gestacional y factores de riesgo.','No suspender la lactancia: 8 a 12 mamadas por día y corregir la técnica.'],
+ ref:'Cuadernillo · Neonatología · Ictericia neonatal; Lactancia materna y alta conjunta.'},
+
+{id:'preecl',area:'obs',motivo:'Embarazada de 34 semanas con dolor de cabeza',lugar:'Guardia de maternidad',
+ pt:{n:'Yanina',e:'19 años · primer embarazo · 34 semanas',av:{sex:'f',skin:3,hair:'long',hc:'#161211',mood:'dolor',top:'#6A2C91'}},
+ sit:'Yanina consulta por cefalea. Enfermería registró 165/112 mmHg.',
+ tareas:['Hacer la anamnesis dirigida.','Examinar y pedir los estudios.','Indicar el tratamiento inmediato.'],
+ abre:'Me duele mucho la cabeza desde anoche y veo como lucecitas.',
+ guion:'Primer embarazo, 34 semanas por ecografía precoz. Cefalea intensa frontal desde hace 12 horas que no cede con paracetamol. Ve luces (fotopsias). Dolor en la boca del estómago desde hoy. Hinchazón de cara y manos hace 3 días. El bebé se mueve bien. Sin contracciones, sin pérdidas de sangre ni de líquido. Controles previos con presión normal. Sin enfermedades, sin asma. Sin alergias.',
+ q:[['Síntomas','¿Cómo es el dolor de cabeza? ¿Cedió con algo?','Fuerte, en la frente, desde anoche. Tomé paracetamol y nada.',0],
+    ['Síntomas','¿Ve luces, manchas o borroso? ¿Zumbidos?','Veo lucecitas.',0],
+    ['Síntomas','¿Le duele la boca del estómago o debajo de las costillas del lado derecho? ¿Náuseas?','Sí, me duele la boca del estómago desde hoy.',1],
+    ['Embarazo','¿Siente que el bebé se mueve? ¿Tiene contracciones, pérdida de sangre o de líquido?','Se mueve bien. No tengo contracciones ni pérdidas.',2],
+    ['Embarazo','¿De cuántas semanas está? ¿Cómo venían los controles y la presión?','34 semanas. Venía todo bien, la presión normal.',3],
+    ['Antecedentes','¿Tiene asma, enfermedades del corazón o de los riñones? ¿Alergias?','No, nada.',4]],
+ x:[['Repito la presión a los 15 minutos, en el mismo brazo','168/110 mmHg.',5],
+    ['Reflejos osteotendinosos y examen general','Hiperreflexia rotuliana con clonus. Edema de cara y manos. Dolor en epigastrio.',6],
+    ['Altura uterina, tono uterino y latidos fetales','Altura uterina acorde. Útero relajado. Latidos 142 por minuto.',7],
+    ['Laboratorio: plaquetas, hepatograma, LDH, creatinina y proteinuria','Plaquetas 135.000 · GOT 68, GPT 74 · LDH 480 · creatinina 0,9 · proteinuria ++.',8],
+    ['Monitoreo fetal','Reactivo.',-1]],
+ d:[['Diagnóstico: preeclampsia con signos de severidad y emergencia hipertensiva. Interno.','Correcto: 160/110 o más, cefalea, fotopsias, epigastralgia e hiperreflexia.',9],
+    ['Indico labetalol IV 20 mg en bolo lento (o nifedipina 10 mg por vía oral), repitiendo según respuesta.','Correcto: tratar en la primera hora, sin bajar bruscamente.',10],
+    ['Indico sulfato de magnesio: carga de 4 a 5 g IV en 10 a 20 minutos y mantenimiento de 1 g por hora.','Correcto: previene la eclampsia.',11],
+    ['Controlo reflejo rotuliano, frecuencia respiratoria y diuresis con sonda; tengo gluconato de calcio a mano.','Correcto: los tres controles y el antídoto.',12],
+    ['Con 34 semanas y signos de severidad: finalización del embarazo una vez estabilizada.','Correcto. Maduración pulmonar si todavía está dentro de las 34 semanas.',13],
+    ['Indico enalapril.','Error: los IECA están contraindicados en el embarazo.',-1,12],
+    ['Indico diazepam para prevenir la convulsión.','Error: el fármaco es el sulfato de magnesio.',-1,10],
+    ['La envío a su casa con alfametildopa y control en 48 horas.','Error grave: tiene criterios de internación y de finalización.',-1,25]],
+ cot:[['Interroga cefalea y síntomas visuales',8,'c'],['Pregunta por epigastralgia',6,'c'],['Pregunta movimientos fetales, contracciones y pérdidas',7,'c'],['Pregunta edad gestacional y controles previos',5,'c'],['Pregunta asma y antecedentes (antes del labetalol)',4,'c'],['Repite la toma de presión a los 15 minutos',7,'c'],['Busca hiperreflexia y clonus',7,'c'],['Evalúa tono uterino y latidos fetales',6,'c'],['Pide plaquetas, hepatograma, LDH, creatinina y proteinuria',8,'k'],
+      ['Diagnostica preeclampsia con signos de severidad e interna',10,'k'],['Indica antihipertensivo en la primera hora',10,'k'],['Indica sulfato de magnesio con dosis de carga y mantenimiento',12,'k'],['Controla reflejos, FR y diuresis, y nombra el antídoto',5,'k'],['Plantea la finalización del embarazo',5,'s']],
+ claves:['Preeclampsia: HTA después de las 20 semanas con proteinuria o daño de órgano. La proteinuria no es obligatoria.','160/110 o más: labetalol IV o nifedipina oral en la primera hora.','Sulfato de magnesio: 4 a 5 g de carga y 1 g por hora durante 24 horas. Antídoto: gluconato de calcio.','Con signos de severidad: finalizar desde las 34 semanas, o antes si hay eclampsia, HELLP o compromiso fetal.','Contraindicados: IECA y ARA II.'],
+ ref:'Cuadernillo · Obstetricia · Trastornos hipertensivos del embarazo (FASGO 2025).'},
+
+{id:'mac',area:'gin',motivo:'Quiere empezar a cuidarse',lugar:'Consultorio de un centro de salud',
+ pt:{n:'Abril',e:'16 años, viene sola',av:{sex:'f',skin:2,hair:'pony',hc:'#4a2f1d',mood:'neutral',top:'#00767F',young:1}},
+ sit:'Abril pide un turno para anticoncepción. La administrativa le dijo que tenía que venir con un adulto.',
+ tareas:['Hacer la consejería en anticoncepción.','Definir qué necesita para iniciar un método.','Aclararle sus derechos.'],
+ abre:'Hola… quería empezar a tomar pastillas, pero me dijeron que tenía que venir con mi mamá. Ella no sabe nada.',
+ guion:'16 años. Novio de 17 hace 6 meses. Relaciones desde hace 3 meses, con preservativo a veces. La última relación sin preservativo fue hace 36 horas. FUM hace 12 días, ciclos regulares. No fuma. Tiene migraña con aura (ve zigzag antes del dolor) una vez por mes. Sin trombosis ni otras enfermedades. No toma medicación. Le preocupa que su mamá se entere. Quiere algo que no tenga que acordarse todos los días. Se siente cuidada y respetada por su novio. Vacuna de VPH aplicada.',
+ q:[['Motivo','¿Qué método tenés en mente y qué es lo importante para vos?','Pastillas, pero la verdad prefiero algo que no tenga que acordarme todos los días.',0],
+    ['Sexual','¿Ya tuviste relaciones? ¿Usan preservativo? ¿Cuándo fue la última sin cuidarse?','Sí, hace tres meses. A veces usamos. La última sin nada fue antes de ayer a la noche.',1],
+    ['Sexual','¿Cuándo fue tu última menstruación?','Hace 12 días. Soy regular.',2],
+    ['Antecedentes','¿Fumás? ¿Tenés migraña? Cuando te duele la cabeza, ¿ves luces o zigzag antes?','No fumo. Migraña sí, y antes veo como un zigzag.',3],
+    ['Antecedentes','¿Tuviste trombosis, presión alta u otra enfermedad? ¿Tomás medicación?','No, nada.',4],
+    ['Vínculo','¿Cómo te sentís en la relación? ¿Alguna vez te sentiste presionada?','Bien, me cuida. Nunca me presionó.',5],
+    ['Contexto','¿Qué te preocupa de que tu mamá se entere?','Que se enoje. No quiero que le cuenten.',6]],
+ x:[['Tomo la presión arterial','105/65 mmHg.',7],
+    ['Examen ginecológico y PAP','No hacen falta para indicar un método, y a los 16 años no corresponde PAP.',-9],
+    ['Laboratorio y ecografía','No se requieren para iniciar anticoncepción.',-9]],
+ d:[['Le explico que a los 16 años puede consultar y elegir un método sola, y que la consulta es confidencial.','Correcto: desde los 16 decide como una adulta; entre los 13 y los 16, sola para prácticas no invasivas.',8],
+    ['Le indico anticoncepción de emergencia hoy: levonorgestrel 1,5 mg.','Correcto: relación sin protección hace 36 horas, en la mitad del ciclo. Sirve hasta las 120 horas.',9],
+    ['Por la migraña con aura le explico que no puede usar métodos con estrógeno, y le ofrezco implante, DIU o desogestrel.','Correcto: categoría 4. El implante es el más eficaz y no depende de la toma diaria.',10],
+    ['Le recomiendo usar siempre preservativo junto con el método elegido y le ofrezco testeo de ITS.','Correcto: doble protección.',11],
+    ['Le indico pastillas combinadas, que es lo que pidió.','Error: los estrógenos están contraindicados con migraña con aura.',-1,15],
+    ['Le digo que vuelva con su mamá para poder indicarle un método.','Error: vulnera su derecho y la deja sin protección.',-1,20],
+    ['Le digo que espere a la próxima menstruación para empezar.','Error: se puede iniciar hoy (inicio rápido) con 7 días de respaldo.',-1,8]],
+ cot:[['Explora sus preferencias y expectativas',6,'c'],['Interroga inicio de relaciones, uso de preservativo y última relación sin protección',10,'c'],['Pregunta la FUM',6,'c'],['Pregunta tabaco y migraña con aura',10,'c'],['Pregunta trombosis, HTA y medicación',6,'c'],['Explora el vínculo y descarta coerción',6,'c'],['Explora su temor y garantiza la confidencialidad',8,'p'],['Toma la presión y no pide estudios innecesarios',6,'c'],
+      ['Explica que puede consentir sola',10,'k'],['Indica anticoncepción de emergencia',12,'k'],['Contraindica estrógenos y ofrece métodos de larga duración',12,'k'],['Recomienda doble protección y testeo',8,'h']],
+ claves:['Para iniciar un método alcanza con la anamnesis y la presión arterial. Inicio rápido con 7 días de respaldo.','Estrógenos contraindicados: migraña con aura, fumadora de 35 años o más, HTA de 160/100, trombosis, lactancia de menos de 6 semanas.','Emergencia: levonorgestrel 1,5 mg hasta 120 horas; sin contraindicaciones; no es abortivo.','13 a 16 años: decide sola prácticas no invasivas; desde los 16, como adulta.','Los más eficaces: implante y DIU. Siempre preservativo.'],
+ ref:'Cuadernillo · Ginecología · Anticoncepción; Pediatría · Adolescencia.'},
+
+{id:'suic',area:'sm',motivo:'No duerme y está sin ganas',lugar:'Consultorio de un centro de salud',
+ pt:{n:'Gustavo',e:'47 años',av:{sex:'m',skin:1,hair:'thin',hc:'#6e6258',mood:'triste',top:'#303F9F'}},
+ sit:'Gustavo pide algo para dormir. Enfermería lo notó muy callado.',
+ tareas:['Hacer la entrevista y evaluar el estado de ánimo.','Evaluar el riesgo suicida.','Decidir la conducta.'],
+ abre:'Vengo a ver si me da algo para dormir, doctor. Hace semanas que no pego un ojo.',
+ guion:'Lo despidieron hace 2 meses de la fábrica donde trabajó 20 años. Desde hace 6 semanas: tristeza casi todo el día, no disfruta nada, se despierta a las 4, perdió 5 kg, se siente un inútil y una carga, le cuesta concentrarse. SOLO si preguntan directamente: piensa que estaría mejor muerto; pensó en colgarse en el galpón, donde tiene una soga; no lo intentó nunca. Lo frena su hija de 12 años. Vive con su esposa y su hija; la esposa no sabe lo que piensa. Toma medio litro de vino por noche desde el despido. Sin antecedentes psiquiátricos ni episodios de euforia. Padre se suicidó cuando él tenía 20. No tiene armas de fuego. Aceptaría ayuda.',
+ q:[['Ánimo','¿Cómo está de ánimo? ¿Pasó algo en estos meses?','Mal. Me echaron hace dos meses, después de 20 años. Estoy triste todo el día.',0],
+    ['Ánimo','¿Sigue disfrutando de las cosas? ¿Cómo está el apetito, el sueño, la concentración?','No disfruto nada. Bajé 5 kilos. Me despierto a las 4. No me concentro. Me siento un inútil.',1],
+    ['Riesgo','¿Sintió que la vida no vale la pena o deseó estar muerto?','…Sí. Pienso que estarían mejor sin mí.',2],
+    ['Riesgo','¿Pensó en quitarse la vida? ¿Pensó cómo?','Pensé en colgarme en el galpón. Tengo una soga ahí.',3],
+    ['Riesgo','¿Lo intentó alguna vez? ¿Qué lo frena?','Nunca. Me frena mi hija, tiene 12.',4],
+    ['Riesgo','¿Con quién vive? ¿Alguien sabe lo que le pasa? ¿Hay armas en su casa?','Con mi señora y la nena. No saben nada. Armas no hay.',5],
+    ['Consumo','¿Está tomando alcohol u otra cosa?','Medio litro de vino por noche, desde que me echaron.',6],
+    ['Antecedentes','¿Alguien de su familia se suicidó? ¿Tuvo épocas de mucha energía y poca necesidad de dormir?','Mi viejo se mató cuando yo tenía 20. Épocas así no tuve.',7]],
+ x:[['Examen del estado mental','Aliño conservado. Enlentecido, voz baja, afecto triste. Orientado. Sin ideas delirantes ni alucinaciones. Juicio conservado.',8],
+    ['Laboratorio: hemograma, glucemia, TSH','Se solicitan para descartar causas orgánicas. No demoran la conducta.',-1]],
+ d:[['Le digo que lo que le pasa es una depresión, que tiene tratamiento, y le agradezco que me lo haya contado.','Correcto: validar y dar esperanza realista.',9],
+    ['Valoro el riesgo como alto: ideación con plan y método accesible, antecedente familiar, alcohol, desesperanza y secreto.','Correcto.',10],
+    ['No lo dejo solo, convoco a su esposa con su acuerdo y pido evaluación por salud mental hoy.','Correcto: con plan y método, evaluación inmediata y definir internación.',11],
+    ['Acordamos retirar la soga y un plan de seguridad con teléfonos (0800-999-0091, 107).','Correcto: restricción de medios.',12],
+    ['Le explico que la confidencialidad tiene un límite cuando su vida corre riesgo y por eso voy a avisar a su esposa.','Correcto.',13],
+    ['Le receto una benzodiacepina para dormir y lo cito en un mes.','Error grave: no evalúa el riesgo y le entrega un medio potencialmente letal.',-1,25],
+    ['Le digo que tiene una hija hermosa y que no puede pensar esas cosas.','Error: minimiza y culpabiliza.',-1,10],
+    ['Evito preguntarle por suicidio para no darle la idea.','Error: preguntar no induce el suicidio; protege.',-1,15]],
+ cot:[['Explora el ánimo y el desencadenante',6,'c'],['Pregunta anhedonia, sueño, apetito, culpa y concentración',8,'c'],['Pregunta por ideas de muerte',10,'c'],['Pregunta por ideación suicida, plan y método',12,'c'],['Pregunta intentos previos y factores protectores',8,'c'],['Explora la red de apoyo y el acceso a medios',8,'c'],['Pregunta consumo de alcohol',6,'c'],['Pregunta antecedente familiar de suicidio y descarta manía',6,'c'],['Realiza el examen del estado mental',4,'c'],
+      ['Devuelve el diagnóstico con empatía, sin juzgar',8,'h'],['Clasifica el riesgo como alto',8,'k'],['No lo deja solo, convoca a un referente y pide evaluación en el día',8,'s'],['Restringe el acceso a medios y arma un plan de seguridad',5,'k'],['Explica el límite de la confidencialidad',3,'p']],
+ claves:['Preguntar por suicidio de forma directa y graduada: ideas de muerte, ideación, plan, método, fecha, intentos.','Riesgo alto: plan y método accesible, intento previo, desesperanza, alcohol, falta de red. Internación y no dejar solo.','Depresión: 5 de 9 síntomas por 2 semanas, con ánimo deprimido o anhedonia.','Antes de un antidepresivo, descartar bipolaridad. ISRS: efecto a las 2 a 4 semanas.','La confidencialidad cede ante el riesgo grave para sí o para terceros, avisándole al paciente.'],
+ ref:'Cuadernillo · Salud mental · Depresión y evaluación del riesgo suicida.'},
+
+{id:'malas',area:'tr',motivo:'Viene a buscar el resultado de la biopsia',lugar:'Consultorio',
+ pt:{n:'Elena',e:'63 años',av:{sex:'f',skin:1,hair:'bob',hc:'#b9b3ab',mood:'neutral',top:'#4E5B1E',glasses:1,old:1}},
+ sit:'Elena se hizo una colonoscopia por anemia. La biopsia informa adenocarcinoma de colon. La TC no muestra metástasis. Vino sola; su hija la espera afuera.',
+ tareas:['Comunicarle el resultado.','Acordar los próximos pasos.'],
+ abre:'Buen día, doctor. Vengo por el resultado. Mi hija me dijo que seguro no era nada.',
+ guion:'Sabe que le sacaron un pedacito de un pólipo grande. Cree que puede ser una úlcera. Quiere saber todo, con la verdad. Preferiría que entre su hija. Al recibir la noticia se queda en silencio y luego llora; pregunta si se va a morir. Le preocupa quién va a cuidar a su marido, que tiene Parkinson. Se calma si la escuchan y le explican que hay tratamiento.',
+ q:[['Preparación','¿Quiere que su hija entre para acompañarla?','Sí, por favor, hágala pasar.',0],
+    ['Percepción','¿Qué le explicaron hasta ahora de los estudios? ¿Qué piensa que puede ser?','Que me sacaron un pedacito de un pólipo grande. Pienso que será una úlcera, algo así.',1],
+    ['Invitación','¿Prefiere que le cuente todos los detalles o lo principal?','Quiero saber todo, con la verdad.',2],
+    ['Emociones','(Después de la noticia) Veo que esto la angustia mucho. ¿Qué es lo que más le preocupa?','¿Me voy a morir? ¿Quién va a cuidar a mi marido? Tiene Parkinson.',5],
+    ['Cierre','¿Qué dudas le quedaron? ¿Me cuenta qué entendió?','Que tengo un tumor, que se puede operar y que me va a ver el cirujano.',8]],
+ x:[],
+ d:[['Busco un lugar privado, me siento, silencio el teléfono y me aseguro de tener tiempo.','Correcto: S de SPIKES, el entorno.',0],
+    ['Uso una frase de aviso: «Lamentablemente, el resultado no es el que esperábamos».','Correcto: prepara para la noticia.',3],
+    ['Le digo con palabras simples: «La biopsia mostró que es un cáncer de colon», y hago una pausa.','Correcto: claro, sin eufemismos ni tecnicismos.',4],
+    ['Me quedo en silencio, le alcanzo un pañuelo y le digo: «Entiendo que es una noticia muy difícil».','Correcto: E de SPIKES, responder a la emoción antes de seguir informando.',6],
+    ['Le explico que los estudios no muestran que se haya extendido, que hay tratamiento y cuál es el próximo paso (cirugía, turno esta semana).','Correcto: esperanza realista y plan concreto.',7],
+    ['Le aseguro que la vamos a acompañar, le doy cómo contactarme y le ofrezco otra consulta con la familia.','Correcto: no abandono.',8],
+    ['Le digo «no se preocupe, todo va a salir bien».','Error: es una falsa seguridad que cierra la conversación.',-1,10],
+    ['Le explico de corrido el estadio TNM, la quimioterapia adyuvante y las tasas de sobrevida.','Error: exceso de información técnica sin atender la emoción.',-1,10],
+    ['Le doy el resultado a la hija en el pasillo para que ella decida cómo decírselo.','Error: la titular de la información es la paciente.',-1,20]],
+ cot:[['Prepara el entorno y ofrece un acompañante',10,'p'],['Explora qué sabe la paciente',12,'h'],['Pregunta cuánto quiere saber',10,'h'],['Usa una frase de aviso',10,'h'],['Da la noticia con lenguaje claro y hace una pausa',14,'h'],['Explora las preocupaciones',10,'h'],['Responde a la emoción con silencio y empatía',14,'h'],['Explica el plan y da esperanza realista',10,'k'],['Resume, verifica la comprensión y asegura el seguimiento',10,'s']],
+ claves:['SPIKES: entorno, percepción, invitación, conocimiento, emociones, estrategia y resumen.','Frase de aviso antes de la noticia; después, silencio.','Responder primero a la emoción y recién después informar.','El titular de la información es el paciente (Ley 26.529).','Nunca dar falsas esperanzas ni quitar toda esperanza; cerrar con un plan concreto.'],
+ ref:'Cuadernillo · Competencias transversales · Comunicación de malas noticias.'},
+
+{id:'anaf',area:'urg',motivo:'Ronchas y falta de aire después de una inyección',lugar:'Sala de enfermería de un centro de salud',
+ pt:{n:'Nicolás',e:'27 años · 80 kg',av:{sex:'m',skin:2,hair:'short',hc:'#141414',mood:'agitado',top:'#B3261E',sweat:1,hives:1}},
+ sit:'Hace 10 minutos le aplicaron penicilina benzatínica. Enfermería te llama: Nicolás se siente mal.',
+ tareas:['Reconocer el cuadro.','Indicar el tratamiento en el orden correcto.','Definir la conducta posterior.'],
+ abre:'Me pica todo… me cuesta respirar… siento la garganta cerrada.',
+ guion:'Recibió penicilina benzatínica hace 10 minutos por una faringitis. Prurito generalizado, ronchas, sensación de garganta cerrada, falta de aire, mareo. Nunca había recibido penicilina. Sin asma ni otras enfermedades. No toma betabloqueantes.',
+ q:[['Cuadro','¿Qué sentís y cuándo empezó?','Empezó a los minutos de la inyección. Me pica todo, me falta el aire y estoy mareado.',0],
+    ['Antecedentes','¿Sos alérgico a algo? ¿Tenés asma? ¿Tomás alguna medicación?','Que yo sepa no. Asma no. No tomo nada.',1]],
+ x:[['Signos vitales y saturación','PA 80/50 · FC 128 · FR 28 · saturación 90 %.',2],
+    ['Piel, vía aérea y auscultación','Urticaria generalizada, edema de labios. Voz ronca. Sibilancias difusas.',3]],
+ d:[['Reconozco una anafilaxia y pido ayuda.','Correcto: piel + compromiso respiratorio + hipotensión tras un alergeno.',4],
+    ['Adrenalina 0,5 mg intramuscular en la cara anterolateral del muslo, de inmediato.','Correcto: 0,01 mg/kg de la solución 1:1000, máximo 0,5 mg. Es lo primero.',5],
+    ['Lo acuesto con las piernas elevadas, oxígeno a alto flujo, vía periférica y cristaloides en bolo.','Correcto: no ponerlo de pie.',6],
+    ['Si no mejora en 5 a 15 minutos, repito la adrenalina IM.','Correcto.',7],
+    ['Salbutamol para el broncoespasmo; antihistamínico y corticoide como segunda línea.','Correcto: no reemplazan ni demoran a la adrenalina.',8],
+    ['Lo derivo en ambulancia para observación de 4 a 6 horas como mínimo.','Correcto: riesgo de reacción bifásica.',9],
+    ['Al alta: registro la alergia a la penicilina, indico autoinyector de adrenalina y derivación a alergia.','Correcto.',10],
+    ['Indico primero difenhidramina y dexametasona, y espero la respuesta.','Error: demora la adrenalina, que es lo único que salva la vida.',-1,25],
+    ['Aplico la adrenalina por vía subcutánea en el brazo.','Error: la vía es intramuscular en el muslo.',-1,10],
+    ['Como mejoró, le doy el alta a los 30 minutos.','Error: debe observarse al menos 4 a 6 horas.',-1,10]],
+ cot:[['Interroga el cuadro y el desencadenante',5,'c'],['Pregunta alergias, asma y fármacos',5,'c'],['Controla signos vitales y saturación',8,'c'],['Evalúa piel, vía aérea y respiración',7,'c'],['Reconoce la anafilaxia y pide ayuda',10,'k'],['Indica adrenalina IM en el muslo con la dosis correcta, como primera medida',25,'k'],['Posiciona, da oxígeno y fluidos',10,'k'],['Repite la adrenalina si no responde',8,'k'],['Indica broncodilatador y fármacos de segunda línea',5,'k'],['Deriva para observación de 4 a 6 horas',10,'s'],['Registra la alergia e indica autoinyector y derivación',7,'s']],
+ claves:['Adrenalina 0,01 mg/kg IM en el muslo (máximo 0,5 mg en adultos y 0,3 mg en niños), repetible a los 5 a 15 minutos.','No tiene contraindicaciones absolutas en la anafilaxia.','Antihistamínicos y corticoides son de segunda línea.','Acostado con las piernas elevadas; nunca ponerlo de pie de golpe.','Observación de 4 a 6 horas por la reacción bifásica; autoinyector al alta.'],
+ ref:'Cuadernillo · Urgencias · RCP, anafilaxia y shock.'}
+];
+
+/* ============ Avatares ============ */
+const SKIN=['#f6d2b8','#eebf9f','#d9a27c','#b97f58'];
+function avatar(a,big){
+  const s=SKIN[a.skin||0], h=a.hc||'#333', m=a.mood||'neutral', f=a.sex==='f';
+  const brow={neutral:['M72 96 q10 -5 20 0','M108 96 q10 -5 20 0'],angustia:['M72 98 q10 -9 20 -6','M108 92 q10 -3 20 6'],triste:['M72 99 q10 -8 20 -5','M108 94 q10 -3 20 5'],dolor:['M72 92 q10 3 20 8','M108 100 q10 -5 20 -8'],agitado:['M72 90 q10 -4 20 0','M108 90 q10 -4 20 0']}[m];
+  const mouth={neutral:'M88 138 q12 7 24 0',angustia:'M88 142 q12 -7 24 0',triste:'M88 143 q12 -8 24 0',dolor:'M86 139 q7 -6 14 0 q7 6 14 0',agitado:'M90 136 q10 12 20 0 q-10 -4 -20 0'}[m];
+  const hairBack=f&&(a.hair==='long')?`<path d="M54 104 q-8 62 6 86 h80 q14 -24 6 -86 z" fill="${h}"/>`:(a.hair==='pony'?`<path d="M140 92 q26 18 12 62 q-12 -18 -18 -44 z" fill="${h}"/>`:'');
+  const hairTop={long:`<path d="M54 106 q-4 -58 46 -58 q50 0 46 58 q-10 -30 -46 -32 q-36 2 -46 32z" fill="${h}"/>`,
+    bob:`<path d="M52 126 q-8 -78 48 -78 q56 0 48 78 q-6 -44 -48 -48 q-42 4 -48 48z" fill="${h}"/>`,
+    bun:`<circle cx="100" cy="42" r="15" fill="${h}"/><path d="M56 104 q-2 -54 44 -54 q46 0 44 54 q-10 -28 -44 -30 q-34 2 -44 30z" fill="${h}"/>`,
+    pony:`<path d="M56 104 q-2 -54 44 -54 q46 0 44 54 q-10 -28 -44 -30 q-34 2 -44 30z" fill="${h}"/>`,
+    short:`<path d="M58 100 q-2 -50 42 -50 q44 0 42 50 q-8 -26 -42 -28 q-34 2 -42 28z" fill="${h}"/>`,
+    messy:`<path d="M56 102 q-6 -40 10 -46 q4 -10 16 -6 q8 -8 18 -2 q12 -6 20 4 q14 0 14 14 q10 12 6 36 q-10 -26 -40 -28 q-34 2 -44 28z" fill="${h}"/>`,
+    thin:`<path d="M60 96 q0 -34 22 -42 q-12 14 -22 42z M140 96 q0 -34 -22 -42 q12 14 22 42z" fill="${h}"/>`}[a.hair||'short'];
+  const size=a.young?0.94:1;
+  return `<svg class="av ${m==='dolor'?'dolor':''} ${m==='agitado'?'agitado':''}" viewBox="0 0 200 220" role="img" aria-label="Paciente simulado" ${big?'':'width="76" height="84"'}>
+  <g class="body"><path d="M30 220 q0 -52 44 -58 h52 q44 6 44 58z" fill="${a.top||'#557'}"/><path d="M84 160 q16 14 32 0 v-14 h-32z" fill="${s}"/><path d="M84 162 q16 16 32 0 l-4 10 q-12 8 -24 0z" fill="color-mix(in oklab,${a.top||'#557'} 80%,#000)"/></g>
+  <g class="head" transform="translate(${100*(1-size)} ${110*(1-size)}) scale(${size})">${hairBack}
+   <ellipse cx="100" cy="108" rx="44" ry="50" fill="${s}"/><ellipse cx="55" cy="112" rx="6" ry="9" fill="${s}"/><ellipse cx="145" cy="112" rx="6" ry="9" fill="${s}"/>${hairTop}
+   ${a.old?'<path d="M70 124 q6 4 12 0 M118 124 q6 4 12 0 M84 152 q16 6 32 0" stroke="#0002" stroke-width="1.5" fill="none"/>':''}
+   <path d="${brow[0]}" stroke="${h==='#b9b3ab'?'#8a857e':'#2a2320'}" stroke-width="3.2" fill="none" stroke-linecap="round"/><path d="${brow[1]}" stroke="${h==='#b9b3ab'?'#8a857e':'#2a2320'}" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+   <ellipse class="eye" cx="82" cy="110" rx="5" ry="${m==='dolor'?2.2:6}" fill="#221c1a"/><ellipse class="eye r" cx="118" cy="110" rx="5" ry="${m==='dolor'?2.2:6}" fill="#221c1a"/>
+   ${a.glasses?'<g fill="none" stroke="#3a3a3a" stroke-width="2.4"><rect x="68" y="99" width="28" height="22" rx="8"/><rect x="104" y="99" width="28" height="22" rx="8"/><path d="M96 109h8"/></g>':''}
+   <path d="M98 114 q-5 12 2 14" stroke="#0003" stroke-width="2" fill="none" stroke-linecap="round"/>
+   ${a.beard?`<path d="M62 124 q4 40 38 42 q34 -2 38 -42 q-10 22 -38 22 q-28 0 -38 -22z" fill="${h}" opacity=".9"/>`:''}
+   <path class="mouth" d="${mouth}" stroke="#7a2e2e" stroke-width="3.2" fill="${m==='agitado'?'#7a2e2e':'none'}" stroke-linecap="round"/>
+   ${(m==='angustia'||m==='triste')?'<path class="tear" d="M78 120 q-4 8 0 10 q4 -2 0 -10z" fill="#6bb7e8"/>':''}
+   ${a.sweat?'<path class="sweat" d="M136 84 q-4 8 0 10 q4 -2 0 -10z" fill="#8fd0f0"/>':''}
+   ${a.hives?'<g fill="#e2574c" opacity=".7"><circle cx="70" cy="132" r="4"/><circle cx="128" cy="128" r="3.4"/><circle cx="120" cy="90" r="3"/><circle cx="96" cy="170" r="3.4"/></g>':''}
+  </g>
+  ${a.baby?`<g class="baby"><ellipse cx="150" cy="188" rx="34" ry="24" fill="#fff6e6" stroke="#0001"/><circle cx="134" cy="176" r="15" fill="${SKIN[a.skin||0]}"/><path d="M128 176 q2 -2 4 0 M137 176 q2 -2 4 0" stroke="#221c1a" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M131 183 q3 2 6 0" stroke="#7a2e2e" stroke-width="1.6" fill="none" stroke-linecap="round"/></g>`:''}
+  </svg>`;
+}
+
+/* ============ Estado ============ */
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let store={};try{store=JSON.parse(localStorage.getItem('ecoe-sim')||'{}')}catch(e){}
+const save=()=>{try{localStorage.setItem('ecoe-sim',JSON.stringify(store))}catch(e){}};
+store.best=store.best||{};
+let cur=null, run=null, tick=null, sample=null, filter='all';
+
+/* tema */
+function setTheme(t){document.documentElement.dataset.theme=t;$('themeBtn').textContent=t==='dark'?'Modo diurno':'Modo nocturno';store.theme=t;save()}
+$('themeBtn').onclick=()=>{const dark=document.documentElement.dataset.theme?document.documentElement.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;setTheme(dark?'light':'dark')};
+if(store.theme)setTheme(store.theme);else if(matchMedia('(prefers-color-scheme: dark)').matches)$('themeBtn').textContent='Modo diurno';
+
+/* ============ Pasillo ============ */
+function pct(st,sc){return Math.round(100*sc/st.cot.reduce((a,c)=>a+c[1],0))}
+function renderHall(){
+  const done=ST.filter(s=>store.best[s.id]!=null);
+  $('sDone').textContent=done.length+'/'+ST.length;
+  $('sAvg').textContent=done.length?Math.round(done.reduce((a,s)=>a+store.best[s.id],0)/done.length)+' %':'–';
+  $('sWeak').textContent=done.length?done.filter(s=>store.best[s.id]<60).length:'–';
+  const used=[...new Set(ST.map(s=>s.area))];
+  $('filters').innerHTML=`<button class="chip" data-f="all" aria-pressed="${filter==='all'}">Todas</button>`+used.map(a=>`<button class="chip" data-f="${a}" aria-pressed="${filter===a}">${AREAS[a][0]}</button>`).join('');
+  $('grid').innerHTML=ST.filter(s=>filter==='all'||s.area===filter).map((s,i)=>{
+    const b=store.best[s.id], cls=b==null?'':(b>=75?'ok':b>=60?'warn':'bad');
+    return `<button class="door" data-id="${s.id}" data-c style="--c:${AREAS[s.area][1]};animation-delay:${i*.03}s">
+      ${avatar(s.pt.av)}
+      <span style="display:flex;flex-direction:column;gap:3px;min-width:0">
+        <span class="eyebrow">${AREAS[s.area][0]} ${s.real?'<span class="real">estación real</span>':''}</span>
+        <h3>${esc(s.motivo)}</h3>
+        <span class="meta">${esc(s.pt.n)} · ${esc(s.pt.e)}</span>
+        <span class="row" style="margin-top:2px"><span class="badge ${cls}">${b==null?'sin practicar':'mejor: '+b+' %'}</span></span>
+      </span></button>`}).join('');
+}
+$('filters').onclick=e=>{const b=e.target.closest('[data-f]');if(b){filter=b.dataset.f;renderHall()}};
+$('grid').onclick=e=>{const b=e.target.closest('[data-id]');if(b)openStation(b.dataset.id)};
+$('rndBtn').onclick=()=>{const pool=ST.filter(s=>store.best[s.id]==null);const l=pool.length?pool:ST;openStation(l[Math.floor(Math.random()*l.length)].id)};
+$('homeBtn').onclick=goHome;
+function goHome(){stopTimer();cur=null;$('station').hidden=true;$('hall').style.display='flex';$('homeBtn').hidden=true;renderHall();scrollTo(0,0)}
+
+/* ============ Estación ============ */
+function openStation(id){
+  cur=ST.find(s=>s.id===id);run={asked:new Set(),exam:new Set(),done:new Set(),chat:[],left:480,phase:'door',mode:sample?'free':'guided',ticks:{}};
+  $('hall').style.display='none';$('station').hidden=false;$('homeBtn').hidden=false;
+  $('room').style.setProperty('--c',AREAS[cur.area][1]);
+  $('avBox').innerHTML=avatar(cur.pt.av,true);$('ptName').textContent=cur.pt.n;$('ptMeta').textContent=cur.pt.e;
+  $('bubble').hidden=true;$('clock').textContent='8:00';$('clock').classList.remove('low');$('timerBox').classList.remove('running');
+  $('phase').textContent='Leé la consigna. El reloj arranca cuando entrás.';
+  $('startBtn').hidden=false;$('startBtn').textContent='Entrar a la estación';$('endBtn').hidden=true;$('work').hidden=true;$('review').hidden=true;$('sheet').hidden=false;
+  $('sheet').innerHTML=`<div class="eyebrow">Instrucciones para el estudiante ${cur.real?'<span class="real">estación real</span>':''}</div>
+    <h2>${esc(cur.motivo)}</h2>
+    <p><b>Lugar:</b> ${esc(cur.lugar)}</p><p><b>Paciente:</b> ${esc(cur.pt.n)}, ${esc(cur.pt.e)}</p>
+    <p>${esc(cur.sit)}</p><p><b>Tenés 8 minutos para:</b></p><ol>${cur.tareas.map(t=>`<li>${esc(t)}</li>`).join('')}</ol>`;
+  scrollTo(0,0);
+}
+function say(text){const b=$('bubble');b.hidden=false;b.textContent=text;const av=$('avBox').firstElementChild;av.classList.add('talk');clearTimeout(say.t);say.t=setTimeout(()=>av.classList.remove('talk'),Math.min(4500,900+text.length*28))}
+function fmt(s){return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}
+function stopTimer(){clearInterval(tick);tick=null;$('timerBox').classList.remove('running')}
+$('startBtn').onclick=()=>{
+  if(run.phase==='review'){openStation(cur.id);return}
+  run.phase='run';$('startBtn').hidden=true;$('endBtn').hidden=false;$('work').hidden=false;$('timerBox').classList.add('running');
+  $('phase').textContent='Dentro de la estación';say(cur.abre);renderWork();
+  tick=setInterval(()=>{run.left--;$('clock').textContent=fmt(Math.max(0,run.left));if(run.left<=60)$('clock').classList.add('low');if(run.left<=0){$('phase').textContent='Sonó el timbre: pasá a la corrección.';finish()}},1000);
+};
+$('endBtn').onclick=finish;
+
+/* pestañas */
+document.querySelector('.tabs').onclick=e=>{const b=e.target.closest('.tab');if(!b)return;document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected',t===b));['ask','exam','do'].forEach(t=>$('tab-'+t).hidden=t!==b.dataset.t)};
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function renderWork(){
+  document.querySelectorAll('.tab').forEach((t,i)=>t.setAttribute('aria-selected',i===0));['ask','exam','do'].forEach((t,i)=>$('tab-'+t).hidden=i!==0);
+  document.querySelector('[data-t="exam"]').hidden=!cur.x.length;
+  $('modeRow').hidden=!sample;setMode(run.mode);
+  $('chat').innerHTML=`<div class="msg pt">${esc(cur.abre)}</div>`;$('freeMsg').textContent='';
+  $('askOpts').innerHTML=cur.q.map((q,i)=>`<button class="opt" data-k="${i}"><span class="cat">${esc(q[0])}</span>${esc(q[1])}</button>`).join('');
+  $('examOpts').innerHTML=cur.x.map((x,i)=>`<button class="opt" data-k="${i}">${esc(x[0])}</button>`).join('');
+  run.order=shuffle(cur.d.map((_,i)=>i));
+  $('doOpts').innerHTML=run.order.map(i=>`<button class="opt" data-k="${i}">${esc(cur.d[i][0])}</button>`).join('');
+}
+function setMode(m){run.mode=m;$('mFree').setAttribute('aria-pressed',m==='free');$('mGuided').setAttribute('aria-pressed',m==='guided');$('freeBox').hidden=m!=='free';$('askOpts').hidden=m!=='guided'}
+$('mFree').onclick=()=>setMode('free');$('mGuided').onclick=()=>setMode('guided');
+function reveal(btn,text){if(btn.querySelector('.ans'))return;btn.classList.add('used');const s=document.createElement('span');s.className='ans';s.textContent=text;btn.appendChild(s)}
+$('askOpts').onclick=e=>{const b=e.target.closest('.opt');if(!b||run.phase!=='run')return;const i=+b.dataset.k;run.asked.add(i);reveal(b,cur.q[i][2]);say(cur.q[i][2])};
+$('examOpts').onclick=e=>{const b=e.target.closest('.opt');if(!b||run.phase!=='run')return;const i=+b.dataset.k;run.exam.add(i);reveal(b,cur.x[i][1])};
+$('doOpts').onclick=e=>{const b=e.target.closest('.opt');if(!b||run.phase!=='run')return;const i=+b.dataset.k;run.done.add(i);b.classList.add('used')};
+
+/* entrevista libre con Claude */
+function patientPrompt(){return `Sos un PACIENTE SIMULADO en una estación de examen clínico (ECOE) para un estudiante de Medicina en la Argentina. Interpretás a: ${cur.pt.n}, ${cur.pt.e}. Lugar: ${cur.lugar}.
+GUION (es todo lo que sabés): ${cur.guion}
+REGLAS: respondé SIEMPRE en primera persona, en español rioplatense, con 1 a 3 oraciones, como una persona real y con la emoción del guion. Contestá sólo lo que te preguntan; los datos marcados como «SOLO si preguntan» no los ofrezcas espontáneamente. Si te preguntan algo que no está en el guion, respondé de forma verosímil y neutra («no», «no sé», «normal»). No uses términos médicos, no des diagnósticos ni consejos, no salgas del personaje y no menciones que sos una IA ni que hay un guion. Si el estudiante te explica algo o te contiene, reaccioná como lo haría el paciente.`}
+$('askForm').onsubmit=async e=>{
+  e.preventDefault();const t=$('askIn').value.trim();if(!t||run.phase!=='run'||!sample||run.busy)return;
+  $('askIn').value='';run.chat.push({role:'user',content:t});
+  const c=$('chat');c.insertAdjacentHTML('beforeend',`<div class="msg me">${esc(t)}</div><div class="msg pt" id="pend">…</div>`);c.scrollTop=c.scrollHeight;
+  run.busy=true;$('askBtn').disabled=true;
+  try{
+    const msgs=run.chat.map((m,i)=>i===0?{role:'user',content:patientPrompt()+'\n\nEl estudiante dice: '+m.content}:m);
+    const r=await sample(msgs);
+    const ans=(r&&r.text||'').trim()||'…';run.chat.push({role:'assistant',content:ans});const p=$('pend');if(p){p.textContent=ans;p.removeAttribute('id')}say(ans);
+  }catch(err){
+    run.chat.pop();const p=$('pend');if(p)p.remove();
+    $('freeMsg').textContent=err&&err.code==='rate_limited'?'Demasiadas consultas seguidas. Esperá un momento o pasá a la entrevista guiada.':'El paciente no pudo responder. Pasá a la entrevista guiada.';
+    if(err&&err.code==='bad_key')$('freeMsg').textContent='La clave o el modelo no son válidos. Revisalos en «Configurar IA» o pasá a la entrevista guiada.';
+  }
+  run.busy=false;$('askBtn').disabled=false;$('askIn').focus();
+};
+$('askIn').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('askForm').requestSubmit()}};
+
+/* ============ Corrección ============ */
+function finish(){
+  if(!cur||run.phase!=='run')return;run.phase='review';stopTimer();
+  $('work').hidden=true;$('endBtn').hidden=true;$('startBtn').hidden=false;$('startBtn').textContent='Repetir la estación';
+  $('phase').textContent='Estación terminada en '+fmt(480-Math.max(0,run.left))+'.';
+  run.ticks={};
+  run.asked.forEach(i=>{const it=cur.q[i][3];if(it>=0)run.ticks[it]=true});
+  run.exam.forEach(i=>{const it=cur.x[i][2];if(it>=0)run.ticks[it]=true});
+  run.done.forEach(i=>{const it=cur.d[i][2];if(it>=0)run.ticks[it]=true});
+  renderReview();
+  if(sample&&run.chat.length)gradeChat();
+}
+function errors(){return [...run.done].filter(i=>cur.d[i][2]===-1).map(i=>cur.d[i])}
+function extraTests(){return [...run.exam].filter(i=>cur.x[i][2]===-9).map(i=>cur.x[i])}
+function total(){return cur.cot.reduce((a,c)=>a+c[1],0)}
+function score(){let s=cur.cot.reduce((a,c,i)=>a+(run.ticks[i]?c[1]:0),0);errors().forEach(d=>s-=d[3]||0);return Math.max(0,s)}
+function renderReview(){
+  const r=$('review');r.hidden=false;$('sheet').hidden=true;
+  const groups=[...new Set(cur.cot.map(c=>c[2]))];
+  const errs=errors(), ext=extraTests(), good=[...run.done].filter(i=>cur.d[i][2]!==-1).map(i=>cur.d[i]);
+  const missed=cur.d.filter((d,i)=>d[2]!==-1&&!run.done.has(i));
+  r.innerHTML=`<div class="eyebrow">Lista de cotejo del examinador</div>
+   <div class="score"><b id="scNum">0</b><div style="flex:1;min-width:160px"><div id="scTxt" class="muted"></div><div class="bar" style="margin-top:6px"><i id="scBar" style="width:0"></i></div></div></div>
+   <p class="muted small">Los ítems que hiciste en la simulación ya están marcados. Marcá a mano lo que dijiste o hiciste en voz alta y la simulación no registró (sobre todo comunicación). Sé estricto: el examinador sólo puntúa lo que ve y escucha.</p>
+   <div class="note info" id="aiNote" hidden></div>
+   ${errs.length?`<div class="note bad"><b>Errores que descuentan</b><ul class="keys">${errs.map(d=>`<li>${esc(d[0])} <b>−${d[3]}</b><br>${esc(d[1])}</li>`).join('')}</ul></div>`:''}
+   ${ext.length?`<div class="note bad"><b>Estudios que no correspondían</b><ul class="keys">${ext.map(x=>`<li>${esc(x[0])}: ${esc(x[1])}</li>`).join('')}</ul></div>`:''}
+   <div class="cot" data-c style="--c:${AREAS[cur.area][1]}">${groups.map(g=>`<h3>${G[g]}</h3>`+cur.cot.map((c,i)=>c[2]!==g?'':`<div class="ci ${run.ticks[i]?'hit':''}"><input type="checkbox" id="ck${i}" data-i="${i}" ${run.ticks[i]?'checked':''}><label for="ck${i}">${esc(c[0])}</label><span class="pts">${c[1]} pts</span></div>`).join('')).join('')}</div>
+   <div><div class="eyebrow" style="margin-bottom:6px">Evaluación global (autoevaluación)</div><div class="glob" id="glob">${['Insuficiente','Limítrofe','Suficiente','Superior'].map((t,i)=>`<button data-g="${i+1}" aria-pressed="false">${i+1} · ${t}</button>`).join('')}</div></div>
+   ${good.length?`<details><summary><b>Lo que indicaste bien</b></summary><ul class="keys" style="margin-top:8px">${good.map(d=>`<li>${esc(d[0])}<br><span class="muted small">${esc(d[1])}</span></li>`).join('')}</ul></details>`:''}
+   ${missed.length?`<details open><summary><b>Conductas que te faltaron</b></summary><ul class="keys" style="margin-top:8px">${missed.map(d=>`<li>${esc(d[0])}<br><span class="muted small">${esc(d[1])}</span></li>`).join('')}</ul></details>`:''}
+   <div class="note ok"><b>Lo que hay que saber de esta estación</b><ul class="keys" style="margin-top:6px">${cur.claves.map(k=>`<li>${esc(k)}</li>`).join('')}</ul></div>
+   <p class="muted small">Bibliografía: ${esc(cur.ref)}</p>
+   <div class="row"><button class="btn primary" id="again">Repetir la estación</button><button class="btn" id="back2">Volver al pasillo</button></div>`;
+  r.querySelector('.cot').onchange=e=>{const i=e.target.dataset.i;if(i==null)return;run.ticks[i]=e.target.checked;e.target.closest('.ci').classList.toggle('hit',e.target.checked);updScore()};
+  $('glob').onclick=e=>{const b=e.target.closest('[data-g]');if(!b)return;$('glob').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b))};
+  $('again').onclick=()=>openStation(cur.id);$('back2').onclick=goHome;
+  updScore();r.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function updScore(){
+  const s=score(),t=total(),p=Math.round(100*s/t);
+  $('scNum').textContent=p+' %';$('scBar').style.width=p+'%';
+  $('scTxt').textContent=`${s} de ${t} puntos · ${p>=75?'Bien resuelta':p>=60?'En el límite: repasá lo que faltó':'Por debajo del corte: repetila mañana'}`;
+  if(store.best[cur.id]==null||p>store.best[cur.id]){store.best[cur.id]=p;save()}
+}
+async function gradeChat(){
+  const n=$('aiNote');n.hidden=false;n.textContent='La IA está corrigiendo tu entrevista con la lista de cotejo…';
+  try{
+    const tr=run.chat.map(m=>(m.role==='user'?'ESTUDIANTE: ':'PACIENTE: ')+m.content).join('\n');
+    const items=cur.cot.map((c,i)=>i+'. '+c[0]).join('\n');
+    const res=await sample.json(`Sos examinador de un ECOE de Medicina. Corregí de forma estricta la entrevista: un ítem se cumple sólo si el estudiante lo hizo o lo dijo de manera explícita.\nLISTA DE COTEJO:\n${items}\n\nENTREVISTA:\n${tr}\n\nDevolvé sólo JSON con esta forma: {"cumplidos":[números de ítem cumplidos en la entrevista],"comentario":"dos oraciones en español rioplatense sobre lo mejor y lo que faltó"}`,{modelTier:'default'});
+    (res.cumplidos||[]).forEach(i=>{if(cur.cot[i]){run.ticks[i]=true;const c=$('ck'+i);if(c){c.checked=true;c.closest('.ci').classList.add('hit')}}});
+    n.textContent='Corrección de la entrevista: '+(res.comentario||'ítems marcados según lo que dijiste.');updScore();
+  }catch(e){n.textContent='No se pudo corregir la entrevista automáticamente. Marcá los ítems a mano.'}
+}
+
+/* ============ Inicio ============ */
+renderHall();
+/* ============ IA externa (clave propia de cada usuario) ============ */
+const PROV={
+ gemini:{model:'gemini-3.5-flash-lite',help:'Sacá la clave gratis en <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> (con tu cuenta de Google, sin tarjeta).'},
+ groq:{model:'openai/gpt-oss-120b',help:'Sacá la clave gratis en <a href="https://console.groq.com/keys" target="_blank" rel="noopener">console.groq.com/keys</a>.'}};
+function aiErr(status,msg){const e=new Error(msg||('HTTP '+status));e.code=status===429?'rate_limited':(status===400||status===401||status===403||status===404)?'bad_key':'failed';return e}
+async function aiCall(cfg,msgs,maxTok){
+  let res,data;
+  if(cfg.prov==='gemini'){
+    res=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(cfg.model)+':generateContent',{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':cfg.key},
+      body:JSON.stringify({contents:msgs.map(m=>({role:m.role==='assistant'?'model':'user',parts:[{text:m.content}]})),generationConfig:{maxOutputTokens:maxTok}})});
+    data=await res.json().catch(()=>({}));if(!res.ok)throw aiErr(res.status,data.error&&data.error.message);
+    const parts=(((data.candidates||[])[0]||{}).content||{}).parts||[];
+    return parts.filter(p=>p.text&&!p.thought).map(p=>p.text).join('').trim();
+  }
+  res=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+cfg.key},
+    body:JSON.stringify({model:cfg.model,messages:msgs,max_completion_tokens:maxTok})});
+  data=await res.json().catch(()=>({}));if(!res.ok)throw aiErr(res.status,data.error&&data.error.message);
+  return ((((data.choices||[])[0]||{}).message||{}).content||'').trim();
+}
+function makeAI(cfg){
+  const f=async input=>({text:await aiCall(cfg,typeof input==='string'?[{role:'user',content:input}]:input,1200)});
+  f.json=async prompt=>{const t=await aiCall(cfg,[{role:'user',content:prompt}],2000);const m=t.match(/\{[\s\S]*\}/);if(!m)throw new Error('sin JSON');return JSON.parse(m[0])};
+  return f;
+}
+async function aiModels(prov,key){
+  try{
+    if(prov==='gemini'){const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models?pageSize=200',{headers:{'x-goog-api-key':key}});if(!r.ok)return[];const d=await r.json();
+      return (d.models||[]).filter(m=>(m.supportedGenerationMethods||[]).includes('generateContent')).map(m=>m.name.replace('models/','')).filter(n=>/^gemini/.test(n)&&!/tts|image|live|audio|embed/.test(n))}
+    const r=await fetch('https://api.groq.com/openai/v1/models',{headers:{'Authorization':'Bearer '+key}});if(!r.ok)return[];const d=await r.json();
+    return (d.data||[]).map(m=>m.id).filter(n=>!/whisper|tts|guard|safeguard|orpheus/.test(n));
+  }catch(e){return[]}
+}
+function aiUI(){
+  const c=store.ai||{};$('aiProv').value=c.prov||'gemini';$('aiKey').value=c.key||'';$('aiModel').value=c.model||PROV[$('aiProv').value].model;
+  $('aiHelp').innerHTML=PROV[$('aiProv').value].help;$('aiBtn').textContent=sample?'IA activada':'Configurar IA';
+}
+$('aiBtn').onclick=()=>{$('aiPanel').hidden=!$('aiPanel').hidden;aiUI();if(!$('aiPanel').hidden)$('aiPanel').scrollIntoView({block:'nearest'})};
+$('aiClose').onclick=()=>{$('aiPanel').hidden=true};
+$('aiProv').onchange=()=>{const p=$('aiProv').value;$('aiModel').value=PROV[p].model;$('aiHelp').innerHTML=PROV[p].help;$('aiModels').innerHTML=''};
+$('aiDel').onclick=()=>{delete store.ai;save();sample=null;$('aiKey').value='';$('aiMsg').textContent='Clave borrada de este navegador.';aiUI();if(run&&run.phase==='run'){$('modeRow').hidden=true;setMode('guided')}};
+$('aiSave').onclick=async()=>{
+  const cfg={prov:$('aiProv').value,key:$('aiKey').value.trim(),model:$('aiModel').value.trim()||PROV[$('aiProv').value].model};
+  if(!cfg.key){$('aiMsg').textContent='Falta pegar la clave.';return}
+  $('aiSave').disabled=true;$('aiMsg').textContent='Probando la conexión…';
+  const list=await aiModels(cfg.prov,cfg.key);$('aiModels').innerHTML=list.map(m=>`<option value="${esc(m)}">`).join('');
+  try{
+    await aiCall(cfg,[{role:'user',content:'Respondé solo: listo'}],200);
+    store.ai=cfg;save();sample=makeAI(cfg);$('aiMsg').textContent='Funciona. La entrevista libre ya está disponible en todas las estaciones.';
+    if(run&&run.phase==='run'){$('modeRow').hidden=false}
+  }catch(e){
+    $('aiMsg').textContent=e.code==='rate_limited'?'La clave es válida, pero llegaste al límite gratuito por ahora. Probá en unos minutos o elegí otro modelo.':
+      e.code==='bad_key'?('No funcionó con esa clave y ese modelo ('+(e.message||'').slice(0,140)+').'+(list.length?' Modelos disponibles con tu clave: '+list.slice(0,8).join(', ')+'.':' Revisá que la clave esté completa.')):
+      'No se pudo conectar con el proveedor. Revisá tu conexión e intentá de nuevo.';
+  }
+  $('aiSave').disabled=false;aiUI();
+};
+if(store.ai&&store.ai.key)sample=makeAI(store.ai);
+aiUI();
+</script>
+</body>
+</html>
