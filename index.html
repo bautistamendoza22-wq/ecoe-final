@@ -9,21 +9,21 @@
 <style>
 /* Paleta: verde esmeralda de la portada del cuadernillo. Layout: pasillo de estaciones → consultorio en dos columnas (paciente y reloj | preguntar, examinar, indicar) → lista de cotejo. */
 :root{
-  --bg:#E9F3EE; --surface:#FBFDFC; --ink:#14231D; --muted:#51655C; --line:#CDDDD4;
-  --accent:#0B8A63; --accent-ink:#ffffff; --accent-soft:#D6EEE4;
-  --g1:#0B8A63; --g2:#8AD6B9; --g3:#3FAE8A; --g4:#BFE8D7;
+  --bg:#E7EFE9; --surface:#FBFCFB; --ink:#13221A; --muted:#4E6256; --line:#C9D8CD;
+  --accent:#1E5638; --accent-ink:#ffffff; --accent-soft:#D2E4D8;
+  --g1:#1E5638; --g2:#7DAE8F; --g3:#2E734D; --g4:#B5D3BF;
   --ok:#17764a; --ok-soft:#DDF0E5; --warn:#8a5a00; --warn-soft:#f3e8cc; --bad:#b3261e; --bad-soft:#f6dfd9; --mixc:var(--ink); --mixp:0%;
   --f-display:"Gloock",Georgia,serif; --f-body:"Fredoka",system-ui,sans-serif; --f-mono:"JetBrains Mono",ui-monospace,monospace; --f-num:"Shrikhand","Gloock",Georgia,serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0A1511; --surface:#11211B; --ink:#E3F0EA; --muted:#93AEA2; --line:#22392F;
-  --accent:#4FD1A5; --accent-ink:#00150D; --accent-soft:#12332A;
-  --g1:#0B8A63; --g2:#1E6F56; --g3:#14503F; --g4:#2B8F70;
+  --bg:#08120D; --surface:#0F1F17; --ink:#E1EDE5; --muted:#8FA797; --line:#20372A;
+  --accent:#5DAF80; --accent-ink:#00130A; --accent-soft:#12301F;
+  --g1:#1E5638; --g2:#1A4A31; --g3:#113825; --g4:#296845;
   --ok:#6fd8a0; --ok-soft:#11301f; --warn:#e2b257; --warn-soft:#33280f; --bad:#f08a80; --bad-soft:#3a1715; --mixp:45%; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#0A1511; --surface:#11211B; --ink:#E3F0EA; --muted:#93AEA2; --line:#22392F;
-  --accent:#4FD1A5; --accent-ink:#00150D; --accent-soft:#12332A;
-  --g1:#0B8A63; --g2:#1E6F56; --g3:#14503F; --g4:#2B8F70;
+  --bg:#08120D; --surface:#0F1F17; --ink:#E1EDE5; --muted:#8FA797; --line:#20372A;
+  --accent:#5DAF80; --accent-ink:#00130A; --accent-soft:#12301F;
+  --g1:#1E5638; --g2:#1A4A31; --g3:#113825; --g4:#296845;
   --ok:#6fd8a0; --ok-soft:#11301f; --warn:#e2b257; --warn-soft:#33280f; --bad:#f08a80; --bad-soft:#3a1715; --mixp:45%; color-scheme:dark}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -214,6 +214,8 @@ details.fold{background:var(--surface)}
       <button class="btn" id="homeBtn" hidden>← Volver al pasillo</button>
       <button class="btn" id="aiBtn" hidden>Configurar IA</button>
       <button class="btn" id="themeBtn">Modo nocturno</button>
+      <button class="btn" id="loginBtn" hidden>Iniciar sesión con Google</button>
+      <span id="syncMsg" style="align-self:center;font-size:.85em;opacity:.75"></span>
     </div>
   </header>
 
@@ -1270,7 +1272,7 @@ function avatar(a,big){
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let store={};try{store=JSON.parse(localStorage.getItem('ecoe-sim')||'{}')}catch(e){}
-const save=()=>{try{localStorage.setItem('ecoe-sim',JSON.stringify(store))}catch(e){}};
+const save=()=>{try{localStorage.setItem('ecoe-sim',JSON.stringify(store))}catch(e){};if(window.cloudSave)window.cloudSave()};
 store.best=store.best||{};
 let cur=null, run=null, tick=null, sample=null, filter='all';
 const inClaude=!!(window.claude&&claude.use);
@@ -1287,7 +1289,7 @@ function renderHall(){
   $('sWeak').textContent=done.length?done.filter(s=>store.best[s.id]<60).length:'–';
   const used=ORDER.filter(a=>ST.some(s=>s.area===a));
   const cnt=a=>{const l=ST.filter(s=>a==='all'||s.area===a);return l.filter(s=>store.best[s.id]!=null).length+'/'+l.length};
-  $('filters').innerHTML=`<button class="sec" data-f="all" data-c style="--c:#0B8A63" aria-pressed="${filter==='all'}"><span class="dot"></span>Todas<span class="cnt">${cnt('all')}</span></button>`+used.map(a=>`<button class="sec" data-f="${a}" data-c style="--c:${AREAS[a][1]}" aria-pressed="${filter===a}"><span class="dot"></span>${AREAS[a][0]}<span class="cnt">${cnt(a)}</span></button>`).join('');
+  $('filters').innerHTML=`<button class="sec" data-f="all" data-c style="--c:#1E5638" aria-pressed="${filter==='all'}"><span class="dot"></span>Todas<span class="cnt">${cnt('all')}</span></button>`+used.map(a=>`<button class="sec" data-f="${a}" data-c style="--c:${AREAS[a][1]}" aria-pressed="${filter===a}"><span class="dot"></span>${AREAS[a][0]}<span class="cnt">${cnt(a)}</span></button>`).join('');
   $('grid').innerHTML=used.filter(a=>filter==='all'||a===filter).map(a=>`<div class="block" data-c style="--c:${AREAS[a][1]}"><header><span class="dot"></span><h2>${AREAS[a][0]}</h2><span class="mono">${cnt(a)}</span></header><div class="grid">`+ST.filter(s=>s.area===a).map(s=>{
     const b=store.best[s.id], cls=b==null?'':(b>=70?'ok':b>=60?'warn':'bad');
     return `<button class="door" data-id="${s.id}">
@@ -1506,6 +1508,73 @@ $('aiSave').onclick=async()=>{
 renderHall();
 if(inClaude){claude.use('sample').then(s=>{sample=s||null;if(sample&&run&&run.phase==='door')run.mode='free'}).catch(()=>{})}
 else{$('aiBtn').hidden=false;if(store.ai&&store.ai.key)sample=makeAI(store.ai);aiUI()}
+</script>
+<script type="module">
+/* ============ Cuenta de Google + progreso en la nube (Firebase) ============
+   Pegá acá la configuración de tu proyecto de Firebase
+   (Consola de Firebase → Configuración del proyecto → Tus apps → SDK config).
+   Mientras quede vacía, el botón de inicio de sesión no aparece y todo
+   funciona como antes, guardando sólo en este navegador. */
+const firebaseConfig = {
+  apiKey: "AIzaSyDsx19z7Vn27LcNAINw8osBELbyUvLPqH0",
+  authDomain: "ecoe-final.firebaseapp.com",
+  projectId: "ecoe-final",
+  storageBucket: "ecoe-final.firebasestorage.app",
+  messagingSenderId: "577496590506",
+  appId: "1:577496590506:web:7244710b6d85e5fbb208d3"
+};
+
+if (firebaseConfig.apiKey && !(window.claude && claude.use)) {
+  const V = '10.12.2', base = `https://www.gstatic.com/firebasejs/${V}/`;
+  const { initializeApp } = await import(base + 'firebase-app.js');
+  const { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signInWithRedirect, signOut } = await import(base + 'firebase-auth.js');
+  const { getFirestore, doc, getDoc, setDoc } = await import(base + 'firebase-firestore.js');
+
+  const app = initializeApp(firebaseConfig), auth = getAuth(app), db = getFirestore(app);
+  const btn = $('loginBtn'), msg = $('syncMsg');
+  let user = null, ready = false, timer = null;
+  btn.hidden = false;
+
+  const pack = () => JSON.parse(JSON.stringify({ best: store.best || {}, theme: store.theme || null, ai: store.ai || null }));
+  const push = async () => {
+    if (!user || !ready) return;
+    try { await setDoc(doc(db, 'users', user.uid), { data: pack(), updated: Date.now() }); msg.textContent = 'Progreso guardado ✓'; }
+    catch (e) { msg.textContent = 'No se pudo guardar en la nube'; console.error(e); }
+  };
+  window.cloudSave = () => { if (!user || !ready) return; clearTimeout(timer); msg.textContent = 'Guardando…'; timer = setTimeout(push, 800); };
+
+  btn.onclick = async () => {
+    if (user) { await signOut(auth); return; }
+    const prov = new GoogleAuthProvider(); prov.setCustomParameters({ prompt: 'select_account' });
+    try { await signInWithPopup(auth, prov); }
+    catch (e) {
+      if (e.code === 'auth/popup-blocked' || e.code === 'auth/operation-not-supported-in-this-environment') signInWithRedirect(auth, prov);
+      else if (e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request') { msg.textContent = 'No se pudo iniciar sesión'; console.error(e); }
+    }
+  };
+
+  onAuthStateChanged(auth, async u => {
+    user = u; ready = false;
+    if (!u) { btn.textContent = 'Iniciar sesión con Google'; msg.textContent = ''; return; }
+    btn.textContent = 'Cerrar sesión'; msg.textContent = 'Sincronizando…';
+    try {
+      const snap = await getDoc(doc(db, 'users', u.uid));
+      const c = (snap.exists() && snap.data().data) || {};
+      // Fusión: por estación queda el mejor puntaje entre este navegador y la nube.
+      const best = { ...(c.best || {}) };
+      for (const [k, v] of Object.entries(store.best || {})) if (best[k] == null || v > best[k]) best[k] = v;
+      store.best = best;
+      if (c.theme) store.theme = c.theme;
+      if (c.ai && c.ai.key) store.ai = c.ai;
+      try { localStorage.setItem('ecoe-sim', JSON.stringify(store)); } catch (e) {}
+      if (store.theme) setTheme(store.theme);
+      renderHall();
+      if (store.ai && store.ai.key) { sample = makeAI(store.ai); aiUI(); }
+      ready = true; await push();
+      msg.textContent = (u.displayName ? u.displayName.split(' ')[0] + ' · ' : '') + 'progreso sincronizado ✓';
+    } catch (e) { msg.textContent = 'No se pudo leer el progreso de la nube'; console.error(e); }
+  });
+}
 </script>
 </body>
 </html>
