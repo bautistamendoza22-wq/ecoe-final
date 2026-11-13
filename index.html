@@ -176,6 +176,8 @@ details.fold li.miss{color:var(--ink)} details.fold li.got::marker{color:var(--o
       <button class="btn" id="homeBtn" hidden>← Volver al pasillo</button>
       <button class="btn" id="aiBtn" hidden>Configurar IA</button>
       <button class="btn" id="themeBtn">Modo nocturno</button>
+      <button class="btn" id="loginBtn" hidden>Iniciar sesión con Google</button>
+      <span id="syncMsg" style="align-self:center;font-size:.85em;opacity:.75"></span>
     </div>
   </header>
 
@@ -1230,7 +1232,7 @@ function avatar(a,big){
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let store={};try{store=JSON.parse(localStorage.getItem('ecoe-sim')||'{}')}catch(e){}
-const save=()=>{try{localStorage.setItem('ecoe-sim',JSON.stringify(store))}catch(e){}};
+const save=()=>{try{localStorage.setItem('ecoe-sim',JSON.stringify(store))}catch(e){};if(window.cloudSave)window.cloudSave()};
 store.best=store.best||{};
 let cur=null, run=null, tick=null, sample=null, filter='all';
 const inClaude=!!(window.claude&&claude.use);
@@ -1457,6 +1459,73 @@ $('aiSave').onclick=async()=>{
 renderHall();
 if(inClaude){claude.use('sample').then(s=>{sample=s||null;if(sample&&run&&run.phase==='door')run.mode='free'}).catch(()=>{})}
 else{$('aiBtn').hidden=false;if(store.ai&&store.ai.key)sample=makeAI(store.ai);aiUI()}
+</script>
+<script type="module">
+/* ============ Cuenta de Google + progreso en la nube (Firebase) ============
+   Pegá acá la configuración de tu proyecto de Firebase
+   (Consola de Firebase → Configuración del proyecto → Tus apps → SDK config).
+   Mientras quede vacía, el botón de inicio de sesión no aparece y todo
+   funciona como antes, guardando sólo en este navegador. */
+const firebaseConfig = {
+  apiKey: "AIzaSyDsx19z7Vn27LcNAINw8osBELbyUvLPqH0",
+  authDomain: "ecoe-final.firebaseapp.com",
+  projectId: "ecoe-final",
+  storageBucket: "ecoe-final.firebasestorage.app",
+  messagingSenderId: "577496590506",
+  appId: "1:577496590506:web:7244710b6d85e5fbb208d3"
+};
+
+if (firebaseConfig.apiKey && !(window.claude && claude.use)) {
+  const V = '10.12.2', base = `https://www.gstatic.com/firebasejs/${V}/`;
+  const { initializeApp } = await import(base + 'firebase-app.js');
+  const { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signInWithRedirect, signOut } = await import(base + 'firebase-auth.js');
+  const { getFirestore, doc, getDoc, setDoc } = await import(base + 'firebase-firestore.js');
+
+  const app = initializeApp(firebaseConfig), auth = getAuth(app), db = getFirestore(app);
+  const btn = $('loginBtn'), msg = $('syncMsg');
+  let user = null, ready = false, timer = null;
+  btn.hidden = false;
+
+  const pack = () => JSON.parse(JSON.stringify({ best: store.best || {}, theme: store.theme || null, ai: store.ai || null }));
+  const push = async () => {
+    if (!user || !ready) return;
+    try { await setDoc(doc(db, 'users', user.uid), { data: pack(), updated: Date.now() }); msg.textContent = 'Progreso guardado ✓'; }
+    catch (e) { msg.textContent = 'No se pudo guardar en la nube'; console.error(e); }
+  };
+  window.cloudSave = () => { if (!user || !ready) return; clearTimeout(timer); msg.textContent = 'Guardando…'; timer = setTimeout(push, 800); };
+
+  btn.onclick = async () => {
+    if (user) { await signOut(auth); return; }
+    const prov = new GoogleAuthProvider(); prov.setCustomParameters({ prompt: 'select_account' });
+    try { await signInWithPopup(auth, prov); }
+    catch (e) {
+      if (e.code === 'auth/popup-blocked' || e.code === 'auth/operation-not-supported-in-this-environment') signInWithRedirect(auth, prov);
+      else if (e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request') { msg.textContent = 'No se pudo iniciar sesión'; console.error(e); }
+    }
+  };
+
+  onAuthStateChanged(auth, async u => {
+    user = u; ready = false;
+    if (!u) { btn.textContent = 'Iniciar sesión con Google'; msg.textContent = ''; return; }
+    btn.textContent = 'Cerrar sesión'; msg.textContent = 'Sincronizando…';
+    try {
+      const snap = await getDoc(doc(db, 'users', u.uid));
+      const c = (snap.exists() && snap.data().data) || {};
+      // Fusión: por estación queda el mejor puntaje entre este navegador y la nube.
+      const best = { ...(c.best || {}) };
+      for (const [k, v] of Object.entries(store.best || {})) if (best[k] == null || v > best[k]) best[k] = v;
+      store.best = best;
+      if (c.theme) store.theme = c.theme;
+      if (c.ai && c.ai.key) store.ai = c.ai;
+      try { localStorage.setItem('ecoe-sim', JSON.stringify(store)); } catch (e) {}
+      if (store.theme) setTheme(store.theme);
+      renderHall();
+      if (store.ai && store.ai.key) { sample = makeAI(store.ai); aiUI(); }
+      ready = true; await push();
+      msg.textContent = (u.displayName ? u.displayName.split(' ')[0] + ' · ' : '') + 'progreso sincronizado ✓';
+    } catch (e) { msg.textContent = 'No se pudo leer el progreso de la nube'; console.error(e); }
+  });
+}
 </script>
 </body>
 </html>
