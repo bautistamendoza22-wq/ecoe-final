@@ -275,6 +275,85 @@ details.fold{border:1.5px solid var(--ink)}
 #aiPanel h2{color:var(--accent);font-size:1.8rem;font-weight:900}
 .steps{background:var(--surface)}
 @media (max-width:700px){.hero .in{grid-template-columns:1fr;padding-right:clamp(16px,4vw,48px)}.hl{padding-right:0}.hr{margin:0 calc(-1*clamp(16px,4vw,48px));}.door{grid-template-columns:48px minmax(0,1fr)}.door .badge{grid-column:2;justify-self:start}.door .av{width:48px;height:55px}}
+/* ===== Ajuste de espacios, menús desplegables y animaciones ===== */
+.hero h1{font-size:clamp(2.2rem,6.5vw,3.8rem);line-height:.95;animation:slideL .6s cubic-bezier(.2,.8,.2,1) both}
+.hl{padding:clamp(20px,3.5vw,36px) 24px clamp(20px,3.5vw,32px) 0;gap:10px}
+.tag{font-size:.72rem;max-width:none;animation:slideL .6s .08s cubic-bezier(.2,.8,.2,1) both}
+.hl .row{animation:slideL .6s .14s cubic-bezier(.2,.8,.2,1) both;position:relative;z-index:6}
+.hero .in{grid-template-columns:minmax(0,1.7fr) minmax(220px,.8fr)}
+.hr{padding:clamp(16px,2.6vw,28px);gap:4px;animation:slideR .6s cubic-bezier(.2,.8,.2,1) both}
+.hr>b{font-size:clamp(2.2rem,5.5vw,3.2rem)}
+.hr>span{font-size:.7rem}
+@keyframes slideL{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:none}}
+@keyframes slideR{from{opacity:0;transform:translateX(32px)}to{opacity:1;transform:none}}
+@keyframes drop{from{opacity:0;transform:translateY(-8px) scaleY(.96)}to{opacity:1;transform:none}}
+@keyframes rowIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes tick{50%{transform:scale(1.35)}}
+.wrap{padding-top:18px;gap:16px}
+.btn{font-size:.72rem;padding:8px 13px;background-image:linear-gradient(var(--ink),var(--ink));background-repeat:no-repeat;background-size:0 100%;transition:background-size .28s cubic-bezier(.2,.8,.2,1),color .2s,border-color .2s,transform .12s}
+.btn:hover{background-size:100% 100%;color:var(--bg);border-color:var(--ink);transform:none}
+.btn.primary:hover{color:#fff}
+.btn:active{transform:scale(.97)}
+.chev{display:inline-block;width:7px;height:7px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg) translateY(-2px);margin-left:9px;transition:transform .25s}
+[aria-expanded="true"]>.chev{transform:rotate(225deg) translate(-2px,-1px)}
+.dd{position:relative;display:inline-block}
+.ddm{position:absolute;top:calc(100% + 6px);left:0;z-index:20;min-width:230px;background:var(--surface);border:2px solid var(--ink);box-shadow:6px 6px 0 var(--ink);display:flex;flex-direction:column;padding:4px;transform-origin:top;animation:drop .18s ease-out}
+.ddm>button{display:flex;align-items:center;gap:9px;width:100%;text-align:left;border:0;background:none;padding:8px 10px;font-size:.86rem;font-weight:500;text-transform:none;letter-spacing:0;transition:background-color .12s,padding-left .15s}
+.ddm>button:hover{background:var(--accent-soft);padding-left:14px}
+.ddm>button[aria-current="true"]{background:var(--ink);color:var(--bg)}
+.ddm>button[aria-current="true"] .cnt{color:inherit}
+.ddm .cnt{margin-left:auto;font-family:var(--f-mono);font-size:.74rem;color:var(--muted)}
+.ddm .dot{width:9px;height:9px;background:var(--cc);flex:none}
+#filters{flex-direction:column;flex-wrap:nowrap;gap:0;margin:0;max-height:min(70vh,460px);overflow:auto}
+.bar2{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.hall{gap:10px;align-items:stretch}
+.hero{display:block}
+.hr .mini{flex-wrap:wrap;gap:2px 14px;justify-content:flex-start}
+.block{display:block;padding:0}
+.block:nth-child(even){background:none;box-shadow:none;clip-path:none}
+.block+.block{border-top:2px solid var(--ink)}
+.block:first-child{border-top:2px solid var(--ink)}.block:last-child{border-bottom:2px solid var(--ink)}
+.bh{display:flex;align-items:baseline;gap:14px;width:100%;text-align:left;background:none;border:0;padding:12px 6px;transition:background-color .2s,padding-left .2s}
+.bh:hover{background:var(--yellow);padding-left:14px}
+.bt{font-family:var(--f-display);font-weight:900;letter-spacing:-.035em;font-size:clamp(1.35rem,3.2vw,1.9rem);line-height:1;color:var(--accent)}
+.bh .mono{font-size:.74rem;color:var(--muted);margin-left:auto}
+.bh .chev{color:var(--ink);align-self:center}
+.block.open>.bh{background:var(--yellow)}
+.acc{display:grid;grid-template-rows:0fr;transition:grid-template-rows .38s cubic-bezier(.2,.8,.2,1)}
+.block.open>.acc{grid-template-rows:1fr}
+.acc>.grid{overflow:hidden;min-height:0;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));column-gap:32px}
+.block.open .door{animation:rowIn .35s calc(var(--i)*35ms + 80ms) both}
+.door{padding:8px 4px;gap:12px;grid-template-columns:44px minmax(0,1fr) auto;transition:background-color .15s,padding-left .2s}
+.door:first-child{border-top:0}
+.door:hover{padding-left:12px}
+.door .av{width:44px;height:51px;transition:transform .25s}
+.door:hover .av{transform:scale(1.12) rotate(-2deg)}
+.door h3{font-size:.98rem;line-height:1.25}
+.door .meta{font-size:.8rem}
+.badge{font-size:.68rem}
+.foot{margin-top:8px}.foot .in{padding-top:18px;padding-bottom:18px}
+.foot h2{font-size:clamp(1.3rem,3.5vw,1.8rem)}.foot p{font-size:.86rem}
+.doorview,#roomWrap,#review,#aiPanel{animation:rowIn .35s cubic-bezier(.2,.8,.2,1) both}
+.doorview{padding:clamp(16px,3vw,28px);gap:14px}
+.doorview h2{font-size:clamp(1.5rem,4vw,2.2rem)}
+.doorview .av{width:130px;height:150px}
+.doorgo{padding-top:12px}
+.btn.big{padding:11px 20px;font-size:.84rem}
+.panel{padding:14px;gap:12px}
+.topbar{padding:8px 14px}.topbar .clock{font-size:clamp(1.5rem,5vw,2rem)}
+.stage .av{width:140px;height:161px}.stage h2{font-size:1.25rem}
+.opt{padding:8px 11px;transition:border-color .15s,background-color .2s,transform .12s,padding-left .2s}
+.opt:hover{padding-left:15px;border-color:var(--ink)}
+.opt.pick:hover{padding-left:11px}
+.opts{gap:6px}
+.tab{padding:6px 11px;transition:background-color .2s,color .2s}
+.revhead h2{font-size:clamp(1.3rem,3.5vw,1.8rem)}
+.res b{font-size:clamp(2.2rem,7vw,3rem)}
+.ci{padding:6px 12px;transition:background-color .2s}
+.ci.hit input{animation:tick .3s}
+.grp header{padding:6px 12px}
+body.st .hl{padding:10px 0}
+@media (max-width:700px){.hero .in{grid-template-columns:1fr;padding-right:clamp(16px,4vw,48px)}.hl{padding-right:0}.hr{margin:0 calc(-1*clamp(16px,4vw,48px));padding:12px clamp(16px,4vw,48px)}.hr>b{font-size:2rem}.ddm{min-width:min(86vw,300px)}.acc>.grid{grid-template-columns:1fr}.hr{flex-direction:row;flex-wrap:wrap;align-items:baseline;gap:6px 12px}.hr .bar{flex-basis:100%}.hr .mini{flex-basis:100%}}
 [hidden]{display:none!important}
 /* avatar */
 .av{display:block}
@@ -304,13 +383,17 @@ details.fold{border:1.5px solid var(--ink)}
 <header class="hero"><div class="in">
   <div class="hl">
     <div class="eyebrow">Examen Final de Carrera · Medicina UNS</div>
-    <h1>Simulador <br>ECOE</h1>
-    <p class="tag">Estaciones con paciente simulado, reloj de 8 minutos y lista de cotejo</p>
+    <h1>Simulador ECOE</h1>
+    <p class="tag">Paciente simulado · 8 minutos · lista de cotejo</p>
     <div class="row">
       <button class="btn primary" id="rndBtn">Estación al azar</button>
       <button class="btn" id="homeBtn" hidden>← Volver al pasillo</button>
-      <button class="btn" id="aiBtn" hidden>Configurar IA</button>
-      <button class="btn" id="themeBtn">Modo nocturno</button>
+      <div class="dd"><button class="btn ddb" aria-haspopup="true" aria-expanded="false">Opciones<i class="chev"></i></button>
+        <div class="ddm" role="menu" hidden>
+          <button role="menuitem" id="aiBtn" hidden>Configurar IA</button>
+          <button role="menuitem" id="themeBtn">Modo nocturno</button>
+          <button role="menuitem" id="resetBtn">Borrar progreso</button>
+        </div></div>
     </div>
   </div>
   <div class="hr prog">
@@ -337,7 +420,11 @@ details.fold{border:1.5px solid var(--ink)}
   </section>
 
   <section id="hall" class="hall">
-    <nav id="filters" aria-label="Secciones"></nav>
+    <div class="bar2">
+      <div class="dd"><button class="btn ddb" id="secBtn" aria-haspopup="true" aria-expanded="false">Sección</button>
+        <div class="ddm" role="menu" id="filters" hidden></div></div>
+      <button class="link" id="allBtn">Desplegar todas</button>
+    </div>
     <div class="main" id="grid"></div>
   </section>
 
@@ -397,7 +484,6 @@ details.fold{border:1.5px solid var(--ink)}
 </div>
 <footer class="foot"><div class="in">
   <div><h2>Practicá en voz alta</h2><p>Bibliografía: Cuadernillo ECOE · Medicina UNS. Los puntajes son orientativos.</p></div>
-  <button class="btn" id="resetBtn">Borrar progreso</button>
 </div></footer>
 
 <script>
@@ -1844,21 +1930,31 @@ delete store.design;
 /* ============ Pasillo ============ */
 function renderHall(){
   const done=ST.filter(s=>store.best[s.id]!=null);
-  $('sDone').textContent=done.length+'/'+ST.length;$('sBar').style.width=Math.round(100*done.length/ST.length)+'%';
+  if(renderHall.first===undefined){renderHall.first=1;countUp($('sDone'),done.length,'/'+ST.length)}else $('sDone').textContent=done.length+'/'+ST.length;$('sBar').style.width=Math.round(100*done.length/ST.length)+'%';
   $('sAvg').textContent=done.length?Math.round(done.reduce((a,s)=>a+store.best[s.id],0)/done.length)+' %':'–';
   $('sWeak').textContent=done.length?done.filter(s=>store.best[s.id]<60).length:'–';
   const used=ORDER.filter(a=>ST.some(s=>s.area===a));
   const cnt=a=>{const l=ST.filter(s=>a==='all'||s.area===a);return l.filter(s=>store.best[s.id]!=null).length+'/'+l.length};
-  $('filters').innerHTML=`<button class="sec" data-f="all" data-c style="--c:#E0241B" aria-pressed="${filter==='all'}"><span class="dot"></span>Todas<span class="cnt">${cnt('all')}</span></button>`+used.map(a=>`<button class="sec" data-f="${a}" data-c style="--c:${AREAS[a][1]}" aria-pressed="${filter===a}"><span class="dot"></span>${AREAS[a][0]}<span class="cnt">${cnt(a)}</span></button>`).join('');
-  $('grid').innerHTML=used.filter(a=>filter==='all'||a===filter).map(a=>`<div class="block" data-c style="--c:${AREAS[a][1]}"><header><h2>${AREAS[a][0]}</h2><span class="mono">${cnt(a)} practicadas</span></header><div class="grid">`+ST.filter(s=>s.area===a).map(s=>{
+  $('secBtn').innerHTML=`Sección: ${filter==='all'?'Todas':AREAS[filter][0]}<i class="chev"></i>`;
+  $('filters').innerHTML=`<button role="menuitem" class="sec" data-f="all" data-c style="--c:#E0241B" aria-current="${filter==='all'}"><span class="dot"></span>Todas<span class="cnt">${cnt('all')}</span></button>`+used.map(a=>`<button role="menuitem" class="sec" data-f="${a}" data-c style="--c:${AREAS[a][1]}" aria-current="${filter===a}"><span class="dot"></span>${AREAS[a][0]}<span class="cnt">${cnt(a)}</span></button>`).join('');
+  const shown=used.filter(a=>filter==='all'||a===filter);
+  if(openSecs==null)openSecs=new Set([shown[0]]);
+  if(filter!=='all')openSecs.add(filter);
+  $('allBtn').hidden=filter!=='all';$('allBtn').textContent=shown.every(a=>openSecs.has(a))?'Plegar todas':'Desplegar todas';
+  $('grid').innerHTML=shown.map(a=>{const op=openSecs.has(a);return `<div class="block ${op?'open':''}" data-c style="--c:${AREAS[a][1]}"><button class="bh" data-acc="${a}" aria-expanded="${op}"><span class="bt">${AREAS[a][0]}</span><span class="mono">${cnt(a)}</span><i class="chev"></i></button><div class="acc" ${op?'':'inert'}><div class="grid">`+ST.filter(s=>s.area===a).map((s,i)=>{
     const b=store.best[s.id], cls=b==null?'':(b>=70?'ok':b>=60?'warn':'bad');
-    return `<button class="door" data-id="${s.id}">
+    return `<button class="door" data-id="${s.id}" style="--i:${i}">
       ${avatar(s.pt.av)}
       <span class="dt"><h3>${esc(s.motivo)}</h3><span class="meta">${esc(s.pt.n)}${s.real?' · <span class="real">estación real</span>':''}</span></span>
-      <span class="badge ${cls}">${b==null?'sin practicar':b+' %'}</span></button>`}).join('')+'</div></div>').join('');
+      <span class="badge ${cls}">${b==null?'sin practicar':b+' %'}</span></button>`}).join('')+'</div></div></div>'}).join('');
 }
+let openSecs=null;
+$('allBtn').onclick=()=>{const used=ORDER.filter(a=>ST.some(s=>s.area===a));const all=used.every(a=>openSecs.has(a));openSecs=new Set(all?[]:used);renderHall()};
+document.addEventListener('click',e=>{const b=e.target.closest('.ddb');document.querySelectorAll('.dd').forEach(d=>{const m=d.querySelector('.ddm'),btn=d.querySelector('.ddb');let open=false;if(b&&d.contains(b))open=m.hidden;else if(d.contains(e.target)&&e.target.closest('#resetBtn'))open=true;m.hidden=!open;btn.setAttribute('aria-expanded',open)})});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.dd').forEach(d=>{d.querySelector('.ddm').hidden=true;d.querySelector('.ddb').setAttribute('aria-expanded','false')})});
+function countUp(el,n,suf){if(matchMedia('(prefers-reduced-motion: reduce)').matches||!n){el.textContent=n+suf;return}const t0=performance.now();(function f(t){const k=Math.min(1,(t-t0)/600);el.textContent=Math.round(n*(1-Math.pow(1-k,3)))+suf;if(k<1)requestAnimationFrame(f)})(t0)}
 $('filters').onclick=e=>{const b=e.target.closest('[data-f]');if(b){filter=b.dataset.f;renderHall()}};
-$('grid').onclick=e=>{const b=e.target.closest('[data-id]');if(b)openStation(b.dataset.id)};
+$('grid').onclick=e=>{const h=e.target.closest('[data-acc]');if(h){const a=h.dataset.acc,bl=h.parentElement,op=!bl.classList.contains('open');bl.classList.toggle('open',op);h.setAttribute('aria-expanded',op);bl.querySelector('.acc').toggleAttribute('inert',!op);op?openSecs.add(a):openSecs.delete(a);return}const b=e.target.closest('[data-id]');if(b)openStation(b.dataset.id)};
 $('rndBtn').onclick=()=>{const base=ST.filter(s=>filter==='all'||s.area===filter);const pool=base.filter(s=>store.best[s.id]==null);const l=pool.length?pool:base;openStation(l[Math.floor(Math.random()*l.length)].id)};
 $('resetBtn').onclick=()=>{const b=$('resetBtn');
   if(b.dataset.arm){clearTimeout(b._t);delete b.dataset.arm;store.best={};save();renderHall();b.textContent='Progreso borrado';b._t=setTimeout(()=>b.textContent='Borrar progreso',2500);return}
@@ -2036,7 +2132,7 @@ async function aiModels(prov,key){
 }
 function aiUI(){
   const c=store.ai||{},p=$('aiProv').value=c.prov||$('aiProv').value||'gemini';$('aiKey').value=c.key||$('aiKey').value;if(!$('aiModel').value)$('aiModel').value=c.model||PROV[p].model;
-  $('aiSteps').innerHTML=PROV[p].steps.map(s=>`<li>${s}</li>`).join('');$('aiBtn').textContent=sample?'IA activada ✓':'Configurar IA';
+  $('aiSteps').innerHTML=PROV[p].steps.map(s=>`<li>${s}</li>`).join('');$('aiBtn').textContent=sample?'IA activada ✓ (cambiar)':'Configurar IA';
 }
 function openAI(){$('aiPanel').hidden=false;aiUI();$('aiPanel').scrollIntoView({behavior:'smooth',block:'start'})}
 $('aiBtn').onclick=()=>{if($('aiPanel').hidden)openAI();else $('aiPanel').hidden=true};
