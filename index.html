@@ -5,25 +5,25 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Simulador ECOE</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Shrikhand&family=Gloock&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
 /* Paleta: verde esmeralda de la portada del cuadernillo. Layout: pasillo de estaciones → consultorio en dos columnas (paciente y reloj | preguntar, examinar, indicar) → lista de cotejo. */
 :root{
-  --bg:#E7EFE9; --surface:#FBFCFB; --ink:#13221A; --muted:#4E6256; --line:#C9D8CD;
-  --accent:#1E5638; --accent-ink:#ffffff; --accent-soft:#D2E4D8;
-  --g1:#1E5638; --g2:#7DAE8F; --g3:#2E734D; --g4:#B5D3BF;
+  --bg:#E9F3EE; --surface:#FBFDFC; --ink:#14231D; --muted:#51655C; --line:#CDDDD4;
+  --accent:#0B8A63; --accent-ink:#ffffff; --accent-soft:#D6EEE4;
+  --g1:#0B8A63; --g2:#8AD6B9; --g3:#3FAE8A; --g4:#BFE8D7;
   --ok:#17764a; --ok-soft:#DDF0E5; --warn:#8a5a00; --warn-soft:#f3e8cc; --bad:#b3261e; --bad-soft:#f6dfd9; --mixc:var(--ink); --mixp:0%;
   --f-display:"Gloock",Georgia,serif; --f-body:"Fredoka",system-ui,sans-serif; --f-mono:"JetBrains Mono",ui-monospace,monospace; --f-num:"Shrikhand","Gloock",Georgia,serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#08120D; --surface:#0F1F17; --ink:#E1EDE5; --muted:#8FA797; --line:#20372A;
-  --accent:#5DAF80; --accent-ink:#00130A; --accent-soft:#12301F;
-  --g1:#1E5638; --g2:#1A4A31; --g3:#113825; --g4:#296845;
+  --bg:#0A1511; --surface:#11211B; --ink:#E3F0EA; --muted:#93AEA2; --line:#22392F;
+  --accent:#4FD1A5; --accent-ink:#00150D; --accent-soft:#12332A;
+  --g1:#0B8A63; --g2:#1E6F56; --g3:#14503F; --g4:#2B8F70;
   --ok:#6fd8a0; --ok-soft:#11301f; --warn:#e2b257; --warn-soft:#33280f; --bad:#f08a80; --bad-soft:#3a1715; --mixp:45%; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#08120D; --surface:#0F1F17; --ink:#E1EDE5; --muted:#8FA797; --line:#20372A;
-  --accent:#5DAF80; --accent-ink:#00130A; --accent-soft:#12301F;
-  --g1:#1E5638; --g2:#1A4A31; --g3:#113825; --g4:#296845;
+  --bg:#0A1511; --surface:#11211B; --ink:#E3F0EA; --muted:#93AEA2; --line:#22392F;
+  --accent:#4FD1A5; --accent-ink:#00150D; --accent-soft:#12332A;
+  --g1:#0B8A63; --g2:#1E6F56; --g3:#14503F; --g4:#2B8F70;
   --ok:#6fd8a0; --ok-soft:#11301f; --warn:#e2b257; --warn-soft:#33280f; --bad:#f08a80; --bad-soft:#3a1715; --mixp:45%; color-scheme:dark}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -61,7 +61,7 @@ header{display:flex;justify-content:space-between;align-items:flex-start;gap:12p
 [data-c]{--cc:color-mix(in oklab,var(--c) calc(100% - var(--mixp)),var(--mixc));--cct:color-mix(in oklab,var(--cc) 78%,var(--ink))}
 /* pasillo */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
-.door{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:grid;grid-template-columns:64px minmax(0,1fr);gap:12px;text-align:left;align-items:center;transition:transform .2s,box-shadow .2s;animation:rise .5s cubic-bezier(.2,.8,.2,1) both}
+.door{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:grid;grid-template-columns:64px minmax(0,1fr);gap:12px;text-align:left;align-items:center;transition:transform .2s,box-shadow .2s}
 .door:hover{transform:translateY(-2px);box-shadow:0 10px 24px -14px color-mix(in oklab,var(--cc) 70%,transparent)}
 .door .av{width:64px;height:74px}
 .door h3{color:var(--ink);font-size:1rem}
@@ -178,6 +178,103 @@ details.fold li.miss{color:var(--ink)} details.fold li.got::marker{color:var(--o
 .revgrid .col{display:flex;flex-direction:column;gap:14px;min-width:0}
 @media (min-width:980px){.revhead{grid-template-columns:minmax(0,1fr) auto;align-items:center}.revgrid{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}}
 details.fold{background:var(--surface)}
+/* ===== Estilo tipográfico amarillo y rojo (plantilla de Canva) ===== */
+:root{--bg:#FFF6EC;--surface:#FFFFFF;--ink:#1D1916;--muted:#6A5F55;--line:#EBD9C2;--accent:#E0241B;--accent-ink:#fff;--accent-soft:#FFE6A3;--yellow:#FFDF80;--ok:#1b7a43;--ok-soft:#dff1e4;--mixp:0%;
+  --f-display:"Montserrat",system-ui,sans-serif;--f-body:"DM Sans",system-ui,sans-serif;--f-num:"Montserrat",system-ui,sans-serif;color-scheme:light}
+:root[data-theme="dark"]{--bg:#181310;--surface:#231C17;--ink:#F6EDE2;--muted:#B5A698;--line:#3B3028;--accent:#FF5A4E;--accent-ink:#1A0605;--accent-soft:#4A3A12;--yellow:#3A2D0E;--ok:#6fd8a0;--ok-soft:#11301f;--mixp:40%;color-scheme:dark}
+body::before,body::after{display:none}
+h1,h2,h3{font-family:var(--f-display);font-weight:800;letter-spacing:-.035em}
+.panel,.btn,.door,.opt,.tab,.chip,.sec,.grp,.minus,details.fold,.bubble,.badge,.real,.fact,.msg,.ask textarea,.cfg input,.cfg select,.note,.steps,.bar,.bar>i,.opt.pick::before{border-radius:0}
+.av>rect,.av clipPath>rect{rx:0}
+.btn{background:transparent;border:2px solid var(--ink);text-transform:uppercase;font-size:.76rem;letter-spacing:.09em;font-weight:700;padding:10px 16px}
+.btn:hover{border-color:var(--accent);box-shadow:none}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.eyebrow{letter-spacing:.14em;font-weight:700;color:var(--ink)}
+.hero{background:var(--yellow)}
+.in{max-width:1240px;margin:0 auto;padding:0 clamp(16px,4vw,48px)}
+.hero .in{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(240px,1fr);padding-right:0}
+.hl{padding:clamp(28px,6vw,64px) 24px clamp(28px,5vw,48px) 0;display:flex;flex-direction:column;gap:16px}
+.hero h1{font-size:clamp(3rem,10vw,5.6rem);font-weight:900;line-height:.92;color:var(--accent)}
+.tag{text-transform:uppercase;letter-spacing:.1em;font-size:.78rem;font-weight:700;max-width:34ch}
+.hr{background:var(--accent);color:#fff;padding:clamp(24px,4vw,48px);justify-content:center;gap:8px}
+:root[data-theme="dark"] .hr{color:#1A0605}
+.hr>b{font-family:var(--f-num);font-weight:900;font-size:clamp(3rem,8vw,4.6rem);line-height:.9;letter-spacing:-.04em;color:inherit}
+.hr>span{text-transform:uppercase;letter-spacing:.1em;font-size:.78rem;font-weight:700}
+.hr .bar{background:#ffffff55;height:6px;margin-top:6px}.hr .bar>i{background:#fff}
+.hr .mini{color:inherit;font-size:.86rem}.hr .mini b{color:inherit}
+body.st .hero h1{font-size:clamp(1.6rem,5vw,2.2rem)}
+body.st .hero h1 br{display:none}
+body.st .hr,body.st .tag{display:none}
+body.st .hero .in{grid-template-columns:1fr;padding-right:clamp(16px,4vw,48px)}
+body.st .hl{padding:18px 0;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 20px}
+body.st .hl .eyebrow{display:none}
+.wrap{padding-top:28px}
+.hall{display:flex;flex-direction:column;gap:8px}
+#filters{display:flex;flex-direction:row;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.sec{width:auto;border:2px solid var(--ink);padding:5px 12px;text-transform:uppercase;font-size:.72rem;letter-spacing:.08em;font-weight:700;background:none}
+.sec:hover{background:var(--accent-soft)}
+.sec[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sec[aria-pressed="true"] .cnt{color:inherit}
+.sec .dot{border-radius:0;width:9px;height:9px}
+.main{gap:0}
+.block{display:grid;grid-template-columns:1fr;gap:12px 40px;padding:clamp(28px,5vw,52px) 0}
+.block:nth-child(even){background:var(--yellow);box-shadow:0 0 0 100vmax var(--yellow);clip-path:inset(0 -100vmax)}
+@media (min-width:860px){.block{grid-template-columns:minmax(220px,.8fr) minmax(0,1.6fr)}}
+.block>header{flex-direction:column;align-items:flex-start;gap:8px;margin:0}
+.block>header::after{display:none}
+.block>header h2{font-size:clamp(2rem,5vw,3rem);font-weight:900;line-height:.95;color:var(--accent)}
+.block>header .mono{font-size:.76rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink)}
+.grid{grid-template-columns:1fr;gap:0}
+.door{grid-template-columns:56px minmax(0,1fr) auto;gap:14px;background:none;border:0;border-bottom:1px solid color-mix(in oklab,var(--ink) 22%,transparent);padding:12px 4px;align-items:center}
+.door:first-child{border-top:1px solid color-mix(in oklab,var(--ink) 22%,transparent)}
+.door:hover{transform:none;box-shadow:none;background:color-mix(in oklab,var(--accent) 9%,transparent)}
+.door .av{width:56px;height:64px}
+.door .dt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.door h3{font-family:var(--f-body);font-weight:700;letter-spacing:0;font-size:1.08rem;color:var(--ink)}
+.door:hover h3{color:var(--accent)}
+.badge{border:1.5px solid var(--ink);color:var(--ink);background:none;text-transform:uppercase;letter-spacing:.04em}
+.real{background:var(--accent);color:var(--accent-ink);border:0;text-transform:uppercase;letter-spacing:.06em;padding:1px 6px}
+.foot{background:var(--accent);color:#fff;margin-top:24px}
+:root[data-theme="dark"] .foot{color:#1A0605}
+.foot .in{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding-top:32px;padding-bottom:32px}
+.foot h2{font-size:clamp(1.8rem,5vw,2.6rem);font-weight:900}
+.foot .btn{border-color:currentColor;color:inherit}
+.panel{border:0;background:var(--surface)}
+.doorview{background:var(--yellow);border-top:0;padding:clamp(20px,4vw,40px)}
+.doorview h2{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:900;line-height:.98;color:var(--accent)}
+.doorgo{border-top:2px solid var(--ink)}
+.topbar{background:var(--accent);color:#fff;border-left:0}
+:root[data-theme="dark"] .topbar{color:#1A0605}
+.topbar .eyebrow,.topbar .clock{color:inherit}
+.topbar .clock{font-weight:900;letter-spacing:-.03em}
+.topbar .clock.low{color:var(--yellow)}
+.topbar .btn{border-color:currentColor;color:inherit}
+.timer.running{animation:none}
+.stage{border:0;background:var(--yellow)}
+.stage h2{font-size:1.5rem}
+.bubble{background:var(--surface);border:0}.bubble::before{background:var(--surface);border:0}
+.tabs{border-bottom:2px solid var(--ink)}
+.tab{border:2px solid var(--ink);color:var(--ink);text-transform:uppercase;font-size:.74rem;letter-spacing:.08em;font-weight:700}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip{border:2px solid var(--ink);color:var(--ink);font-weight:700}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.opt{border:1.5px solid color-mix(in oklab,var(--ink) 30%,transparent)}
+.opt.used{background:var(--accent-soft);border-color:var(--ink)}
+.opt.pick.used::before{background-color:var(--accent);border-color:var(--accent)}
+.revhead{border-top:0;background:var(--yellow)}
+.revhead h2{font-size:clamp(1.5rem,4vw,2.2rem);font-weight:900;color:var(--accent)}
+.res b{font-weight:900;letter-spacing:-.04em}
+.res .verdict{font-family:var(--f-display);font-weight:800;text-transform:uppercase;letter-spacing:.02em}
+.grp{border:1.5px solid var(--ink)}
+.grp header{background:var(--ink)}
+.grp header span:first-child,.grp header .mono{color:var(--bg)}
+.grp header span:first-child{text-transform:uppercase;font-size:.78rem;letter-spacing:.08em}
+details.fold{border:1.5px solid var(--ink)}
+.fact{border:1.5px solid var(--ink);color:var(--ink);background:var(--surface)}
+#aiPanel{background:var(--yellow)}
+#aiPanel h2{color:var(--accent);font-size:1.8rem;font-weight:900}
+.steps{background:var(--surface)}
+@media (max-width:700px){.hero .in{grid-template-columns:1fr;padding-right:clamp(16px,4vw,48px)}.hl{padding-right:0}.hr{margin:0 calc(-1*clamp(16px,4vw,48px));}.door{grid-template-columns:48px minmax(0,1fr)}.door .badge{grid-column:2;justify-self:start}.door .av{width:48px;height:55px}}
 [hidden]{display:none!important}
 /* avatar */
 .av{display:block}
@@ -189,35 +286,41 @@ details.fold{background:var(--surface)}
 .av .tear{animation:tear 2.8s ease-in infinite}
 .av .sweat{animation:tear 3.4s ease-in infinite .8s}
 .av.dolor .head{animation:wince 2.8s ease-in-out infinite;transform-origin:100px 160px}
-.av.agitado .head{animation:shake .5s ease-in-out infinite alternate;transform-origin:100px 160px}
+.av.agitado .head{animation:shake .9s ease-in-out infinite alternate;transform-origin:100px 160px}
 .av.agitado .body{animation-duration:1.3s}
 .av .baby{animation:rock 3s ease-in-out infinite alternate;transform-origin:150px 200px}
 @keyframes breathe{50%{transform:scaleY(1.02) translateY(-1px)}}
 @keyframes blink{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.08)}}
-@keyframes talk{from{transform:scaleY(.7)}to{transform:scaleY(1.6)}}
+@keyframes talk{from{transform:scaleY(.85)}to{transform:scaleY(1.45)}}
 @keyframes tear{0%{opacity:0;transform:translateY(0)}20%{opacity:1}100%{opacity:0;transform:translateY(24px)}}
-@keyframes wince{0%,60%,100%{transform:rotate(0)}70%{transform:rotate(-2.5deg)}85%{transform:rotate(1.5deg)}}
-@keyframes shake{from{transform:rotate(-1.2deg)}to{transform:rotate(1.2deg)}}
+@keyframes wince{0%,60%,100%{transform:rotate(0)}70%{transform:rotate(-1.6deg)}85%{transform:rotate(.8deg)}}
+@keyframes shake{from{transform:rotate(-.6deg)}to{transform:rotate(.6deg)}}
 @keyframes rock{from{transform:rotate(-3deg)}to{transform:rotate(3deg)}}
 @media (max-width:600px){.strip{grid-template-columns:1fr 1fr}.strip .stat:last-child{grid-column:1/-1}}
 @media (prefers-reduced-motion:reduce){*,body::before,body::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div>
-      <div class="eyebrow">Examen Final de Carrera · Medicina UNS</div>
-      <h1>Simulador ECOE</h1>
-    </div>
+<header class="hero"><div class="in">
+  <div class="hl">
+    <div class="eyebrow">Examen Final de Carrera · Medicina UNS</div>
+    <h1>Simulador <br>ECOE</h1>
+    <p class="tag">Estaciones con paciente simulado, reloj de 8 minutos y lista de cotejo</p>
     <div class="row">
+      <button class="btn primary" id="rndBtn">Estación al azar</button>
       <button class="btn" id="homeBtn" hidden>← Volver al pasillo</button>
       <button class="btn" id="aiBtn" hidden>Configurar IA</button>
       <button class="btn" id="themeBtn">Modo nocturno</button>
-      <button class="btn" id="loginBtn" hidden>Iniciar sesión con Google</button>
-      <span id="syncMsg" style="align-self:center;font-size:.85em;opacity:.75"></span>
     </div>
-  </header>
+  </div>
+  <div class="hr prog">
+    <b id="sDone">0</b>
+    <span>estaciones practicadas</span>
+    <div class="bar"><i id="sBar" style="width:0"></i></div>
+    <div class="mini"><span>Promedio <b id="sAvg">–</b></span><span>Bajo 60 % <b id="sWeak">–</b></span></div>
+  </div>
+</div></header>
+<div class="wrap">
 
   <section class="panel" id="aiPanel" hidden>
     <h2>Paciente con inteligencia artificial</h2>
@@ -234,17 +337,7 @@ details.fold{background:var(--surface)}
   </section>
 
   <section id="hall" class="hall">
-    <aside class="panel side">
-      <div class="prog">
-        <b id="sDone">0</b>
-        <span class="muted small">estaciones practicadas</span>
-        <div class="bar"><i id="sBar" style="width:0"></i></div>
-        <div class="mini"><span>Promedio <b id="sAvg">–</b></span><span>Bajo 60 % <b id="sWeak">–</b></span></div>
-      </div>
-      <button class="btn primary" id="rndBtn">Estación al azar</button>
-      <nav id="filters" aria-label="Secciones"></nav>
-      <button class="btn ghost" id="resetBtn">Borrar progreso</button>
-    </aside>
+    <nav id="filters" aria-label="Secciones"></nav>
     <div class="main" id="grid"></div>
   </section>
 
@@ -302,6 +395,10 @@ details.fold{background:var(--surface)}
     <div id="review" hidden></div>
   </section>
 </div>
+<footer class="foot"><div class="in">
+  <div><h2>Practicá en voz alta</h2><p>Bibliografía: Cuadernillo ECOE · Medicina UNS. Los puntajes son orientativos.</p></div>
+  <button class="btn" id="resetBtn">Borrar progreso</button>
+</div></footer>
 
 <script>
 const AREAS={cli:['Clínica médica','#1F4E79'],cir:['Cirugía general','#2E6B34'],uro:['Urología','#8A6400'],tra:['Traumatología','#6D4C41'],ped:['Pediatría','#BF5B0A'],neo:['Neonatología','#A61E5B'],obs:['Obstetricia','#6A2C91'],gin:['Ginecología','#00767F'],sm:['Salud mental','#303F9F'],mf:['Medicina familiar','#1F6F6B'],urg:['Urgencias','#B3261E'],tr:['Transversales','#4E5B1E']};
@@ -1205,7 +1302,415 @@ const ST=[
  cot:[['Cuantifica el consumo',8,'c'],['Evalúa la dependencia',8,'c'],['Pregunta intentos previos y causa de recaída',8,'c'],['Evalúa la motivación y la etapa de cambio',10,'c'],['Explora desencadenantes, entorno y temores',8,'c'],['Descarta contraindicaciones de los fármacos',6,'c'],
       ['Calcula los paquetes-año',6,'k'],['Da un consejo claro y personalizado',10,'h'],['Fija el día D',10,'k'],['Trabaja estrategias conductuales',8,'h'],['Indica tratamiento farmacológico',10,'k'],['Programa el seguimiento',8,'s']],
  claves:['Las 5 A: averiguar, aconsejar, asistir, ayudar y acompañar.','Paquetes-año = (cigarrillos por día ÷ 20) × años.','Dependencia alta: 20 o más por día o primer cigarrillo antes de los 30 minutos.','Fármacos con 10 o más cigarrillos por día: parches (21-14-7 mg), bupropión o vareniclina.','Bupropión: contraindicado con convulsiones y trastornos de la alimentación. Si no está listo: las 5 R.'],
- ref:'Cuadernillo · Medicina familiar · Tabaquismo y obesidad.'}
+ ref:'Cuadernillo · Medicina familiar · Tabaquismo y obesidad.'},
+{id:'dengue',area:'cli',motivo:'Fiebre y dolor de cuerpo desde hace 4 días',lugar:'Consultorio de demanda espontánea, en verano',
+ pt:{n:'Valeria',e:'33 años',av:{sex:'f',skin:2,hair:'pony',hc:'#3a2418',mood:'dolor',top:'#3d6a94',sweat:1}},
+ sit:'Valeria volvió hace una semana de visitar a su familia en el norte del país, donde hay casos de dengue.',
+ tareas:['Hacer la anamnesis y definir si es un caso sospechoso.','Examinar, buscar signos de alarma y clasificar.','Indicar el tratamiento, las pautas y el seguimiento.'],
+ abre:'Hace cuatro días que tengo fiebre y me duele todo el cuerpo, sobre todo atrás de los ojos.',
+ guion:'Fiebre de hasta 39 desde hace 4 días; hoy a la mañana no tuvo. Dolor detrás de los ojos, dolor de músculos y articulaciones, náuseas, un vómito ayer. Sin tos ni mocos. Manchas rojas en los brazos desde ayer. Volvió hace 7 días del norte, donde varios familiares tuvieron dengue. No le duele la panza. No sangró por encías ni nariz; la menstruación no le vino. Toma líquidos pero poco. Orina normal. Tomó ibuprofeno. No está embarazada (usa DIU, FUM hace 2 semanas). Sin enfermedades. Vive con su pareja.',
+ q:[['Fiebre','¿Desde cuándo tiene fiebre? ¿Hoy tuvo?','Cuatro días, hasta 39. Hoy a la mañana no tuve.',0],
+    ['Síntomas','¿Qué más siente? ¿Tos o mocos?','Dolor atrás de los ojos, en los músculos y las articulaciones, náuseas. Me salieron manchas rojas en los brazos. Tos y mocos no.',1],
+    ['Epidemiología','¿Viajó en las últimas dos semanas? ¿Alguien cercano con dengue?','Volví hace una semana del norte. Varios en mi familia lo tuvieron.',2],
+    ['Alarma','¿Le duele fuerte la panza? ¿Vomitó varias veces? ¿Sangró por encías o nariz? ¿Está muy somnolienta?','La panza no me duele. Vomité una sola vez. No sangré. Estoy cansada pero despierta.',3],
+    ['Hidratación','¿Está tomando líquidos? ¿Orina bien?','Tomo poco, la verdad. Orino normal.',4],
+    ['Antecedentes','¿Puede estar embarazada? ¿Tiene alguna enfermedad? ¿Qué tomó para la fiebre?','Embarazada no, tengo DIU. Soy sana. Tomé ibuprofeno.',5]],
+ x:[['Conciencia, FC, PA con presión de pulso y llenado capilar','Lúcida. FC 92 · PA 110/70 (presión de pulso 40) · llenado capilar de 2 segundos.',6],
+    ['Piel, mucosas y abdomen','Exantema en brazos y tronco. Sin petequias ni sangrado. Abdomen blando, sin dolor ni hepatomegalia. Mucosas algo secas.',7],
+    ['Hemograma con plaquetas','Hematocrito 40 % · leucocitos 3200 · plaquetas 128.000.',8],
+    ['NS1 e IgM (día 4)','Se solicitan: entre los días 4 y 6 corresponden las dos.',9],
+    ['Hemocultivos y Rx de tórax','No están indicados.',-9]],
+ d:[['Es un caso sospechoso de dengue sin signos de alarma ni comorbilidades: grupo A, tratamiento en domicilio.','Correcto.',10],
+    ['Indico hidratación oral intensa, hasta 3 litros por día, de preferencia con sales de rehidratación.','Correcto.',11],
+    ['Indico paracetamol 500 a 1000 mg cada 6 horas y suspender el ibuprofeno.','Correcto: no AINE ni aspirina.',12],
+    ['Le explico que ahora empieza la etapa crítica aunque no tenga fiebre, y le doy los signos de alarma por escrito.','Correcto: dolor abdominal intenso, vómitos persistentes, sangrados, somnolencia.',13],
+    ['La cito a control en 24 a 48 horas, hasta 48 horas después de que ceda la fiebre.','Correcto.',14],
+    ['Notifico el caso e indico repelente, mosquitero y eliminar criaderos.','Correcto.',15],
+    ['Le digo que como ya no tiene fiebre está curada.','Error: la fase crítica comienza al ceder la fiebre.',-1,15],
+    ['Indico ibuprofeno reglado para el dolor.','Error: los AINE aumentan el riesgo de sangrado.',-1,12],
+    ['Indico un antibiótico y una inyección intramuscular para la fiebre.','Error: no se indican antibióticos ni medicación intramuscular.',-1,10]],
+ cot:[['Interroga los días de fiebre y si ya cedió',8,'c'],['Interroga los síntomas y la ausencia de tos y rinorrea',6,'c'],['Pregunta el nexo epidemiológico',6,'c'],['Pregunta los signos de alarma uno por uno',10,'c'],['Pregunta la ingesta de líquidos y la diuresis',5,'c'],['Pregunta embarazo, comorbilidades y uso de AINE',6,'c'],['Controla conciencia, PA con presión de pulso y llenado capilar',8,'c'],['Examina piel, mucosas y abdomen',5,'c'],
+      ['Pide hemograma con plaquetas',6,'k'],['Pide la confirmación según los días de evolución',4,'k'],['Clasifica el caso (grupo A)',8,'k'],['Indica la hidratación con volumen concreto',8,'k'],['Indica paracetamol y suspende el AINE',6,'k'],['Explica la fase crítica y los signos de alarma',6,'h'],['Cita a control en 24 a 48 horas',5,'s'],['Notifica y da medidas de prevención',3,'s']],
+ claves:['Caso sospechoso: fiebre de 2 a 7 días con 2 o más síntomas y nexo epidemiológico.','La fase crítica empieza cuando baja la fiebre (días 4 a 6).','Grupos: A sin alarma; B1 con comorbilidad; B2 con signos de alarma; C grave.','Hidratación oral intensa y paracetamol; nunca AINE, aspirina ni intramusculares.','B2: 10 ml/kg en una hora. C: bolo de 20 ml/kg en 15-30 minutos.'],
+ ref:'Cuadernillo · Clínica médica · Dengue (GPC Nacional 2025).'},
+
+{id:'leuc',area:'cli',motivo:'Nene pálido, con moretones y fiebre',lugar:'Consultorio de pediatría de un centro de salud',
+ pt:{n:'Romina (mamá de Bruno, 4 años)',e:'Bruno está sentado en su falda, decaído',av:{sex:'f',skin:1,hair:'long',hc:'#4a2f1d',mood:'angustia',top:'#3d6a94'}},
+ sit:'Romina trae a Bruno porque lo nota pálido y cansado. Enfermería le hizo un hemograma que ya está disponible.',
+ tareas:['Interrogar a la mamá.','Examinar a Bruno e interpretar el hemograma.','Decidir la conducta y comunicarla.'],
+ abre:'Hace dos semanas que lo veo pálido, sin ganas de jugar, y le salen moretones sin golpearse.',
+ guion:'Bruno, 4 años. Desde hace 2-3 semanas está pálido, cansado y juega menos. Moretones en las piernas y el tronco sin golpes. Fiebre de 38 varios días, sin causa. Le duelen las piernas y a veces no quiere caminar. Le sangró la nariz dos veces. Come poco. Antes era sano, vacunas completas. No toma medicación. No hay enfermedades de la sangre en la familia. La mamá está muy asustada y pregunta si es algo grave.',
+ q:[['Cuadro','¿Desde cuándo lo nota así? ¿Qué cambió?','Dos o tres semanas. Está pálido, cansado, no juega.',0],
+    ['Sangrado','¿Los moretones aparecen sin golpes? ¿Sangró por nariz o encías?','Sí, sin golpearse. Le sangró la nariz dos veces.',1],
+    ['Infección','¿Tuvo fiebre o infecciones?','Fiebre de 38 varios días, sin que le encontraran nada.',2],
+    ['Otros','¿Le duelen los huesos o las piernas? ¿Bajó de peso?','Le duelen las piernas, a veces no quiere caminar. Come poco.',3],
+    ['Antecedentes','¿Toma algún medicamento? ¿Enfermedades previas o en la familia?','Nada. Siempre fue sano.',4]],
+ x:[['Estado general, piel y mucosas','Pálido. Petequias y equimosis en piernas y tronco. Sin sangrado activo.',5],
+    ['Ganglios, hígado y bazo','Adenopatías cervicales e inguinales pequeñas. Hígado a 3 cm y bazo a 2 cm del reborde.',6],
+    ['Signos vitales','38,2 °C · FC 130 · FR 24 · bien perfundido.',-1],
+    ['Hemograma con frotis','Hemoglobina 7,2 g/dl · leucocitos 42.000 con 60 % de blastos · neutrófilos 400 · plaquetas 18.000.',7]],
+ d:[['Interpreto: tres series afectadas con blastos; sospecha de leucemia aguda.','Correcto: anemia, plaquetopenia, neutropenia y blastos.',8],
+    ['Derivo hoy a un hospital con hematología pediátrica, para internación.','Correcto: no se estudia en forma ambulatoria.',9],
+    ['Como tiene fiebre con neutrófilos menores de 500: hemocultivos y antibiótico de amplio espectro en la primera hora.','Correcto: neutropenia febril.',10],
+    ['Indico no dar aspirina ni ibuprofeno, ni aplicar inyecciones intramusculares.','Correcto: tiene 18.000 plaquetas.',11],
+    ['Le explico a la mamá que el análisis muestra una alteración de la sangre que hay que estudiar hoy con especialistas, sin afirmar un diagnóstico; la escucho y respondo sus preguntas.','Correcto: honestidad, sin dar por confirmado lo que todavía no se sabe.',12],
+    ['Me aseguro de que tenga cómo llegar y aviso al hospital que la recibe.','Correcto.',13],
+    ['Indico hierro y control en un mes.','Error grave: no es una anemia ferropénica.',-1,25],
+    ['Indico corticoides por las adenopatías.','Error: enmascaran el diagnóstico.',-1,15],
+    ['Le digo que seguro es un virus y que no se preocupe.','Error: falsa tranquilidad ante un cuadro grave.',-1,15]],
+ cot:[['Interroga el tiempo de evolución y el síndrome anémico',6,'c'],['Pregunta por sangrados',8,'c'],['Pregunta por fiebre e infecciones',6,'c'],['Pregunta dolor óseo y síntomas generales',6,'c'],['Pregunta fármacos y antecedentes',4,'c'],['Examina piel y mucosas',6,'c'],['Busca adenopatías y visceromegalias',10,'c'],['Lee el hemograma: series afectadas, neutrófilos y blastos',12,'k'],
+      ['Plantea la sospecha de leucemia aguda',8,'k'],['Deriva en el día a hematología',12,'s'],['Reconoce y trata la neutropenia febril',6,'k'],['Contraindica AINE e intramusculares',4,'k'],['Comunica con empatía, sin afirmar el diagnóstico',8,'h'],['Asegura el traslado y la continuidad',4,'s']],
+ claves:['Anemia + sangrado + infección, con adenopatías o visceromegalias: pensar en leucemia aguda.','Hemograma con frotis el mismo día: dos o más series afectadas o blastos.','Derivación a hematología e internación en el día.','Neutropenia febril: antibiótico de amplio espectro en la primera hora.','No dar AINE, intramusculares ni corticoides antes del diagnóstico.'],
+ ref:'Cuadernillo · Clínica médica · Hemograma patológico y sospecha de leucemia aguda.'},
+
+{id:'htg',area:'cli',motivo:'Control de diabetes con análisis nuevos',lugar:'Consultorio de un centro de salud',
+ pt:{n:'Graciela',e:'58 años',av:{sex:'f',skin:2,hair:'bob',hc:'#5c4a3c',mood:'neutral',top:'#3d6a94',glasses:1}},
+ sit:'Graciela tiene diabetes tipo 2 hace 8 años. Trae análisis: glucemia 236 mg/dl, HbA1c 9,4 %, triglicéridos 620 mg/dl, LDL 118, creatinina normal.',
+ tareas:['Hacer la anamnesis.','Examinar lo que corresponda.','Armar un plan integral para todos sus problemas.'],
+ abre:'Vengo al control, doctor. Me dijeron que los análisis dieron mal.',
+ guion:'Toma metformina 850 mg cada 12 horas; se olvida varias tomas por semana. Sed y orina mucho desde hace un mes, bajó 3 kg. Come muchas harinas y dulces, toma gaseosas. Toma dos o tres vasos de vino por día. No hace actividad física. Hormigueo y ardor en los pies de noche. No se revisa los pies; usa ojotas. No se hizo fondo de ojo nunca. Hipertensa, toma enalapril. No fuma. Vive sola y dice que le da miedo la insulina porque «es el final».',
+ q:[['Diabetes','¿Qué medicación toma y cómo la toma?','Metformina 850, dos por día. Me olvido varias veces por semana.',0],
+    ['Síntomas','¿Tiene mucha sed, orina más, bajó de peso?','Sí, hace un mes. Bajé tres kilos.',1],
+    ['Hábitos','¿Cómo es su alimentación? ¿Toma alcohol? ¿Hace actividad física?','Muchas harinas y dulces, gaseosa. Dos o tres vasos de vino por día. Ejercicio no.',2],
+    ['Complicaciones','¿Siente hormigueo o ardor en los pies? ¿Se los revisa? ¿Se hizo fondo de ojo?','Hormigueo y ardor de noche. No me los reviso. Fondo de ojo nunca.',3],
+    ['Antecedentes','¿Tiene presión alta? ¿Fuma? ¿Qué más toma?','Presión alta, tomo enalapril. No fumo.',4],
+    ['Creencias','¿Qué piensa de usar insulina?','Me da miedo. Para mí es el final.',5]],
+ x:[['Peso, IMC, cintura y presión arterial','82 kg · IMC 32 · PA 138/84.',6],
+    ['Examen del pie: inspección, pulsos y monofilamento','Piel seca con fisuras en los talones. Pulsos presentes. Monofilamento: no siente 3 de 10 puntos en cada pie.',7],
+    ['TSH, hepatograma, RACo y fondo de ojo','TSH y hepatograma normales. RACo 45 mg/g. Fondo de ojo: se solicita.',8]],
+ d:[['Le explico que la diabetes está descontrolada (HbA1c 9,4 % con síntomas) y que hay que intensificar el tratamiento.','Correcto.',9],
+    ['Como tiene síntomas y pérdida de peso, indico insulina basal 10 UI (0,1-0,2 UI/kg) por la noche, con ajuste cada 3 a 5 días, y mantengo la metformina.','Correcto: síntomas catabólicos = insulina.',10],
+    ['Trabajo su miedo a la insulina: le explico que no es «el final», que puede ser transitoria y cómo se aplica.','Correcto: abordar las creencias mejora la adherencia.',11],
+    ['Triglicéridos de 620: suspender el alcohol, reducir azúcares y harinas, e indico fenofibrato para prevenir una pancreatitis.','Correcto: 500 mg/dl o más. El control glucémico también los baja.',12],
+    ['Le enseño el cuidado diario de los pies y el calzado cerrado; tiene neuropatía.','Correcto: monofilamento alterado = pie de riesgo.',13],
+    ['Por la albuminuria mantengo el enalapril; pido fondo de ojo y la cito en 2 semanas para ajustar.','Correcto.',14],
+    ['Indico glibenclamida y control en 6 meses.','Error: se evita la glibenclamida y con síntomas corresponde insulina; el control es cercano.',-1,12],
+    ['Le digo que si no se cuida va a terminar con una amputación.','Error: amenazar no mejora la adherencia.',-1,8],
+    ['Indico gemfibrozil junto con una estatina.','Error: esa combinación aumenta el riesgo de miopatía; se prefiere el fenofibrato.',-1,6]],
+ cot:[['Interroga el tratamiento actual y la adherencia',8,'c'],['Pregunta síntomas cardinales y pérdida de peso',6,'c'],['Interroga alimentación, alcohol y actividad física',8,'c'],['Pregunta síntomas de complicaciones y controles previos',6,'c'],['Pregunta otros factores de riesgo',4,'c'],['Explora las creencias sobre la insulina',6,'h'],['Mide peso, IMC y PA',4,'c'],['Examina los pies con monofilamento',10,'c'],['Pide estudios de causas secundarias y de complicaciones',6,'k'],
+      ['Explica la situación con claridad',4,'h'],['Indica insulina basal con dosis y titulación',10,'k'],['Aborda el miedo a la insulina',6,'h'],['Trata la hipertrigliceridemia (alcohol, dieta y fibrato)',10,'k'],['Educa sobre el cuidado del pie',6,'h'],['Planifica el seguimiento cercano',6,'s']],
+ claves:['Los exámenes combinan problemas: abordarlos todos y priorizar.','HbA1c de 10 % o más, o síntomas catabólicos: insulina basal 0,1-0,2 UI/kg, con ajuste cada 3-5 días.','Triglicéridos de 500 o más: suspender alcohol, controlar la glucemia y fibrato para prevenir la pancreatitis.','Monofilamento alterado: pie de riesgo; educación y calzado.','Explorar las creencias del paciente antes de indicar.'],
+ ref:'Cuadernillo · Clínica médica · Diabetes mellitus tipo 2; Hipertrigliceridemia.'},
+
+{id:'epoc',area:'cli',motivo:'Más falta de aire y catarro verde',lugar:'Guardia',
+ pt:{n:'Osvaldo',e:'69 años',av:{sex:'m',skin:1,hair:'thin',hc:'#8c867d',mood:'agitado',top:'#3d6a94',old:1}},
+ sit:'Osvaldo tiene EPOC. Llega agitado, hablando entrecortado.',
+ tareas:['Hacer una anamnesis breve.','Examinar y pedir los estudios.','Indicar el tratamiento.'],
+ abre:'Hace tres días… que me falta más el aire… y tengo el catarro verde.',
+ guion:'EPOC diagnosticado hace 6 años. Fumó 40 años, un atado por día; sigue fumando 5 por día. Desde hace 3 días más falta de aire, más catarro y de color verde. Sin dolor de pecho. Fiebre no se tomó. Usa salbutamol cuando se acuerda y un inhalador diario que abandonó hace un mes. Una internación el año pasado. Sin oxígeno en casa. No tiene hinchazón de piernas. Sin alergias.',
+ q:[['Cuadro','¿Qué cambió en estos días? ¿Más falta de aire, más catarro, cambió el color?','Las tres cosas, hace tres días. El catarro está verde.',0],
+    ['Cuadro','¿Dolor de pecho, fiebre, hinchazón de piernas?','No, nada de eso.',1],
+    ['Tratamiento','¿Qué inhaladores usa? ¿Tiene oxígeno en casa?','Salbutamol cuando me acuerdo. El otro lo dejé hace un mes. Oxígeno no.',2],
+    ['Antecedentes','¿Sigue fumando? ¿Estuvo internado por esto?','Cinco por día. Me internaron el año pasado.',3]],
+ x:[['Signos vitales, saturación y conciencia','FR 28 · FC 108 · PA 140/85 · saturación 86 % al aire · lúcido.',4],
+    ['Examen respiratorio','Uso de músculos accesorios, espiración prolongada, sibilancias y roncus difusos.',5],
+    ['Gases arteriales','pH 7,36 · PaCO2 48 · PaO2 54.',6],
+    ['Rx de tórax y ECG','Hiperinsuflación, sin consolidación ni neumotórax. ECG: taquicardia sinusal.',7]],
+ d:[['Diagnóstico: exacerbación de EPOC (los tres criterios de Anthonisen).','Correcto.',8],
+    ['Oxígeno controlado con máscara Venturi al 24-28 % para una saturación de 88 a 92 %.','Correcto.',9],
+    ['Salbutamol 4 a 8 disparos con aerocámara + ipratropio, cada 20 minutos en la primera hora.','Correcto.',10],
+    ['Prednisona 40 mg por día durante 5 días.','Correcto.',11],
+    ['Antibiótico por 5 días (amoxicilina-clavulánico), por el esputo purulento con más disnea.','Correcto.',12],
+    ['Reevalúo con gases; si aparece acidosis respiratoria, ventilación no invasiva. Al alta: cesación tabáquica, técnica inhalatoria y vacunas.','Correcto.',13],
+    ['Oxígeno a alto flujo con máscara de reservorio hasta saturar 100 %.','Error: en el retenedor de CO2 puede producir hipercapnia.',-1,15],
+    ['Indico aminofilina endovenosa.','Error: las metilxantinas no se usan.',-1,8]],
+ cot:[['Interroga los tres criterios de Anthonisen',10,'c'],['Descarta otros diagnósticos (dolor, fiebre, edemas)',6,'c'],['Pregunta el tratamiento habitual y el oxígeno domiciliario',6,'c'],['Pregunta tabaquismo e internaciones',6,'c'],['Mide saturación, FR y conciencia',8,'c'],['Examina el aparato respiratorio',6,'c'],['Pide gases arteriales',8,'k'],['Pide Rx de tórax y ECG',6,'k'],
+      ['Diagnostica la exacerbación',6,'k'],['Titula el oxígeno a 88-92 %',12,'k'],['Indica broncodilatadores de acción corta',8,'k'],['Indica corticoide sistémico por 5 días',6,'k'],['Indica antibiótico con criterio',6,'k'],['Reevalúa y plantea la prevención',6,'s']],
+ claves:['Anthonisen: más disnea, más volumen y más purulencia del esputo.','Oxígeno controlado para 88-92 %; pedir gases.','Salbutamol + ipratropio; prednisona 40 mg por 5 días.','Antibiótico con esputo purulento y otro criterio, o ventilación mecánica.','VNI con pH menor de 7,35 y PaCO2 mayor de 45. Sin metilxantinas.'],
+ ref:'Cuadernillo · Clínica médica · EPOC y asma (GOLD 2026).'},
+
+{id:'cad',area:'cli',motivo:'Vómitos, dolor de panza y respiración agitada',lugar:'Guardia',
+ pt:{n:'Agustín',e:'21 años · 70 kg',av:{sex:'m',skin:1,hair:'messy',hc:'#6b4a2a',mood:'dolor',top:'#3d6a94',sweat:1}},
+ sit:'Agustín tiene diabetes tipo 1. Llega con vómitos. La glucemia capilar marca 480 mg/dl.',
+ tareas:['Hacer una anamnesis dirigida.','Pedir los estudios y confirmar el diagnóstico.','Indicar el tratamiento en el orden correcto.'],
+ abre:'Vomité toda la noche… me duele la panza y tengo mucha sed.',
+ guion:'Diabetes tipo 1 desde los 12 años. Hace 2 días tiene gastroenteritis con fiebre y, como no comía, dejó de aplicarse la insulina. Mucha sed, orina mucho, vómitos desde anoche, dolor abdominal difuso, respira rápido. Sin dolor de pecho. No consumió alcohol ni drogas. Sin alergias.',
+ q:[['Cuadro','¿Desde cuándo está así? ¿Qué síntomas tiene?','Desde anoche vomito. Mucha sed, orino mucho, me duele la panza.',0],
+    ['Desencadenante','¿Se está aplicando la insulina? ¿Tuvo fiebre o alguna infección?','Hace dos días tengo diarrea y fiebre. Como no comía, no me puse la insulina.',1],
+    ['Antecedentes','¿Consumió alcohol o drogas? ¿Dolor de pecho? ¿Alergias?','No, nada.',2]],
+ x:[['Signos vitales, hidratación y conciencia','PA 100/60 · FC 118 · FR 30 profunda (Kussmaul) · 37,8 °C. Mucosas secas, aliento cetónico. Somnoliento pero orientado.',3],
+    ['Gases venosos e ionograma','pH 7,14 · bicarbonato 9 · Na 132 · K 4,6 · Cl 98. Anión gap 25.',4],
+    ['Cetonas en sangre u orina','Positivas (+++).',5],
+    ['Glucemia de laboratorio, urea, creatinina, hemograma y ECG','Glucemia 492 · creatinina 1,3 · leucocitos 14.000 · ECG sin alteraciones.',6]],
+ d:[['Diagnóstico: cetoacidosis diabética, desencadenada por la infección y la omisión de la insulina.','Correcto: glucemia mayor de 250, pH menor de 7,30, bicarbonato menor de 18 y cetonas.',7],
+    ['Primero, hidratación: solución fisiológica 1000 a 1500 ml en la primera hora.','Correcto: 15-20 ml/kg; luego 250-500 ml/h.',8],
+    ['Miro el potasio antes de la insulina: con 4,6, agrego 20 a 30 mEq por litro de solución.','Correcto: entre 3,5 y 5,2 se repone. Con menos de 3,5 no se inicia la insulina.',9],
+    ['Después, insulina regular en infusión a 0,1 UI/kg/h.','Correcto: descenso de 50-70 mg/dl por hora.',10],
+    ['Cuando la glucemia baje a 200-250, agrego dextrosa al 5 %; controlo glucemia cada hora e ionograma y gases cada 2 a 4 horas.','Correcto.',11],
+    ['Busco y trato el desencadenante, y le explico por qué nunca hay que suspender la insulina basal aunque no coma.','Correcto: educación para los días de enfermedad.',12],
+    ['Empiezo con un bolo de insulina antes de los líquidos y sin ver el potasio.','Error: riesgo de hipokalemia grave y arritmia.',-1,20],
+    ['Indico bicarbonato porque el pH es de 7,14.','Error: sólo con pH menor de 6,9.',-1,10]],
+ cot:[['Interroga los síntomas y el tiempo de evolución',6,'c'],['Busca el desencadenante',10,'c'],['Descarta otros desencadenantes y alergias',4,'c'],['Evalúa hidratación, respiración y conciencia',8,'c'],['Pide gases e ionograma y calcula el anión gap',10,'k'],['Pide cetonas',6,'k'],['Pide el resto del laboratorio y ECG',4,'k'],
+      ['Diagnostica la cetoacidosis',8,'k'],['Inicia con hidratación',12,'k'],['Evalúa y repone el potasio antes de la insulina',12,'k'],['Indica insulina en infusión con dosis',8,'k'],['Planifica dextrosa y controles',6,'s'],['Educa sobre los días de enfermedad',6,'h']],
+ claves:['Orden: líquidos, potasio, insulina.','Potasio menor de 3,5: no iniciar la insulina. Entre 3,5 y 5,2: reponer.','Insulina regular 0,1 UI/kg/h; dextrosa cuando la glucemia llega a 200-250.','Bicarbonato sólo con pH menor de 6,9.','Buscar siempre el desencadenante: infección, omisión de insulina, infarto.'],
+ ref:'Cuadernillo · Clínica médica · Diabetes mellitus tipo 2 y descompensaciones agudas.'},
+
+{id:'tec',area:'cir',motivo:'Caída con golpe en la cabeza',lugar:'Guardia',
+ pt:{n:'Elsa',e:'74 años, con su hijo',av:{sex:'f',skin:1,hair:'bob',hc:'#cfcac2',mood:'neutral',top:'#2e6b34',old:1}},
+ sit:'Elsa tropezó con la alfombra hace 2 horas y se golpeó la frente. Está despierta y conversa. Su hijo quiere llevársela a la casa.',
+ tareas:['Hacer la anamnesis.','Examinar y decidir si necesita estudios.','Indicar la conducta y las pautas.'],
+ abre:'Me tropecé con la alfombra, querido. Me di la frente contra la mesa, pero estoy bien.',
+ guion:'Tropezó, no se mareó antes. No perdió el conocimiento; recuerda todo. Vomitó una vez. Dolor de cabeza leve. No convulsionó. Toma acenocumarol por una fibrilación auricular, y enalapril. No tomó alcohol. Vive sola; su hijo vive a 20 cuadras y trabaja de noche. Sin visión doble ni debilidad.',
+ q:[['Mecanismo','¿Cómo fue la caída? ¿Se mareó antes?','Me tropecé con la alfombra. No me mareé.',0],
+    ['Síntomas','¿Perdió el conocimiento? ¿Recuerda todo? ¿Vomitó? ¿Convulsionó?','No me desmayé y me acuerdo de todo. Vomité una vez. Convulsión no.',1],
+    ['Síntomas','¿Le duele la cabeza? ¿Ve doble? ¿Siente debilidad?','Me duele un poco. Lo otro no.',2],
+    ['Fármacos','¿Toma anticoagulantes o aspirina? ¿Tomó alcohol?','Tomo acenocumarol por el corazón. Alcohol no.',3],
+    ['Contexto','¿Con quién vive? ¿Alguien puede quedarse con usted esta noche?','Vivo sola. Mi hijo trabaja de noche.',4]],
+ x:[['Glasgow, pupilas y examen neurológico','Glasgow 15. Pupilas iguales y reactivas. Sin déficit motor ni sensitivo.',5],
+    ['Cuero cabelludo y signos de fractura de la base','Hematoma frontal de 4 cm, sin hundimiento. Sin hematoma periorbitario ni retroauricular, sin otorragia.',6],
+    ['Columna cervical y resto del cuerpo','Cuello indoloro y móvil. Sin otras lesiones.',7],
+    ['TC de cerebro sin contraste','Sin sangrado ni fractura.',8],
+    ['RIN','3,4.',9],
+    ['Rx de cráneo','No está indicada.',-9]],
+ d:[['Pido la tomografía: tiene 65 años o más y está anticoagulada, aunque el Glasgow sea de 15.','Correcto: cualquiera de los dos criterios alcanza.',8],
+    ['Con la tomografía normal, la dejo en observación: anticoagulada, con RIN de 3,4 y sin acompañante.','Correcto: puede sangrar en forma diferida y no tiene quién la controle.',10],
+    ['Les explico a Elsa y a su hijo por qué no puede irse todavía y qué vamos a vigilar.','Correcto.',11],
+    ['Pautas de alarma por escrito para cuando se vaya: cefalea que empeora, vómitos repetidos, somnolencia, confusión, debilidad, convulsiones.','Correcto.',12],
+    ['Indico paracetamol, reviso la anticoagulación con su médico y evalúo el riesgo de caídas en la casa.','Correcto.',13],
+    ['Como está lúcida, le doy el alta sin tomografía.','Error grave: anticoagulada y mayor de 65 años.',-1,25],
+    ['Indico ibuprofeno para el dolor.','Error: aumenta el riesgo de sangrado en una paciente anticoagulada.',-1,8]],
+ cot:[['Interroga el mecanismo y la causa de la caída',6,'c'],['Pregunta pérdida de conciencia, amnesia, vómitos y convulsión',10,'c'],['Pregunta cefalea y síntomas neurológicos',5,'c'],['Pregunta por anticoagulantes y alcohol',12,'c'],['Explora si tiene acompañante',6,'c'],['Mide el Glasgow y examina pupilas y motricidad',10,'c'],['Busca signos de fractura de la base',6,'c'],['Examina el cuello y busca otras lesiones',5,'c'],
+      ['Indica la TC y la justifica',12,'k'],['Pide el RIN',4,'k'],['Decide la observación',8,'s'],['Explica la conducta a la paciente y a su hijo',6,'h'],['Da pautas de alarma por escrito',6,'h'],['Indica analgesia segura y prevención de caídas',4,'s']],
+ claves:['TEC leve: Glasgow 13-15. La radiografía de cráneo no sirve.',
+  'TC con: Glasgow menor de 15 a las 2 horas, signos de fractura, 2 o más vómitos, 65 años o más, anticoagulación, convulsión o déficit focal.','Anticoagulado con TC normal: observación prolongada.','Alta sólo con Glasgow 15, examen normal y un adulto que acompañe 24 horas.','Hematoma subdural crónico: adulto mayor, semanas después de una caída.'],
+ ref:'Cuadernillo · Cirugía general · Traumatismo encefalocraneano.'},
+
+{id:'neumot',area:'cir',motivo:'Dolor en el pecho y falta de aire de golpe',lugar:'Guardia',
+ pt:{n:'Matías',e:'22 años',av:{sex:'m',skin:1,hair:'short',hc:'#2c2119',mood:'dolor',top:'#2e6b34'}},
+ sit:'Matías es alto y delgado. Consulta por dolor en el pecho que empezó hace 3 horas.',
+ tareas:['Hacer la anamnesis.','Examinar y pedir el estudio que corresponde.','Indicar la conducta y las pautas.'],
+ abre:'Estaba estudiando y de golpe sentí una puntada en el costado derecho. Me cuesta respirar hondo.',
+ guion:'Dolor súbito en el lado derecho del pecho hace 3 horas, en reposo, que aumenta al respirar hondo. Falta de aire leve, puede hablar y caminar. Tos seca. Sin fiebre. Fuma 10 cigarrillos por día y marihuana los fines de semana. Es la primera vez. Sin enfermedades pulmonares ni golpes. No viajó ni estuvo inmovilizado. Juega al básquet y tiene un vuelo en 5 días.',
+ q:[['Dolor','¿Cómo empezó y cómo es el dolor?','De golpe, en reposo. Una puntada a la derecha que aumenta al respirar hondo.',0],
+    ['Síntomas','¿Tiene falta de aire, tos, fiebre?','Un poco de falta de aire y tos seca. Fiebre no.',1],
+    ['Antecedentes','¿Fuma? ¿Le pasó antes? ¿Tiene alguna enfermedad del pulmón?','Diez cigarrillos por día y marihuana a veces. Primera vez. Soy sano.',2],
+    ['Diferenciales','¿Tuvo un golpe, un viaje largo o estuvo inmovilizado?','No, nada.',3],
+    ['Contexto','¿Hace deportes, bucea o tiene algún viaje pronto?','Juego al básquet. Tengo un vuelo en cinco días.',4]],
+ x:[['Signos vitales y saturación','FR 20 · FC 96 · PA 120/75 · saturación 96 %. Sin ingurgitación yugular; tráquea centrada.',5],
+    ['Examen del tórax comparando ambos lados','Hemitórax derecho: menor expansión, hipersonoridad, murmullo vesicular y vibraciones disminuidos.',6],
+    ['Rx de tórax de frente, de pie','Línea pleural visible a la derecha con ausencia de trama por fuera; separación de 1,5 cm a la altura del hilio. Mediastino centrado.',7],
+    ['ECG','Normal.',-1],
+    ['Dímero D y angiotomografía','No están indicados: el cuadro y la Rx explican los síntomas.',-9]],
+ d:[['Diagnóstico: neumotórax espontáneo primario, estable y con pocos síntomas.','Correcto.',8],
+    ['Descarto el neumotórax a tensión: está estable, sin hipotensión ni desviación de la tráquea.','Correcto: es lo primero que hay que decir.',9],
+    ['Conducta conservadora: observación, analgesia, oxígeno y control clínico y radiológico.','Correcto: primario con pocos síntomas.',10],
+    ['Si aumenta la disnea o no se reexpande: aspiración con aguja o drenaje pleural.','Correcto.',11],
+    ['Al alta: dejar el tabaco y la marihuana, no volar hasta una semana después de la resolución por Rx, no bucear, y control con Rx en 2 a 4 semanas.','Correcto: tiene que reprogramar el vuelo.',12],
+    ['Le explico que puede repetirse y cuándo volver de urgencia.','Correcto: recurre en cerca del 30 %.',13],
+    ['Le coloco un drenaje pleural de entrada.','Error: no hace falta en un primario estable con pocos síntomas.',-1,10],
+    ['Le doy analgésicos y le digo que puede viajar tranquilo.','Error: no se vuela con un neumotórax sin resolver.',-1,12]],
+ cot:[['Caracteriza el dolor y su inicio',8,'c'],['Pregunta disnea, tos y fiebre',5,'c'],['Pregunta tabaco, episodios previos y enfermedad pulmonar',8,'c'],['Explora diagnósticos diferenciales',5,'c'],['Pregunta actividades de riesgo y viajes',6,'c'],['Controla signos vitales y busca signos de tensión',8,'c'],['Examina el tórax en forma comparativa',10,'c'],['Pide la Rx de tórax y la describe',10,'k'],
+      ['Diagnostica el neumotórax espontáneo primario',8,'k'],['Descarta la tensión',6,'k'],['Indica conducta conservadora',8,'k'],['Sabe cuándo drenar',6,'k'],['Da las pautas del alta (tabaco, vuelos, buceo, control)',8,'h'],['Explica la recurrencia y las pautas de alarma',4,'h']],
+ claves:['Varón joven, alto, delgado y fumador con dolor pleurítico súbito.','Rx de frente, de pie: línea pleural sin trama periférica.','A tensión: diagnóstico clínico y descompresión inmediata.','Primario con pocos síntomas: observación. Sintomático: aspiración o drenaje. Secundario: internación.','Al alta: no fumar, no volar hasta la resolución, no bucear.'],
+ ref:'Cuadernillo · Cirugía general · Neumotórax espontáneo.'},
+
+{id:'pancr',area:'cir',motivo:'Dolor fuerte en la boca del estómago',lugar:'Guardia',
+ pt:{n:'Norberto',e:'52 años',av:{sex:'m',skin:2,hair:'short',hc:'#3f352c',mood:'dolor',top:'#2e6b34',beard:1,sweat:1}},
+ sit:'Norberto llega doblado de dolor, después de un asado con amigos.',
+ tareas:['Hacer la anamnesis del dolor.','Examinar y pedir los estudios.','Decir el diagnóstico y el tratamiento inicial.'],
+ abre:'Tengo un dolor terrible acá arriba, que me atraviesa hasta la espalda. No se me pasa con nada.',
+ guion:'Dolor en la boca del estómago desde hace 8 horas, muy intenso, en cinturón, que se va a la espalda; alivia algo inclinándose hacia adelante. Vómitos repetidos. Empezó después de un asado con mucho vino. Toma alcohol casi todos los días. Le dijeron hace años que tenía piedras en la vesícula. Sin fiebre. Sin dolor de pecho ni falta de aire. No toma medicación. Sin cirugías.',
+ q:[['Dolor','¿Dónde le duele, cómo es y hacia dónde se corre?','En la boca del estómago, como un cinturón que me atraviesa a la espalda. Hace ocho horas.',0],
+    ['Dolor','¿Qué lo alivia o lo empeora? ¿Vomitó?','Inclinarme hacia adelante alivia un poco. Vomité muchas veces.',1],
+    ['Causas','¿Toma alcohol? ¿Tiene piedras en la vesícula? ¿Toma algún medicamento?','Vino casi todos los días, y anoche mucho. Hace años me dijeron que tenía piedras. Remedios no.',2],
+    ['Diferenciales','¿Dolor de pecho, falta de aire, fiebre?','No.',3]],
+ x:[['Signos vitales','PA 105/65 · FC 112 · FR 22 · 37,4 °C · saturación 95 %.',4],
+    ['Examen abdominal','Dolor intenso en el epigastrio, con distensión leve y ruidos disminuidos. Sin abdomen en tabla.',5],
+    ['Lipasa o amilasa','Lipasa 1450 U/l (más de 3 veces el valor normal).',6],
+    ['Hemograma, urea, creatinina, glucemia, calcio, hepatograma y triglicéridos','Hematocrito 47 % · leucocitos 15.000 · urea 52 · bilirrubina y fosfatasa normales · triglicéridos 210.',7],
+    ['Ecografía abdominal','Litiasis vesicular múltiple. Vía biliar de 5 mm.',8],
+    ['ECG','Normal.',-1],
+    ['TC de abdomen con contraste al ingreso','No está indicada al ingreso: se reserva para las 72-96 horas si no mejora o hay dudas.',-9]],
+ d:[['Diagnóstico: pancreatitis aguda (dolor típico + lipasa mayor de 3 veces el valor normal).','Correcto: alcanza con 2 de 3 criterios.',9],
+    ['Interno e indico hidratación con Ringer lactato guiada por metas.','Correcto: bolo de 10 ml/kg si hay hipovolemia y luego 1,5 ml/kg/h, reevaluando.',10],
+    ['Analgesia, con opioides si hace falta.','Correcto.',11],
+    ['Alimentación oral precoz cuando la tolere; sin antibióticos profilácticos.','Correcto.',12],
+    ['Vigilo la gravedad (hematocrito mayor de 44 %, urea, SIRS); si es leve y biliar, colecistectomía en la misma internación.','Correcto.',13],
+    ['Indico antibióticos preventivos.','Error: sólo con infección documentada.',-1,10],
+    ['Lo dejo en ayuno prolongado con sonda nasogástrica por una semana.','Error: se alimenta en forma precoz según la tolerancia.',-1,8]],
+ cot:[['Caracteriza el dolor y su irradiación',8,'c'],['Pregunta factores que lo modifican y vómitos',5,'c'],['Busca la causa (alcohol, litiasis, fármacos)',10,'c'],['Descarta diferenciales',5,'c'],['Controla signos vitales',6,'c'],['Examina el abdomen',8,'c'],['Pide lipasa o amilasa',10,'k'],['Pide el laboratorio de gravedad y de causa',6,'k'],['Pide ecografía',8,'k'],
+      ['Diagnostica con 2 de 3 criterios',8,'k'],['Indica hidratación con Ringer lactato',10,'k'],['Indica analgesia adecuada',6,'k'],['Indica alimentación precoz, sin antibióticos',5,'k'],['Evalúa la gravedad y plantea la colecistectomía',5,'s']],
+ claves:['Diagnóstico con 2 de 3: dolor típico, lipasa o amilasa mayor de 3 veces, imagen compatible.','Causas: litiasis y alcohol (80 %). Ecografía a todos.','Ringer lactato guiado por metas, analgesia y alimentación precoz.','Sin antibióticos profilácticos. TC a las 72-96 horas si no mejora.','La magnitud de la amilasa no indica gravedad.'],
+ ref:'Cuadernillo · Cirugía general · Abdomen agudo.'},
+
+{id:'colles',area:'tra',motivo:'Caída sobre la mano y dolor de muñeca',lugar:'Guardia',
+ pt:{n:'Irma',e:'67 años',av:{sex:'f',skin:1,hair:'bun',hc:'#a9a39b',mood:'dolor',top:'#6D4C41',old:1,glasses:1}},
+ sit:'Irma resbaló en la vereda y cayó sobre la mano derecha extendida. Sostiene la muñeca con la otra mano.',
+ tareas:['Interrogar.','Examinar y pedir el estudio.','Indicar el tratamiento, las pautas y la prevención.'],
+ abre:'Me resbalé y puse la mano para no golpearme. Mire cómo me quedó la muñeca.',
+ guion:'Cayó hace una hora sobre la mano derecha extendida. Es diestra. Dolor e hinchazón en la muñeca. Siente hormigueo en los dedos pulgar, índice y medio. No se golpeó la cabeza ni otra parte. Menopausia a los 48. Nunca se hizo una densitometría. Su mamá se quebró la cadera. Sin otras fracturas. Toma levotiroxina. Vive con su marido.',
+ q:[['Mecanismo','¿Cómo fue la caída? ¿Es diestra?','Resbalé y caí sobre la mano derecha abierta. Soy diestra.',0],
+    ['Síntomas','¿Siente hormigueo o adormecimiento en los dedos?','Sí, hormigueo en el pulgar, el índice y el medio.',1],
+    ['Otras lesiones','¿Se golpeó la cabeza, el codo o el hombro?','No, sólo la muñeca.',2],
+    ['Osteoporosis','¿A qué edad fue la menopausia? ¿Tuvo otras fracturas? ¿Alguien en su familia se quebró la cadera?','A los 48. Fracturas no. Mi mamá se quebró la cadera.',3]],
+ x:[['Inspección y palpación de la muñeca','Deformidad «en dorso de tenedor», edema y dolor en el radio distal. Tabaquera anatómica indolora.',4],
+    ['Pulso radial, llenado capilar y sensibilidad en el territorio del mediano','Pulso y llenado capilar normales. Hipoestesia leve en el pulpejo de los tres primeros dedos.',5],
+    ['Codo y hombro','Sin dolor.',6],
+    ['Rx de muñeca de frente y perfil','Fractura extraarticular del radio distal con desplazamiento dorsal (fractura de Colles).',7]],
+ d:[['Diagnóstico: fractura de Colles desplazada.','Correcto.',8],
+    ['Analgesia, y reducción cerrada con anestesia local en el foco, seguida de yeso.','Correcto.',9],
+    ['Rx de control después de la reducción y control semanal.','Correcto.',10],
+    ['Reevalúo la sensibilidad del mediano después de reducir; si persiste o empeora, interconsulta urgente.','Correcto: síndrome del túnel carpiano agudo.',11],
+    ['Pautas del yeso: elevar la mano, mover los dedos y el hombro; volver si hay dolor creciente, dedos fríos o azules, u hormigueo.','Correcto.',12],
+    ['Es una fractura por fragilidad: indico estudiar y tratar la osteoporosis y prevenir caídas.','Correcto.',13],
+    ['Coloco el yeso sin reducir la fractura.','Error: desplazada, se reduce.',-1,12],
+    ['Le digo que el hormigueo es normal y no lo vuelvo a evaluar.','Error: puede ser una compresión aguda del nervio mediano.',-1,12]],
+ cot:[['Interroga el mecanismo y la mano dominante',6,'c'],['Pregunta síntomas neurológicos',8,'c'],['Descarta otras lesiones',5,'c'],['Pregunta factores de riesgo de osteoporosis',8,'c'],['Inspecciona y palpa, incluida la tabaquera anatómica',8,'c'],['Evalúa el estado neurovascular',12,'c'],['Examina el codo y el hombro',5,'c'],['Pide la Rx de frente y perfil y la describe',8,'k'],
+      ['Diagnostica la fractura de Colles',6,'k'],['Indica reducción cerrada con anestesia e inmovilización',10,'k'],['Indica Rx posreducción y controles',6,'s'],['Reevalúa el nervio mediano',6,'k'],['Da pautas de alarma del yeso',6,'h'],['Plantea el estudio de la osteoporosis',6,'s']],
+ claves:['Colles: extraarticular con desplazamiento dorsal, «dorso de tenedor».','Evaluar siempre pulso, llenado capilar y nervio mediano.','Dolor en la tabaquera anatómica: sospechar escafoides e inmovilizar aunque la Rx sea normal.','No desplazada: yeso 4-6 semanas. Desplazada: reducción e inmovilización. Inestable o intraarticular: cirugía.','Fractura por fragilidad: tratar la osteoporosis.'],
+ ref:'Cuadernillo · Traumatología · Esguince de tobillo y fractura de radio distal.'},
+
+{id:'nefrot',area:'ped',motivo:'Nene hinchado',lugar:'Consultorio de pediatría',
+ pt:{n:'Hernán (papá de Santino, 4 años)',e:'Santino pesa 19 kg; pesaba 17 hace un mes',av:{sex:'m',skin:2,hair:'short',hc:'#1c1512',mood:'angustia',top:'#BF5B0A'}},
+ sit:'Hernán trae a Santino porque amanece con los ojos hinchados.',
+ tareas:['Interrogar al papá.','Examinar a Santino y pedir los estudios.','Decir el diagnóstico, la conducta y educar a la familia.'],
+ abre:'Hace una semana que se levanta con los ojos hinchados. Pensamos que era alergia, pero ahora tiene la panza y las piernas hinchadas.',
+ guion:'Santino, 4 años. Ojos hinchados a la mañana desde hace una semana; ahora también las piernas, la panza y el escroto. Aumentó 2 kg en un mes. Orina poco y con espuma, de color amarillo normal. Tuvo un resfrío hace 10 días. Sin fiebre ni dolor de panza. Sin dolor de garganta ni lesiones de piel en el último mes. Respira bien. Es la primera vez. Vacunas del calendario completas. Sin enfermedades de riñón en la familia.',
+ q:[['Edema','¿Desde cuándo está hinchado y dónde empezó?','Una semana. Primero los ojos a la mañana; ahora las piernas, la panza y los testículos.',0],
+    ['Orina','¿Cómo es la orina: color, cantidad, espuma?','Orina poco y hace mucha espuma. El color es normal, amarillo.',1],
+    ['Previos','¿Tuvo alguna infección antes? ¿Dolor de garganta o lesiones en la piel en el último mes?','Un resfrío hace 10 días. Garganta y piel, nada.',2],
+    ['Alarma','¿Tiene fiebre, dolor de panza o dificultad para respirar?','No, ninguna.',3],
+    ['Antecedentes','¿Le había pasado antes? ¿Tiene las vacunas? ¿Enfermedades de riñón en la familia?','Primera vez. Vacunas completas. En la familia no.',4]],
+ x:[['Peso y presión arterial','19 kg (2 kg más que hace un mes) · PA 95/60 (normal para la edad).',5],
+    ['Examen físico','Edema palpebral, de miembros inferiores con fóvea y escrotal. Ascitis leve. Bien perfundido, sin dificultad respiratoria.',6],
+    ['Tira reactiva de orina e índice proteína/creatinina','Proteínas ++++, sangre negativa. Índice proteína/creatinina 6 mg/mg.',7],
+    ['Albúmina, colesterol, creatinina, ionograma, hemograma y C3','Albúmina 1,8 g/dl · colesterol 380 · creatinina 0,4 · C3 normal.',8],
+    ['PPD y Rx de tórax','Se solicitan antes de iniciar los corticoides.',9]],
+ d:[['Diagnóstico: síndrome nefrótico, probablemente por cambios mínimos.','Correcto: edad típica, PA normal, sin hematuria, C3 normal.',10],
+    ['Al ser el primer episodio, lo derivo para internación y comienzo del tratamiento.','Correcto.',11],
+    ['Prednisona 60 mg/m² por día (2 mg/kg) por 4 a 6 semanas y luego 40 mg/m² en días alternos.','Correcto.',12],
+    ['Dieta sin sal agregada, con proteínas normales, sin restringir líquidos; actividad según tolerancia.','Correcto.',13],
+    ['Le enseño a la familia a controlar la orina con tiras y el peso, y cuándo consultar: fiebre, dolor de panza, más hinchazón u orina oscura.','Correcto: las infecciones y la trombosis son las complicaciones.',14],
+    ['Indico furosemida por boca para deshincharlo en la casa.','Error: los diuréticos sin control pueden causar hipovolemia y trombosis.',-1,12],
+    ['Le digo que es alergia e indico un antihistamínico.','Error: no se pidió ni la tira de orina.',-1,20]],
+ cot:[['Interroga la distribución y la evolución del edema',8,'c'],['Pregunta las características de la orina',10,'c'],['Pregunta infecciones previas',5,'c'],['Pregunta fiebre, dolor abdominal y disnea',8,'c'],['Pregunta antecedentes y vacunas',4,'c'],['Pesa y mide la presión arterial',10,'c'],['Examina el edema, la perfusión y la respiración',6,'c'],['Pide la tira reactiva y el índice proteína/creatinina',10,'k'],['Pide albúmina, lípidos, función renal y C3',6,'k'],['Descarta tuberculosis antes de los corticoides',3,'k'],
+      ['Diagnostica el síndrome nefrótico y lo diferencia del nefrítico',8,'k'],['Deriva para internación',5,'s'],['Indica la prednisona con dosis y duración',7,'k'],['Indica las medidas generales',4,'k'],['Educa a la familia',6,'h']],
+ claves:['Nefrótico: proteinuria masiva, hipoalbuminemia, edemas e hiperlipidemia.','Nefrítico: hematuria, hipertensión, oliguria y C3 bajo.','Cambios mínimos: 1 a 10 años, PA normal, sin hematuria; responde a los corticoides.','Prednisona 60 mg/m² por día 4-6 semanas y luego 40 mg/m² en días alternos.','Fiebre o dolor abdominal en un nefrótico: internar (peritonitis).'],
+ ref:'Cuadernillo · Pediatría · Síndrome nefrótico y síndrome nefrítico.'},
+
+{id:'mioma',area:'gin',motivo:'Menstruaciones muy abundantes y cansancio',lugar:'Consultorio de ginecología',
+ pt:{n:'Sandra',e:'41 años',av:{sex:'f',skin:2,hair:'long',hc:'#2a1a12',mood:'triste',top:'#00767F'}},
+ sit:'Sandra consulta por menstruaciones abundantes. Se la ve pálida.',
+ tareas:['Hacer la anamnesis.','Examinar y pedir los estudios.','Indicar el tratamiento de todos sus problemas.'],
+ abre:'Hace un año que me viene muchísimo. Y estoy agotada, no puedo ni subir la escalera.',
+ guion:'Menstruaciones de 9 días, con coágulos, cambia la toalla cada hora y media los primeros días; mancha la cama. Ciclos cada 28 días. Sin sangrado entre menstruaciones. Cansancio, se agita al subir escaleras, palpitaciones; tiene ganas de masticar hielo. Sensación de peso en el bajo vientre y orina seguido. Tiene dos hijos y no quiere más; su pareja usa preservativo. FUM hace 10 días. PAP hace 4 años. Come poca carne. No toma medicación ni aspirina. Le preocupa que sea cáncer.',
+ q:[['Sangrado','¿Cuántos días le viene? ¿Cada cuánto se cambia? ¿Tiene coágulos?','Nueve días. Los primeros me cambio cada hora y media, con coágulos. Mancho la cama.',0],
+    ['Sangrado','¿Sangra entre las menstruaciones o después de las relaciones?','No.',1],
+    ['Anemia','¿Está cansada, se agita, tiene palpitaciones?','Agotada. Me agito en la escalera y me late fuerte. Tengo ganas de masticar hielo.',2],
+    ['Compresión','¿Siente peso en el bajo vientre? ¿Orina seguido?','Sí, las dos cosas.',3],
+    ['Reproductivo','¿Tiene hijos? ¿Quiere tener más? ¿Qué método usa? ¿Fecha de última menstruación?','Dos, no quiero más. Preservativo. Me vino hace 10 días.',4],
+    ['Antecedentes','¿Cuándo fue su último PAP? ¿Toma aspirina o anticoagulantes?','El PAP hace cuatro años. No tomo nada.',5],
+    ['Temores','¿Qué es lo que más le preocupa?','Que sea un cáncer.',6]],
+ x:[['Signos vitales y mucosas','PA 110/70 · FC 98. Palidez de piel y mucosas.',7],
+    ['Especuloscopía y tacto bimanual','Cuello sano. Útero aumentado de tamaño como un embarazo de 12 semanas, irregular, firme y móvil. Anexos libres.',8],
+    ['hCG','Negativa.',9],
+    ['Hemograma y ferritina','Hemoglobina 8,4 g/dl · VCM 68 · ferritina 6 ng/ml.',10],
+    ['Ecografía transvaginal','Útero con tres miomas: uno submucoso de 3 cm y dos intramurales de 4 y 5 cm. Endometrio de 8 mm. Ovarios normales.',11],
+    ['PAP','Se toma hoy: estaba vencido.',12],
+    ['CA-125 y TC de abdomen','No están indicados.',-9]],
+ d:[['Diagnósticos: sangrado menstrual abundante por miomatosis uterina y anemia ferropénica moderada.','Correcto: los dos problemas.',13],
+    ['Le explico que los miomas son tumores benignos y respondo a su temor.','Correcto.',14],
+    ['Hierro elemental 100 a 200 mg por día por vía oral, hasta 3 a 6 meses después de normalizar la hemoglobina; control en 4 semanas.','Correcto. Hierro intravenoso si no tolera o si se opera pronto.',15],
+    ['Para el sangrado: ácido tranexámico 1 g cada 8 horas durante la menstruación, o AINE.','Correcto.',16],
+    ['Como no quiere más hijos y tiene un mioma submucoso sintomático, la derivo para evaluar el tratamiento quirúrgico y acordamos el plan.','Correcto: miomectomía histeroscópica o histerectomía, según su decisión.',17],
+    ['Indico sólo hierro y control en 6 meses.','Error: si no se frena el sangrado, la anemia no se corrige.',-1,12],
+    ['Le indico una histerectomía sin preguntarle si quiere tener más hijos.','Error: el deseo reproductivo define el tratamiento.',-1,10],
+    ['Indico transfusión de sangre.','Error: está estable; se trata con hierro.',-1,8]],
+ cot:[['Cuantifica el sangrado',8,'c'],['Pregunta por sangrado intermenstrual',3,'c'],['Pregunta síntomas de anemia',6,'c'],['Pregunta síntomas por compresión',3,'c'],['Pregunta deseo reproductivo, anticoncepción y FUM',8,'c'],['Pregunta PAP y fármacos',4,'c'],['Explora los temores',4,'h'],['Controla signos vitales y palidez',4,'c'],['Realiza el examen ginecológico',6,'c'],['Pide hCG',5,'k'],['Pide hemograma y ferritina',6,'k'],['Pide ecografía transvaginal',6,'k'],['Actualiza el PAP',3,'s'],
+      ['Formula los dos diagnósticos',6,'k'],['Explica la benignidad',5,'h'],['Indica el hierro con dosis y duración',8,'k'],['Indica un tratamiento para el sangrado',8,'k'],['Acuerda el tratamiento definitivo según su deseo',7,'s']],
+ claves:['Tratar los dos problemas: la anemia y el sangrado.','Hierro elemental 100-200 mg por día, hasta 3-6 meses después de normalizar la hemoglobina.','Sangrado: ácido tranexámico, AINE, anticonceptivos o DIU con levonorgestrel si la cavidad no está deformada.','El deseo de embarazo define entre miomectomía e histerectomía.','Siempre hCG; PAP al día; biopsia de endometrio en mayores de 45 años o con factores de riesgo.'],
+ ref:'Cuadernillo · Ginecología · Miomatosis uterina con anemia ferropénica.'},
+
+{id:'endom',area:'gin',motivo:'Dolor menstrual que empeora cada año',lugar:'Consultorio de ginecología',
+ pt:{n:'Luciana',e:'28 años',av:{sex:'f',skin:1,hair:'long',hc:'#5a3a22',mood:'triste',top:'#00767F'}},
+ sit:'Luciana consulta por dolor menstrual. Ya vio a dos médicos que le dijeron que «es normal».',
+ tareas:['Hacer la anamnesis.','Examinar y pedir lo necesario.','Explicar el diagnóstico e indicar el tratamiento.'],
+ abre:'Vengo porque los dolores de la menstruación son cada vez peores. Me dijeron que es normal, pero yo no puedo más.',
+ guion:'Dolor menstrual desde los 20 años, cada vez más fuerte; empieza dos días antes y dura toda la menstruación. Falta al trabajo uno o dos días por mes. El ibuprofeno ya no le alcanza. Dolor profundo en las relaciones. Dolor al ir de cuerpo durante la menstruación. Dolor en el bajo vientre también fuera de la menstruación. Ciclos regulares, sangrado normal. Busca un embarazo hace un año y medio, sin lograrlo. No usa anticonceptivos. Su mamá tuvo «quistes de chocolate». Sin flujo ni fiebre. Está angustiada y se siente incomprendida.',
+ q:[['Dolor','¿Desde cuándo tiene dolor, cómo evolucionó y cuánto dura?','Desde los 20, cada año peor. Empieza dos días antes y dura toda la menstruación.',0],
+    ['Impacto','¿Le impide trabajar o hacer su vida? ¿Qué toma?','Falto uno o dos días por mes. El ibuprofeno ya no me hace nada.',1],
+    ['Otras D','¿Tiene dolor en las relaciones, al ir de cuerpo o al orinar con la menstruación? ¿Dolor fuera del período?','En las relaciones, profundo. Al ir de cuerpo cuando menstrúo. Y a veces me duele sin estar con el período.',2],
+    ['Fertilidad','¿Está buscando un embarazo? ¿Usa algún método?','Hace un año y medio que buscamos y nada. No uso nada.',3],
+    ['Antecedentes','¿Alguien en su familia con endometriosis? ¿Flujo, fiebre?','Mi mamá tuvo quistes de chocolate. Flujo y fiebre no.',4],
+    ['Vivencia','¿Cómo le afecta todo esto?','Estoy angustiada. Siento que nadie me cree.',5]],
+ x:[['Examen abdominal y ginecológico','Abdomen blando. Tacto: nódulos dolorosos en el fondo de saco posterior, útero en retroversión poco móvil, anexo izquierdo aumentado y sensible.',6],
+    ['hCG','Negativa.',7],
+    ['Ecografía transvaginal','Quiste de ovario izquierdo de 4 cm con contenido en «vidrio esmerilado» (endometrioma).',8],
+    ['CA-125','No sirve para el diagnóstico.',-9],
+    ['Laparoscopia diagnóstica','No es imprescindible para iniciar el tratamiento.',-9]],
+ d:[['Le digo: «No es normal que la menstruación le impida hacer su vida. Le creo».','Correcto: validar el dolor.',9],
+    ['Diagnóstico clínico de endometriosis: dismenorrea progresiva, dispareunia, disquecia, infertilidad y endometrioma.','Correcto: se puede tratar con el diagnóstico clínico.',10],
+    ['Le explico que es una enfermedad crónica y benigna, que tiene tratamiento.','Correcto.',11],
+    ['Para el dolor: AINE reglados desde antes de la menstruación.','Correcto.',12],
+    ['Como busca un embarazo, no indico tratamiento hormonal y la derivo para evaluar fertilidad (cirugía o fertilización asistida).','Correcto: los tratamientos hormonales son anticonceptivos y no mejoran la fertilidad.',13],
+    ['La cito a control y le ofrezco apoyo psicológico.','Correcto.',14],
+    ['Indico anticonceptivos continuos o dienogest.','Error en este caso: es la primera línea para el dolor, pero ella busca un embarazo.',-1,10],
+    ['Le digo que el dolor menstrual es normal y que tome más ibuprofeno.','Error: es lo que retrasa el diagnóstico durante años.',-1,15]],
+ cot:[['Caracteriza la dismenorrea y su progresión',8,'c'],['Evalúa el impacto y la respuesta a los analgésicos',6,'c'],['Pregunta dispareunia, disquecia, disuria y dolor crónico',10,'c'],['Pregunta por el deseo de embarazo',10,'c'],['Pregunta antecedentes familiares y descarta infección',4,'c'],['Explora la vivencia de la paciente',6,'h'],['Realiza el examen ginecológico',8,'c'],['Pide hCG',4,'k'],['Pide ecografía transvaginal',8,'k'],
+      ['Valida el dolor',8,'h'],['Formula el diagnóstico clínico',8,'k'],['Explica la enfermedad',5,'h'],['Indica analgesia',5,'k'],['Adecua el tratamiento al deseo de embarazo y deriva',6,'s'],['Asegura el seguimiento',4,'s']],
+ claves:['Dismenorrea progresiva, dispareunia profunda, dolor pelviano crónico, disquecia e infertilidad.','Se admite el diagnóstico clínico para tratar; la ecografía transvaginal busca endometriomas.','El CA-125 no sirve; la laparoscopia ya no es imprescindible.','Primera línea: AINE + anticonceptivos continuos o progestágenos (dienogest 2 mg).','Con deseo de embarazo: los hormonales no mejoran la fertilidad; derivar.'],
+ ref:'Cuadernillo · Ginecología · Endometriosis y dismenorrea.'},
+
+{id:'olvidos',area:'sm',motivo:'Se olvida las cosas y teme tener Alzheimer',lugar:'Consultorio de un centro de salud',
+ pt:{n:'Raúl',e:'72 años, vino con su esposa',av:{sex:'m',skin:1,hair:'thin',hc:'#b5afa6',mood:'neutral',top:'#303F9F',old:1,glasses:1}},
+ sit:'Raúl es contador jubilado. Pidió el turno él mismo. Su esposa, Marta, está en la sala de espera.',
+ tareas:['Entrevistar a Raúl y a su esposa.','Evaluar la cognición, la funcionalidad y el ánimo.','Ubicar el cuadro, explicarlo e indicar la conducta.'],
+ abre:'Doctor, estoy preocupado. Me olvido los nombres, no sé dónde dejo los anteojos… Mi hermano tuvo Alzheimer.',
+ guion:'Desde hace un año olvida nombres de conocidos y dónde deja objetos; después se acuerda. No repite preguntas ni se pierde. Maneja solo las cuentas de la casa, los remedios, el auto y el celular. Lee y hace crucigramas. Duerme mal desde que se jubiló y toma clonazepam 2 mg todas las noches hace 3 años. Ánimo: algo aburrido, sin tristeza marcada. Dos vasos de vino con la cena. Hipertenso. Usa audífono pero no se lo pone. SI PREGUNTAN A LA ESPOSA: dice que él está igual que siempre, que se olvida alguna cosa como todos, que maneja todo solo y que no cambió el carácter; lo nota muy preocupado desde que murió el hermano.',
+ q:[['Olvidos','¿Qué cosas se olvida? ¿Las recuerda después?','Nombres, dónde dejo las cosas. Al rato me acuerdo.',0],
+    ['Olvidos','¿Desde cuándo? ¿Va empeorando? ¿Se perdió alguna vez o repite preguntas?','Un año, más o menos igual. Perderme, nunca.',1],
+    ['Informante','(A la esposa) ¿Usted qué nota? ¿Cambió su forma de ser?','Está igual que siempre. Se olvida alguna cosa, como todos. Lo veo muy preocupado desde que murió el hermano.',2],
+    ['Funcionalidad','¿Quién maneja el dinero, los remedios, las compras? ¿Maneja el auto?','Yo, todo. Llevo las cuentas de la casa y manejo sin problemas.',3],
+    ['Ánimo','¿Cómo está de ánimo? ¿Cómo duerme?','Un poco aburrido desde que me jubilé. Duermo mal.',4],
+    ['Fármacos','¿Qué medicación toma? ¿Toma alcohol?','Clonazepam 2 mg a la noche hace tres años, y el de la presión. Dos vasos de vino con la cena.',5],
+    ['Sentidos','¿Cómo oye y cómo ve?','Tengo audífono, pero no me lo pongo.',6]],
+ x:[['MoCA (o Mini-Cog, MMSE)','MoCA 27 de 30 (normal). Recuerda las 3 palabras; test del reloj correcto.',7],
+    ['Escala de depresión geriátrica','3 de 15: sin depresión.',8],
+    ['Examen neurológico y marcha','Normal.',-1],
+    ['Hemograma, glucemia, TSH y vitamina B12','Normales.',9],
+    ['Resonancia de cerebro','No está indicada con pruebas normales y sin signos de alarma.',-9]],
+ d:[['Le explico que son olvidos benignos, propios de la edad: las pruebas son normales y maneja su vida sin ayuda.','Correcto: sin déficit objetivo y con funcionalidad intacta.',10],
+    ['Le explico la diferencia con una demencia: en ella se olvidan hechos completos, lo nota la familia y se pierde autonomía.','Correcto: tranquilizar con fundamento.',11],
+    ['Propongo retirar el clonazepam de a poco y reducir el alcohol, porque afectan la memoria.','Correcto.',12],
+    ['Recomiendo usar el audífono, actividad física, vida social y estimulación, e higiene del sueño.','Correcto.',13],
+    ['Lo cito a control en un año, o antes si él o su esposa notan un cambio.','Correcto.',14],
+    ['Le digo que tiene un principio de Alzheimer e indico donepezilo.','Error: no tiene déficit objetivo ni pérdida de la autonomía.',-1,20],
+    ['Le digo que no tiene nada y que no piense más en eso.','Error: minimiza y no da un plan ni seguimiento.',-1,8],
+    ['Suspendo el clonazepam de golpe.','Error: después de 3 años se retira en forma gradual.',-1,8]],
+ cot:[['Caracteriza los olvidos',8,'c'],['Pregunta evolución, desorientación y repeticiones',6,'c'],['Entrevista a un informante',10,'c'],['Evalúa la funcionalidad con ejemplos concretos',12,'c'],['Explora el ánimo y el sueño',6,'c'],['Revisa fármacos y alcohol',8,'c'],['Pregunta por audición y visión',4,'c'],['Aplica una prueba cognitiva breve',10,'c'],['Pesquisa depresión',5,'c'],['Pide estudios de causas tratables',4,'k'],
+      ['Ubica el cuadro y lo explica',8,'k'],['Diferencia de la demencia y tranquiliza',6,'h'],['Propone retirar la benzodiacepina y reducir el alcohol',6,'k'],['Da medidas concretas',4,'h'],['Asegura el seguimiento',3,'s']],
+ claves:['Dos preguntas separan los tres escalones: ¿hay déficit objetivo en las pruebas? ¿está afectada la funcionalidad?','Olvidos benignos: consulta el paciente, recuerda después, pruebas normales, autonomía intacta.','Deterioro cognitivo leve: pruebas alteradas con autonomía conservada; control cada 6-12 meses.','Demencia: lo trae la familia; pierde las actividades instrumentales.','Siempre: informante, depresión, fármacos (benzodiacepinas, anticolinérgicos), TSH y B12.'],
+ ref:'Cuadernillo · Salud mental · Queja de memoria: olvidos benignos, deterioro cognitivo leve y demencia.'},
+
+{id:'sincope',area:'urg',motivo:'Se desmayó en la fila del banco',lugar:'Guardia',
+ pt:{n:'Camila',e:'19 años',av:{sex:'f',skin:1,hair:'pony',hc:'#7a5230',mood:'neutral',top:'#B3261E'}},
+ sit:'A Camila la trae una ambulancia. Ya está recuperada. Vino con una amiga que vio el episodio.',
+ tareas:['Interrogar a Camila y a la testigo.','Hacer la evaluación inicial obligatoria.','Clasificar el síncope y decidir la conducta.'],
+ abre:'Estaba haciendo la fila, parada hacía como una hora, y de repente me desperté en el piso.',
+ guion:'Estuvo de pie una hora, con calor, sin desayunar. Antes sintió náuseas, sudor frío, visión borrosa y zumbido. Se recuperó en menos de un minuto, orientada. SEGÚN LA AMIGA: se puso pálida, cayó despacio, estuvo inconsciente unos 20 segundos, sin sacudidas, no se mordió la lengua ni se orinó. Le pasó una vez a los 15, al sacarse sangre. Nunca durante el ejercicio ni acostada. Sin palpitaciones ni dolor de pecho. Sin enfermedades del corazón; nadie en la familia murió joven de repente. No toma medicación. FUM hace 3 semanas, usa anticonceptivos. No consume drogas.',
+ q:[['Episodio','¿Qué estaba haciendo y qué sintió antes?','Hacía una hora de pie, con calor, sin desayunar. Náuseas, sudor frío, se me nubló la vista.',0],
+    ['Testigo','(A la amiga) ¿Qué viste? ¿Cuánto duró? ¿Tuvo sacudidas, se mordió la lengua o se orinó?','Se puso pálida y cayó despacio. Unos 20 segundos. Sin sacudidas ni nada de eso.',1],
+    ['Recuperación','¿Cómo se despertó? ¿Estaba confundida?','Enseguida, sabía dónde estaba.',2],
+    ['Alarma','¿Tuvo palpitaciones o dolor de pecho? ¿Le pasó alguna vez haciendo ejercicio o acostada?','No. Me pasó una vez a los 15, al sacarme sangre.',3],
+    ['Antecedentes','¿Enfermedades del corazón? ¿Alguien en su familia murió joven de repente? ¿Medicación?','No, nadie. Tomo sólo anticonceptivos.',4],
+    ['Otros','¿Puede estar embarazada? ¿Consumió alguna sustancia?','No, me vino hace tres semanas. No consumo nada.',5]],
+ x:[['Signos vitales y glucemia capilar','PA 105/65 · FC 72 · saturación 99 % · glucemia 88 mg/dl.',6],
+    ['Presión arterial acostada y de pie a los 3 minutos','Acostada 105/65; de pie 100/65. Sin caída significativa.',7],
+    ['Examen cardiovascular y neurológico','Sin soplos. Examen neurológico normal. Sin lesiones por la caída.',8],
+    ['ECG de 12 derivaciones','Ritmo sinusal, PR y QT normales, sin preexcitación ni signos de hipertrofia.',9],
+    ['TC de cerebro y EEG','No están indicados.',-9],
+    ['Ecocardiograma y Holter','No están indicados: no hay datos de síncope cardíaco.',-9]],
+ d:[['Diagnóstico: síncope reflejo (vasovagal), de bajo riesgo.','Correcto: desencadenante, pródromo, recuperación rápida, examen y ECG normales.',10],
+    ['Le explico qué le pasó y que es benigno.','Correcto.',11],
+    ['Alta con educación: hidratarse, no saltear comidas, evitar estar de pie mucho tiempo y el calor.','Correcto.',12],
+    ['Le enseño a reconocer el pródromo y qué hacer: acostarse con las piernas elevadas o maniobras de contrapresión.','Correcto.',13],
+    ['Pautas para volver: si ocurre durante el ejercicio, acostada, sin aviso previo o con palpitaciones o dolor de pecho.','Correcto: son datos de síncope cardíaco.',14],
+    ['La interno para monitoreo cardíaco.','Error: no tiene criterios de alto riesgo.',-1,10],
+    ['Indico un anticonvulsivante por las dudas.','Error: no fue una convulsión.',-1,12]],
+ cot:[['Interroga la situación y el pródromo',10,'c'],['Interroga a la testigo',10,'c'],['Pregunta la recuperación',5,'c'],['Busca datos de alarma cardíaca',10,'c'],['Pregunta antecedentes personales y familiares',6,'c'],['Descarta embarazo y sustancias',4,'c'],['Controla signos vitales y glucemia',5,'c'],['Mide la presión acostada y de pie',8,'c'],['Examina el corazón y busca lesiones',5,'c'],['Pide e interpreta el ECG',12,'k'],
+      ['Clasifica el síncope',8,'k'],['Explica la benignidad',5,'h'],['Da medidas de prevención',5,'h'],['Enseña las maniobras ante el pródromo',3,'h'],['Da pautas de alarma',4,'s']],
+ claves:['Evaluación inicial obligatoria: anamnesis con testigo, PA acostado y de pie, y ECG.','Reflejo: desencadenante y pródromo. Ortostático: al incorporarse. Cardíaco: en el esfuerzo o acostado, sin pródromo.','ECG de riesgo: bloqueo AV avanzado, QT largo, preexcitación, Brugada, isquemia.','Convulsión: aura, mordedura lateral de lengua, período posictal prolongado.','Reflejo sin alarma: alta con educación. Sospecha cardíaca: internación.'],
+ ref:'Cuadernillo · Clínica médica · Accidente cerebrovascular y síncope.'}
 ];
 const ORDER=['cli','cir','uro','tra','ped','neo','obs','gin','sm','mf','urg','tr'];
 ST.sort((a,b)=>ORDER.indexOf(a.area)-ORDER.indexOf(b.area));
@@ -1215,56 +1720,110 @@ const SKIN=['#F2CDB1','#E2B28C','#C48B62','#96643F'];
 function mixHex(a,b,t){const p=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));const x=p(a),y=p(b);return '#'+x.map((v,i)=>Math.round(v+(y[i]-v)*t).toString(16).padStart(2,'0')).join('')}
 let avN=0;
 function avatar(a,big){
-  const id='a'+(++avN), s=SKIN[a.skin||0], sh=mixHex(s,'#6b2f1a',.28), hi=mixHex(s,'#ffffff',.22), lip=mixHex(s,'#b0463f',a.sex==='f'?.62:.4), lip2=mixHex(lip,'#ffffff',.18);
-  const h=a.hc||'#333', hl=mixHex(h,'#ffffff',.22), brow=mixHex(h,'#1a1410',a.old?.25:.45), top=a.top||'#557', topd=mixHex(top,'#000000',.22);
-  const m=a.mood||'neutral', f=a.sex==='f', iris=a.iris||(a.skin>=2?'#4a2f1c':'#5b4630');
-  const jaw=f?'M58 104 C58 60 142 60 142 104 C142 132 131 153 116 162 Q100 171 84 162 C69 153 58 132 58 104Z':'M57 104 C57 60 143 60 143 104 C143 134 135 155 119 164 Q100 172 81 164 C65 155 57 134 57 104Z';
-  const B={neutral:['M70 100 Q80 95 91 99','M109 99 Q120 95 130 100'],angustia:['M70 102 Q80 94 91 94','M109 94 Q120 94 130 102'],triste:['M70 103 Q80 96 91 95','M109 95 Q120 96 130 103'],dolor:['M70 96 Q81 98 91 103','M109 103 Q119 98 130 96'],agitado:['M70 96 Q80 90 91 95','M109 95 Q120 90 130 96']}[m];
-  const bw=f?3:4.2;
-  const eye=(cx,cls)=>m==='dolor'
-    ?`<g class="eye ${cls}"><path d="M${cx-10} 114 Q${cx} 108 ${cx+10} 114" stroke="#2a1e19" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M${cx-9} 116 Q${cx} 113 ${cx+9} 116" stroke="${sh}" stroke-width="1.4" fill="none"/></g>`
-    :`<g class="eye ${cls}"><path d="M${cx-10.5} 113 Q${cx} ${m==='agitado'?100:103} ${cx+10.5} 113 Q${cx} ${m==='agitado'?122:121} ${cx-10.5} 113Z" fill="#fdfbf8"/><circle cx="${cx}" cy="112.6" r="4.7" fill="${iris}"/><circle cx="${cx}" cy="112.6" r="2.1" fill="#120c0a"/><circle cx="${cx-1.6}" cy="110.8" r="1.2" fill="#fff"/><path d="M${cx-11} 113 Q${cx} ${m==='agitado'?99.5:102.5} ${cx+11} 112.6" stroke="#2a1e19" stroke-width="${f?2.4:1.9}" fill="none" stroke-linecap="round"/>${f?`<path d="M${cx+(cls==='r'?10:-10)} 111.6 l${cls==='r'?3.2:-3.2} -2.6" stroke="#2a1e19" stroke-width="1.6" stroke-linecap="round"/>`:''}<path d="M${cx-8} 118.6 Q${cx} 121.6 ${cx+8} 118.6" stroke="${sh}" stroke-width="1" fill="none" opacity=".7"/></g>`;
-  const mouth={
-    neutral:`<path d="M88 146.5 Q94 143 100 145 Q106 143 112 146.5 Q100 149 88 146.5Z" fill="${lip}"/><path d="M89.5 147.2 Q100 155 110.5 147.2 Q100 149.6 89.5 147.2Z" fill="${lip2}"/><path d="M88 146.8 Q100 149 112 146.8" stroke="${mixHex(lip,'#3a1210',.5)}" stroke-width="1" fill="none"/>`,
-    triste:`<path d="M88 149.5 Q94 144 100 146 Q106 144 112 149.5 Q100 147.6 88 149.5Z" fill="${lip}"/><path d="M90.5 149 Q100 154.5 109.5 149 Q100 148.4 90.5 149Z" fill="${lip2}"/><path d="M88 149.6 Q100 146.6 112 149.6" stroke="${mixHex(lip,'#3a1210',.5)}" stroke-width="1" fill="none"/>`,
-    dolor:`<path d="M86 144 Q100 139 114 144 Q113 153 100 154 Q87 153 86 144Z" fill="#5a1d1d"/><path d="M89 144.4 Q100 141 111 144.4 L110.4 148 Q100 145.6 89.6 148Z" fill="#f7f3ee"/><path d="M86 144 Q100 139 114 144 Q113 153 100 154 Q87 153 86 144Z" fill="none" stroke="${lip}" stroke-width="2.2"/>`,
-    agitado:`<ellipse cx="100" cy="148" rx="8.5" ry="6.5" fill="#5a1d1d"/><path d="M93.5 145.6 Q100 143.4 106.5 145.6 L106 147.4 Q100 146 94 147.4Z" fill="#f7f3ee"/><ellipse cx="100" cy="148" rx="8.5" ry="6.5" fill="none" stroke="${lip}" stroke-width="2.4"/>`};
-  mouth.angustia=mouth.triste;
-  const backHair={long:`<path d="M49 100 C42 150 46 192 58 208 L142 208 C154 192 158 150 151 100Z" fill="${h}"/>`,bob:`<path d="M49 100 C45 132 49 152 58 160 L142 160 C151 152 155 132 151 100Z" fill="${h}"/>`,pony:`<path d="M138 84 C170 96 168 152 151 176 C152 142 146 116 134 100Z" fill="${h}"/>`,bun:`<circle cx="100" cy="43" r="17" fill="${h}"/><path d="M90 36 Q100 30 110 36" stroke="${hl}" stroke-width="2" fill="none" opacity=".5"/>`}[a.hair]||'';
-  const fTop=`<path d="M53 114 C46 56 78 48 100 48 C122 48 154 56 147 114 C143 94 133 81 113 77 Q96 74 84 81 C70 87 59 97 53 114Z" fill="${h}"/><path d="M70 66 Q92 54 120 62" stroke="${hl}" stroke-width="2.4" fill="none" opacity=".45" stroke-linecap="round"/>`;
-  const upTop=`<path d="M55 110 C50 58 78 52 100 52 C122 52 150 58 145 110 C141 89 127 77 100 77 C73 77 59 89 55 110Z" fill="${h}"/><path d="M72 66 Q100 56 128 66" stroke="${hl}" stroke-width="2.2" fill="none" opacity=".4" stroke-linecap="round"/>`;
-  const topHair={long:fTop,bob:fTop,bun:upTop,pony:upTop,
-    short:`<path d="M55 108 C50 58 78 50 100 50 C122 50 150 58 145 108 C142 91 135 81 123 77 Q100 70 77 77 C65 81 58 91 55 108Z" fill="${h}"/><path d="M74 64 Q100 54 126 64" stroke="${hl}" stroke-width="2.2" fill="none" opacity=".4" stroke-linecap="round"/>`,
-    messy:`<path d="M55 108 C48 70 60 55 73 57 C77 46 92 46 98 53 C106 44 123 47 127 57 C142 55 152 76 145 108 C141 91 133 81 121 79 L112 86 L104 77 L94 86 L86 77 L77 85 C66 85 59 93 55 108Z" fill="${h}"/>`,
-    thin:`<path d="M55 110 C52 88 57 74 67 67 C62 82 60 96 58 112Z M145 110 C148 88 143 74 133 67 C138 82 140 96 142 112Z" fill="${h}"/><path d="M72 66 Q100 58 128 66 Q100 63 72 66Z" fill="${h}" opacity=".28"/>`}[a.hair||'short'];
-  const cls=(m==='dolor'?'dolor ':'')+(m==='agitado'?'agitado':'');
-  return `<svg class="av ${cls}" viewBox="0 0 200 230" role="img" aria-label="Paciente simulado" ${big?'':'width="78" height="90"'}>
-  <defs><radialGradient id="${id}f" cx=".45" cy=".4" r=".75"><stop offset="0" stop-color="${hi}"/><stop offset=".55" stop-color="${s}"/><stop offset="1" stop-color="${mixHex(s,sh,.55)}"/></radialGradient><linearGradient id="${id}t" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${top}"/><stop offset="1" stop-color="${topd}"/></linearGradient></defs>
-  ${backHair&&a.hair!=='bun'?backHair:''}
-  <g class="body"><path d="M20 230 C20 194 48 178 80 174 L120 174 C152 178 180 194 180 230Z" fill="url(#${id}t)"/>
-   <path d="M85 150 L85 178 Q100 192 115 178 L115 150Z" fill="${mixHex(s,sh,.45)}"/><path d="M85 160 Q100 172 115 160 L115 150 L85 150Z" fill="${sh}" opacity=".55"/>
-   ${f?`<path d="M80 174 Q100 204 120 174 L115 176 Q100 190 85 176Z" fill="${topd}"/>`:`<path d="M82 174 L100 196 L118 174 L114 176 Q100 188 86 176Z" fill="${topd}"/><path d="M100 196 L100 230" stroke="${topd}" stroke-width="1.4" opacity=".6"/>`}</g>
-  <g class="head" ${a.young?'transform="translate(3 6) scale(.97)"':''}>
-   ${a.hair==='bun'?backHair:''}
-   <ellipse cx="56.5" cy="114" rx="7" ry="11" fill="${s}"/><path d="M55 108 q-3 6 1 12" stroke="${sh}" stroke-width="1.4" fill="none"/>
-   <ellipse cx="143.5" cy="114" rx="7" ry="11" fill="${s}"/><path d="M145 108 q3 6 -1 12" stroke="${sh}" stroke-width="1.4" fill="none"/>
-   <path d="${jaw}" fill="url(#${id}f)"/>
-   ${a.beard?`<path d="M59 118 C60 148 74 166 100 169 C126 166 140 148 141 118 C136 138 124 148 112 142 Q100 138 88 142 C76 148 64 138 59 118Z" fill="${h}" opacity=".88"/><path d="M86 141 Q100 135 114 141 Q100 139.5 86 141Z" fill="${h}"/>`:(!f&&!a.young?`<path d="M62 126 C64 150 76 164 100 167 C124 164 136 150 138 126 C134 146 120 154 100 154 C80 154 66 146 62 126Z" fill="#3a3330" opacity=".07"/>`:'')}
-   <ellipse cx="72" cy="131" rx="10" ry="6" fill="#e2675c" opacity="${f?.2:.11}"/><ellipse cx="128" cy="131" rx="10" ry="6" fill="#e2675c" opacity="${f?.2:.11}"/>
-   ${topHair}
-   ${a.old?`<path d="M80 86 Q100 82 120 86 M84 92 Q100 89 116 92" stroke="${sh}" stroke-width="1.1" fill="none" opacity=".6"/><path d="M66 118 l-5 -2 M66 121 l-5 2 M134 118 l5 -2 M134 121 l5 2" stroke="${sh}" stroke-width="1" opacity=".7"/><path d="M84 132 Q80 142 85 152 M116 132 Q120 142 115 152" stroke="${sh}" stroke-width="1.2" fill="none" opacity=".65"/>`:''}
-   <path d="${B[0]}" stroke="${brow}" stroke-width="${bw}" fill="none" stroke-linecap="round"/><path d="${B[1]}" stroke="${brow}" stroke-width="${bw}" fill="none" stroke-linecap="round"/>
-   ${eye(81,'')}${eye(119,'r')}
-   ${a.glasses?'<g fill="none" stroke="#2f2f33" stroke-width="2.4"><rect x="66" y="101" width="30" height="23" rx="9" fill="#ffffff" fill-opacity=".12"/><rect x="104" y="101" width="30" height="23" rx="9" fill="#ffffff" fill-opacity=".12"/><path d="M96 110 q4 -3 8 0 M66 109 l-8 -2 M134 109 l8 -2"/></g>':''}
-   <path d="M98 112 Q94 126 91.5 131.5 Q95 136.6 100 135.4 Q105 136.6 108.5 131.5" stroke="${sh}" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M93 132 q2 2.4 4.4 1.6 M107 132 q-2 2.4 -4.4 1.6" stroke="${mixHex(sh,'#2a120c',.4)}" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-   <g class="mouth">${mouth[m]}</g>
-   <path d="M95 158 Q100 160 105 158" stroke="${sh}" stroke-width="1" fill="none" opacity=".5"/>
-   ${(m==='angustia'||m==='triste')?'<path class="tear" d="M76 121 q-4 8 0 10.5 q4 -2.5 0 -10.5z" fill="#6bb7e8"/>':''}
-   ${a.sweat?'<path class="sweat" d="M134 84 q-4 8 0 10.5 q4 -2.5 0 -10.5z" fill="#8fd0f0"/><path class="sweat" d="M68 92 q-3 6 0 8 q3 -2 0 -8z" fill="#8fd0f0" style="animation-delay:1.9s"/>':''}
-   ${a.hives?'<g fill="#e2574c" opacity=".6"><circle cx="70" cy="140" r="4"/><circle cx="130" cy="136" r="3.4"/><circle cx="118" cy="90" r="3"/><circle cx="84" cy="94" r="2.6"/></g>':''}
+  const id='a'+(++avN), f=a.sex==='f', m=a.mood||'neutral', old=!!a.old;
+  const s=SKIN[a.skin||0], sh=mixHex(s,'#5a2a18',.36), sh2=mixHex(s,'#35160d',.55), hi=mixHex(s,'#fff6ea',.42), rim=mixHex(s,'#ffd9b8',.3);
+  const lipB=mixHex(s,'#b0403d',f?.6:.34), lipD=mixHex(lipB,'#4a1714',.4), lipL=mixHex(lipB,'#ffe1d8',.35);
+  const h=a.hc||'#333', hd=mixHex(h,'#000000',.42), hl=mixHex(h,'#ffffff',.32), browC=mixHex(h,'#1c1410',old?.15:.4);
+  const top=a.top||'#557', topd=mixHex(top,'#000000',.42), topl=mixHex(top,'#ffffff',.3);
+  const iris=a.iris||(a.skin>=2?'#4a2c18':'#6a5236'), irisL=mixHex(iris,'#ffd9a0',.35), irisD=mixHex(iris,'#000000',.55);
+  const face=f?'M63 100 C62 70 78 52 100 52 C122 52 138 70 137 100 C137 113 135 125 130.5 136 C125.5 148 113.5 158 100 158.5 C86.5 158 74.5 148 69.5 136 C65 125 63 113 63 100Z'
+              :'M62 100 C61 70 77 51 100 51 C123 51 139 70 138 100 C138 114 136.5 127 133 138 C128.5 151 114 160.5 100 160.5 C86 160.5 71.5 151 67 138 C63.5 127 62 114 62 100Z';
+  const X={neutral:{k:1,bi:0,bo:0,c:0,o:0},angustia:{k:.92,bi:-3.6,bo:1.6,c:1.5,o:0},triste:{k:.82,bi:-3,bo:1.8,c:1.7,o:0},dolor:{k:.64,bi:3,bo:-1.2,c:.6,o:1.1},agitado:{k:1.22,bi:-2.6,bo:-2.6,c:.3,o:1.9}}[m];
+  const B1=`filter="url(#${id}b)"`, B2=`filter="url(#${id}b2)"`;
+  const eye=(cx,side)=>{const y=108,k=X.k,t=y-6.6*k,b=y+4.6*k,cid=id+'e'+(side>0?'r':'l'),ep=`M${cx-9} ${y+.3} Q${cx} ${t} ${cx+9} ${y+.3} Q${cx} ${b} ${cx-9} ${y+.3}Z`;
+    return `<g transform="translate(${cx} ${y}) scale(1.34) translate(${-cx} ${-y})"><g class="eye ${side>0?'r':''}"><clipPath id="${cid}"><path d="${ep}"/></clipPath>
+     <ellipse cx="${cx}" cy="${y-2}" rx="13" ry="8.5" fill="${sh2}" opacity="${old?.34:.24}" ${B1}/>
+     <path d="${ep}" fill="url(#${id}w)"/>
+     <g clip-path="url(#${cid})"><circle cx="${cx}" cy="${y-.4}" r="4.6" fill="url(#${id}i)"/><circle cx="${cx}" cy="${y-.4}" r="4.6" fill="none" stroke="${irisD}" stroke-width="1.1" opacity=".8"/><circle cx="${cx}" cy="${y-.4}" r="2" fill="#070504"/><path d="M${cx-10} ${y-1} Q${cx} ${t-.6} ${cx+10} ${y-1} L${cx+10} ${t-3} L${cx-10} ${t-3}Z" fill="#1a0d08" opacity=".3" ${B2}/><circle cx="${cx-1.7}" cy="${y-2.3}" r="1.25" fill="#fff"/><circle cx="${cx+1.9}" cy="${y+1.2}" r=".6" fill="#fff" opacity=".7"/></g>
+     <path d="M${cx-9.4} ${y+.6} Q${cx} ${t-.7} ${cx+9.4} ${y+.3}" stroke="#23150f" stroke-width="${f?2.3:1.7}" fill="none" stroke-linecap="round"/>
+     ${f?`<path d="M${cx+side*9.2} ${y+.1} q${side*2.6} -1 ${side*3.8} -3.2" stroke="#23150f" stroke-width="1.4" fill="none" stroke-linecap="round"/>`:''}
+     <path d="M${cx-8} ${y-5*k-1.6} Q${cx} ${t-4.8} ${cx+8.4} ${y-4.6*k-1.6}" stroke="${sh2}" stroke-width="1.1" fill="none" opacity=".5"/>
+     <path d="M${cx-7.4} ${b+.4} Q${cx} ${b+2.2} ${cx+7.4} ${b}" stroke="${hi}" stroke-width="1.2" fill="none" opacity=".5" ${B2}/>
+     ${old?`<path d="M${cx-7} ${y+8} Q${cx} ${y+11.5} ${cx+7} ${y+8}" stroke="${sh2}" stroke-width="1.6" fill="none" opacity=".4" ${B2}/>`:''}</g></g>`};
+  const brow=side=>{const ix=100+side*9.5,ox=100+side*28.5,mx=100+side*19,iy=92.5+X.bi,oy=95.5+X.bo,my=(iy+oy)/2-3.4,th=f?2.8:4.4;
+    return `<path d="M${ix} ${iy+.4} Q${mx} ${my} ${ox} ${oy+.6} Q${mx} ${my+th*.75} ${ix} ${iy+th}Z" fill="${browC}" opacity="${old?.8:.95}"/>`};
+  const c=X.c,o=X.o,my=143;
+  const mouth=`<ellipse cx="100" cy="${my+2+o}" rx="13" ry="5" fill="${sh2}" opacity=".18" ${B1}/>
+    ${o?`<path d="M90.5 ${my+c} Q100 ${my-.8} 109.5 ${my+c} Q100 ${my+1.6+o*2.6} 90.5 ${my+c}Z" fill="#2c0c0c"/><path d="M92.5 ${my+c*.6} Q100 ${my-.4} 107.5 ${my+c*.6} Q100 ${my+1.5} 92.5 ${my+c*.6}Z" fill="#f4eee7"/>`:''}
+    <path d="M89.5 ${my+c} Q94.5 ${my-2.9} 98.2 ${my-1.8} Q100 ${my-1.1} 101.8 ${my-1.8} Q105.5 ${my-2.9} 110.5 ${my+c} Q100 ${my+1.1-(o?1.4:0)} 89.5 ${my+c}Z" fill="${lipD}"/>
+    <path d="M90.8 ${my+.5+c} Q100 ${my+1.4+o*2.4} 109.2 ${my+.5+c} Q105.5 ${my+6.4+o*2.4} 100 ${my+6.6+o*2.4} Q94.5 ${my+6.4+o*2.4} 90.8 ${my+.5+c}Z" fill="url(#${id}p)"/>
+    <ellipse cx="98.4" cy="${my+3.5+o*2.4}" rx="4.4" ry="1.3" fill="#fff" opacity=".42" ${B2}/>
+    ${o?'':`<path d="M89.5 ${my+c} Q100 ${my+1.5} 110.5 ${my+c}" stroke="${mixHex(lipD,'#200808',.6)}" stroke-width="1" fill="none" stroke-linecap="round"/>`}
+    <path d="M88.4 ${my+c-.4} q-1.2 ${c?1.2:.2} -1.6 ${c?2.4:.6} M111.6 ${my+c-.4} q1.2 ${c?1.2:.2} 1.6 ${c?2.4:.6}" stroke="${sh2}" stroke-width="1" fill="none" opacity=".45" stroke-linecap="round"/>`;
+  const H=`url(#${id}h)`;
+  const back={long:`<path d="M56 98 C51 56 76 39 100 39 C124 39 149 56 144 98 C149 132 153 172 148 204 L52 204 C47 172 51 132 56 98Z" fill="${hd}"/><path d="M56 98 C51 56 76 39 100 39 C124 39 149 56 144 98 C147 130 149 168 145 200 L128 200 C132 160 134 130 131 104 L69 104 C66 130 68 160 72 200 L55 200 C51 168 53 130 56 98Z" fill="${H}"/>`,
+    bob:`<path d="M55 98 C50 56 76 39 100 39 C124 39 150 56 145 98 C148 118 149 140 144 154 Q136 160 126 156 L130 104 L70 104 L74 156 Q64 160 56 154 C51 140 52 118 55 98Z" fill="${H}"/>`,
+    pony:`<path d="M128 60 C162 64 170 124 153 168 C151 138 144 112 132 96Z" fill="${H}"/><path d="M146 86 C156 106 156 134 152 154" stroke="${hl}" stroke-width="3" fill="none" opacity=".3" ${B2}/>`,
+    bun:`<ellipse cx="100" cy="36" rx="17" ry="15" fill="${H}"/><ellipse cx="94" cy="30" rx="7" ry="4" fill="#fff" opacity=".22" ${B2}/>`}[a.hair]||'';
+  const FP={pulled:'M61 104 C56 73 71 45 100 43 C129 45 144 73 139 104 C136 85 125 68 100 66 C75 68 64 85 61 104Z',
+    parted:'M61 106 C55 73 70 44 100 42 C130 44 145 73 139 106 C136 90 129 76 116 68 C104 76 82 80 68 92 C65 96 63 101 61 106Z',
+    short:'M60.5 106 C56 86 58 61 76 49 C89 39 114 39 126 47 C143 59 144 86 139.5 106 C138 94 135 84 129 76 C119 69 104 67 92 69 C80 71 71 77 66 87 C63 93 62 99 60.5 106Z',
+    messy:'M60.5 106 C55 84 57 61 72 51 C76 40 90 38 97 44 C104 36 120 38 125 46 C141 50 146 82 139.5 106 C138 94 134 84 128 77 L119 82 L112 72 L103 80 L95 71 L86 80 L78 74 C70 79 63 92 60.5 106Z',
+    thin:'M61 108 C58 90 61 74 70 64 C66 78 64.5 94 64 110Z M139 108 C142 90 139 74 130 64 C134 78 135.5 94 136 110Z'};
+  const fk={long:'parted',bob:'parted',pony:'pulled',bun:'pulled',short:'short',messy:'messy',thin:'thin'}[a.hair||'short'], fp=FP[fk];
+  const front=`<path d="${fp}" fill="${H}"/>${fk==='thin'?`<path d="M76 58 Q100 50 124 58 Q100 55 76 58Z" fill="${h}" opacity=".28"/>`:`<path d="M72 68 Q84 50 104 48" stroke="#fff" stroke-width="7" fill="none" opacity=".22" stroke-linecap="round" ${B1}/><path d="M118 52 Q132 62 135 84" stroke="${hd}" stroke-width="6" fill="none" opacity=".35" stroke-linecap="round" ${B1}/>`}`;
+  const beard=a.beard?`<path d="M64 120 C65 146 76 160 100 162 C124 160 135 146 136 120 C133 134 126 141 115 138.5 Q100 134.5 85 138.5 C74 141 67 134 64 120Z" fill="${H}" opacity=".94"/><path d="M86 139.6 Q93 135.2 100 137.2 Q107 135.2 114 139.6 Q107 138.6 100 139.4 Q93 138.6 86 139.6Z" fill="${hd}"/>`
+    :(!f&&!a.young?`<path d="M66 124 C68 146 78 158 100 160 C122 158 132 146 134 124 C131 142 120 150 100 150 C80 150 69 142 66 124Z" fill="#2c2623" opacity=".1" ${B2}/>`:'');
+  return `<svg class="av ${m==='dolor'?'dolor':''} ${m==='agitado'?'agitado':''}" viewBox="0 0 200 230" role="img" aria-label="Paciente simulado" ${big?'':'width="64" height="74"'}>
+  <defs>
+   <filter id="${id}b" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="3.4"/></filter>
+   <filter id="${id}b2" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="1.1"/></filter>
+   <radialGradient id="${id}k" cx=".37" cy=".3" r=".8"><stop offset="0" stop-color="${hi}"/><stop offset=".42" stop-color="${s}"/><stop offset=".82" stop-color="${mixHex(s,sh,.62)}"/><stop offset="1" stop-color="${mixHex(s,sh2,.6)}"/></radialGradient>
+   <linearGradient id="${id}n" x1="0" x2="1"><stop offset="0" stop-color="${mixHex(s,hi,.3)}"/><stop offset=".55" stop-color="${mixHex(s,sh,.45)}"/><stop offset="1" stop-color="${mixHex(s,sh2,.7)}"/></linearGradient>
+   <linearGradient id="${id}h" x1=".15" y1="0" x2=".85" y2="1"><stop offset="0" stop-color="${hl}"/><stop offset=".35" stop-color="${h}"/><stop offset="1" stop-color="${hd}"/></linearGradient>
+   <radialGradient id="${id}t" cx=".3" cy=".08" r="1.05"><stop offset="0" stop-color="${topl}"/><stop offset=".5" stop-color="${top}"/><stop offset="1" stop-color="${topd}"/></radialGradient>
+   <radialGradient id="${id}i" cx=".5" cy=".68" r=".62"><stop offset="0" stop-color="${irisL}"/><stop offset=".6" stop-color="${iris}"/><stop offset="1" stop-color="${irisD}"/></radialGradient>
+   <linearGradient id="${id}w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cfc6bd"/><stop offset=".45" stop-color="#f6f1eb"/><stop offset="1" stop-color="#fffdfa"/></linearGradient>
+   <linearGradient id="${id}p" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${lipB}"/><stop offset=".5" stop-color="${lipL}"/><stop offset="1" stop-color="${lipD}"/></linearGradient>
+   <linearGradient id="${id}g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${top}" stop-opacity=".3"/><stop offset="1" stop-color="${top}" stop-opacity=".08"/></linearGradient>
+   <clipPath id="${id}c"><path d="${face}"/></clipPath><clipPath id="${id}r"><rect x="3" y="6" width="194" height="224" rx="44"/></clipPath>
+  </defs>
+  <rect x="3" y="6" width="194" height="224" rx="44" fill="url(#${id}g)"/>
+  <g clip-path="url(#${id}r)">
+  ${a.hair==='long'||a.hair==='bob'||a.hair==='pony'?back:''}
+  <g class="body">
+   <ellipse cx="100" cy="226" rx="84" ry="14" fill="#000" opacity=".16" ${B1}/>
+   <path d="M84 138 L84 168 C84 177 72 182 54 186 L146 186 C128 182 116 177 116 168 L116 138Z" fill="url(#${id}n)"/><path d="M54 186 L146 186 L140 212 L60 212Z" fill="url(#${id}n)"/>
+   <ellipse cx="101" cy="158" rx="19" ry="10" fill="${sh2}" opacity=".6" ${B1}/>
+   ${f?`<path d="M14 232 C16 202 36 192 62 185 Q100 214 138 185 C164 192 184 202 186 232Z" fill="url(#${id}t)"/><path d="M62 185 Q100 214 138 185 L141 189 Q100 221 59 189Z" fill="${topd}" opacity=".55"/><path d="M66 190 Q100 220 134 190" stroke="#000" stroke-width="5" fill="none" opacity=".2" ${B1}/>`
+      :`<path d="M14 232 C16 202 36 192 66 185 L100 204 L134 185 C164 192 184 202 186 232Z" fill="url(#${id}t)"/><path d="M66 185 L80 180 L100 204 L88 215Z" fill="${topl}"/><path d="M134 185 L120 180 L100 204 L112 215Z" fill="${mixHex(top,topd,.45)}"/><path d="M88 215 L100 204 L112 215" stroke="#000" stroke-width="4" fill="none" opacity=".22" ${B1}/><path d="M100 206 L100 232" stroke="${topd}" stroke-width="1.3" opacity=".7"/><circle cx="100" cy="219" r="1.7" fill="${topd}"/>`}
+   <ellipse cx="46" cy="206" rx="22" ry="9" fill="#fff" opacity=".22" transform="rotate(-24 46 206)" ${B1}/><ellipse cx="160" cy="214" rx="24" ry="14" fill="#000" opacity=".2" ${B1}/>
   </g>
-  ${a.hives?'<g fill="#e2574c" opacity=".6"><circle cx="96" cy="176" r="3"/><circle cx="108" cy="170" r="2.4"/></g>':''}
-  ${a.baby?`<g class="baby"><path d="M112 206 C112 184 132 176 156 180 C182 184 190 204 180 222 C150 230 124 226 112 206Z" fill="#fff8ea" stroke="#0000001a"/><path d="M118 204 Q150 190 182 214" stroke="#e9dcc0" stroke-width="2" fill="none"/><circle cx="136" cy="186" r="15.5" fill="${SKIN[a.skin||0]}"/><path d="M122 182 Q136 166 150 182 Q136 174 122 182Z" fill="#fff8ea"/><path d="M129 187 q2.6 -2.2 5.2 0 M139 187 q2.6 -2.2 5.2 0" stroke="#2a1e19" stroke-width="1.7" fill="none" stroke-linecap="round"/><ellipse cx="128" cy="192" rx="3" ry="2" fill="#e2675c" opacity=".3"/><ellipse cx="145" cy="192" rx="3" ry="2" fill="#e2675c" opacity=".3"/><path d="M133.5 194 q3 2 6 0" stroke="#a04a44" stroke-width="1.6" fill="none" stroke-linecap="round"/></g>`:''}
+  <g class="head" ${a.young?'transform="translate(2.5 5) scale(.975)"':''}>
+   ${a.hair==='bun'?back:''}
+   <path d="M62.5 103 C55 101 54 116 58 123.5 C60.4 128 64.6 128.6 66.4 124Z" fill="url(#${id}k)"/><path d="M61 109 q-2.8 5 .6 11" stroke="${sh2}" stroke-width="1.6" fill="none" opacity=".45" ${B2}/>
+   <path d="M137.5 103 C145 101 146 116 142 123.5 C139.6 128 135.4 128.6 133.6 124Z" fill="${mixHex(s,sh2,.5)}"/>
+   <path d="${face}" fill="url(#${id}k)"/>
+   <g clip-path="url(#${id}c)">
+    <path d="${fp}" fill="#1a0d06" opacity=".42" transform="translate(1.5 5)" ${B1}/>
+    <ellipse cx="139" cy="112" rx="13" ry="46" fill="${sh2}" opacity=".42" ${B1}/>
+    <path d="M60 140 Q100 178 140 140 L140 168 L60 168Z" fill="${sh2}" opacity=".3" ${B1}/>
+    <ellipse cx="88" cy="82" rx="17" ry="9" fill="#fff" opacity=".2" ${B1}/>
+    <ellipse cx="76" cy="123" rx="9" ry="7" fill="#fff" opacity=".2" ${B1}/><ellipse cx="122" cy="124" rx="7" ry="5" fill="#fff" opacity=".08" ${B1}/>
+    <ellipse cx="74" cy="128" rx="10" ry="6.5" fill="#e0524a" opacity="${f?.17:.09}" ${B1}/><ellipse cx="126" cy="128" rx="10" ry="6.5" fill="#e0524a" opacity="${f?.15:.08}" ${B1}/>
+    <ellipse cx="98" cy="153" rx="8" ry="3.4" fill="#fff" opacity=".2" ${B1}/>
+    <path d="M132 150 Q140 128 138 104" stroke="${rim}" stroke-width="2.4" fill="none" opacity=".45" ${B2}/>
+    ${a.hives?`<g fill="#d9483d" opacity=".5" ${B2}><ellipse cx="74" cy="134" rx="6" ry="4"/><ellipse cx="126" cy="130" rx="5" ry="3.6"/><ellipse cx="112" cy="84" rx="4.6" ry="3"/><ellipse cx="84" cy="88" rx="3.6" ry="2.6"/><ellipse cx="118" cy="148" rx="4" ry="2.6"/></g>`:''}
+    ${a.sweat?`<g fill="#ffffff" opacity=".5" ${B2}><ellipse cx="84" cy="78" rx="5" ry="1.4" transform="rotate(-18 84 78)"/><ellipse cx="112" cy="74" rx="4" ry="1.4"/><ellipse cx="73" cy="118" rx="1.6" ry="3"/><ellipse cx="127" cy="96" rx="1.4" ry="2.6"/></g>`:''}
+    ${beard}
+   </g>
+   ${front}
+   ${old?`<path d="M82 80 Q100 76.5 118 80 M85 86.5 Q100 83.5 115 86.5" stroke="${sh2}" stroke-width="1.2" fill="none" opacity=".4" ${B2}/><path d="M70 111 l-4.2 -1.6 M70 113.6 l-4.4 1 M130 111 l4.2 -1.6 M130 113.6 l4.4 1" stroke="${sh2}" stroke-width=".9" opacity=".5"/><path d="M88.5 131 Q83.5 139 86 149 M111.5 131 Q116.5 139 114 149" stroke="${sh2}" stroke-width="1.8" fill="none" opacity=".45" ${B2}/>`:`<path d="M89.5 132 Q86.5 138 87.5 143 M110.5 132 Q113.5 138 112.5 143" stroke="${sh2}" stroke-width="1.6" fill="none" opacity=".2" ${B2}/>`}
+   ${m==='dolor'?`<path d="M97.6 91 q-1.4 4.4 0 8.4 M102.4 91 q1.4 4.4 0 8.4" stroke="${sh2}" stroke-width="1.4" fill="none" opacity=".55" ${B2}/>`:''}
+   ${brow(-1)}${brow(1)}
+   ${eye(82.5,-1)}${eye(117.5,1)}
+   ${a.glasses?`<g fill="none" stroke="#1d1d22" stroke-width="2.4"><rect x="66" y="95" width="32" height="26" rx="9.5" fill="#ffffff" fill-opacity=".12"/><rect x="102" y="95" width="32" height="26" rx="9.5" fill="#ffffff" fill-opacity=".12"/><path d="M98 105 q2 -2.4 4 0 M66 104 l-6 -2 M134 104 l6 -2"/></g><path d="M70 99.6 l9 -2.2 M106 99.6 l9 -2.2" stroke="#fff" stroke-width="1.6" opacity=".6" stroke-linecap="round"/><path d="M68 123.4 h28 M104 123.4 h28" stroke="#000" stroke-width="3" opacity=".16" ${B2}/>`:''}
+   <path d="M103 104 Q107 119 110.4 126 Q112 132 107 134.2 Q102.6 135.4 100 134.6 L100 127 Q102 116 103 104Z" fill="${sh2}" opacity=".42" ${B2}/>
+   <ellipse cx="100" cy="128.6" rx="7.4" ry="6" fill="${mixHex(s,hi,.5)}" opacity=".85" ${B2}/>
+   <path d="M98 106 Q96.8 117 97.4 123" stroke="#fff" stroke-width="2.2" fill="none" opacity=".38" stroke-linecap="round" ${B2}/><ellipse cx="98" cy="126.4" rx="2.4" ry="1.8" fill="#fff" opacity=".55" ${B2}/>
+   <path d="M91.2 128.4 Q89.4 132.8 93.6 134 Q96.8 134.4 98.6 133 M108.8 128.4 Q110.6 132.8 106.4 134 Q103.2 134.4 101.4 133" stroke="${sh2}" stroke-width="1.2" fill="none" opacity=".6" stroke-linecap="round"/>
+   <path d="M94.4 133.2 q2 1.5 3.8 .4 M105.6 133.2 q-2 1.5 -3.8 .4" stroke="#1f0d08" stroke-width="1.5" fill="none" opacity=".7" stroke-linecap="round"/>
+   <ellipse cx="100" cy="137" rx="7" ry="2" fill="${sh2}" opacity=".4" ${B2}/>
+   <g class="mouth">${mouth}</g>
+  </g>
+  ${a.hives?`<g fill="#d9483d" opacity=".45" ${B2}><ellipse cx="94" cy="178" rx="4" ry="2.6"/><ellipse cx="108" cy="172" rx="3" ry="2"/></g>`:''}
+  ${a.baby?`<g class="baby"><ellipse cx="150" cy="226" rx="40" ry="8" fill="#000" opacity=".2" ${B1}/><path d="M110 208 C110 186 130 177 156 181 C184 185 192 206 181 224 C150 232 122 228 110 208Z" fill="#f7efe0"/><path d="M150 184 C182 188 190 206 180 223 C170 226 160 227 150 226 C168 214 168 196 150 184Z" fill="#000" opacity=".12" ${B1}/><path d="M116 206 Q150 190 184 216 M124 220 Q150 206 178 224" stroke="#d9cbb0" stroke-width="1.8" fill="none"/><ellipse cx="136" cy="188" rx="14.5" ry="15.5" fill="url(#${id}k)"/><path d="M121 185 Q136 166 151 185 Q136 176 121 185Z" fill="#fbf5e9"/><path d="M129 189 q2.6 1.8 5.2 0 M139 189 q2.6 1.8 5.2 0" stroke="#23150f" stroke-width="1.4" fill="none" stroke-linecap="round"/><ellipse cx="136.6" cy="192.6" rx="2" ry="1.4" fill="#fff" opacity=".4" ${B2}/><path d="M133.6 196.4 Q136.6 198.2 139.6 196.4 Q136.6 199.6 133.6 196.4Z" fill="${lipB}"/><ellipse cx="128" cy="194" rx="3.4" ry="2.2" fill="#e0524a" opacity=".28" ${B2}/><ellipse cx="145" cy="194" rx="3.4" ry="2.2" fill="#e0524a" opacity=".28" ${B2}/></g>`:''}
+  </g>
   </svg>`;
 }
 
@@ -1272,14 +1831,15 @@ function avatar(a,big){
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let store={};try{store=JSON.parse(localStorage.getItem('ecoe-sim')||'{}')}catch(e){}
-const save=()=>{try{localStorage.setItem('ecoe-sim',JSON.stringify(store))}catch(e){};if(window.cloudSave)window.cloudSave()};
+const save=()=>{try{localStorage.setItem('ecoe-sim',JSON.stringify(store))}catch(e){}};
 store.best=store.best||{};
 let cur=null, run=null, tick=null, sample=null, filter='all';
 const inClaude=!!(window.claude&&claude.use);
 
 function setTheme(t){document.documentElement.dataset.theme=t;$('themeBtn').textContent=t==='dark'?'Modo diurno':'Modo nocturno';store.theme=t;save()}
 $('themeBtn').onclick=()=>{const dark=document.documentElement.dataset.theme?document.documentElement.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;setTheme(dark?'light':'dark')};
-if(store.theme)setTheme(store.theme);else if(matchMedia('(prefers-color-scheme: dark)').matches)$('themeBtn').textContent='Modo diurno';
+setTheme(store.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'));
+delete store.design;
 
 /* ============ Pasillo ============ */
 function renderHall(){
@@ -1289,16 +1849,13 @@ function renderHall(){
   $('sWeak').textContent=done.length?done.filter(s=>store.best[s.id]<60).length:'–';
   const used=ORDER.filter(a=>ST.some(s=>s.area===a));
   const cnt=a=>{const l=ST.filter(s=>a==='all'||s.area===a);return l.filter(s=>store.best[s.id]!=null).length+'/'+l.length};
-  $('filters').innerHTML=`<button class="sec" data-f="all" data-c style="--c:#1E5638" aria-pressed="${filter==='all'}"><span class="dot"></span>Todas<span class="cnt">${cnt('all')}</span></button>`+used.map(a=>`<button class="sec" data-f="${a}" data-c style="--c:${AREAS[a][1]}" aria-pressed="${filter===a}"><span class="dot"></span>${AREAS[a][0]}<span class="cnt">${cnt(a)}</span></button>`).join('');
-  $('grid').innerHTML=used.filter(a=>filter==='all'||a===filter).map(a=>`<div class="block" data-c style="--c:${AREAS[a][1]}"><header><span class="dot"></span><h2>${AREAS[a][0]}</h2><span class="mono">${cnt(a)}</span></header><div class="grid">`+ST.filter(s=>s.area===a).map(s=>{
+  $('filters').innerHTML=`<button class="sec" data-f="all" data-c style="--c:#E0241B" aria-pressed="${filter==='all'}"><span class="dot"></span>Todas<span class="cnt">${cnt('all')}</span></button>`+used.map(a=>`<button class="sec" data-f="${a}" data-c style="--c:${AREAS[a][1]}" aria-pressed="${filter===a}"><span class="dot"></span>${AREAS[a][0]}<span class="cnt">${cnt(a)}</span></button>`).join('');
+  $('grid').innerHTML=used.filter(a=>filter==='all'||a===filter).map(a=>`<div class="block" data-c style="--c:${AREAS[a][1]}"><header><h2>${AREAS[a][0]}</h2><span class="mono">${cnt(a)} practicadas</span></header><div class="grid">`+ST.filter(s=>s.area===a).map(s=>{
     const b=store.best[s.id], cls=b==null?'':(b>=70?'ok':b>=60?'warn':'bad');
     return `<button class="door" data-id="${s.id}">
       ${avatar(s.pt.av)}
-      <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
-        <h3>${esc(s.motivo)}</h3>
-        <span class="meta">${esc(s.pt.n)}</span>
-        <span class="row" style="margin-top:3px"><span class="badge ${cls}">${b==null?'sin practicar':b+' %'}</span>${s.real?'<span class="real">estación real</span>':''}</span>
-      </span></button>`}).join('')+'</div></div>').join('');
+      <span class="dt"><h3>${esc(s.motivo)}</h3><span class="meta">${esc(s.pt.n)}${s.real?' · <span class="real">estación real</span>':''}</span></span>
+      <span class="badge ${cls}">${b==null?'sin practicar':b+' %'}</span></button>`}).join('')+'</div></div>').join('');
 }
 $('filters').onclick=e=>{const b=e.target.closest('[data-f]');if(b){filter=b.dataset.f;renderHall()}};
 $('grid').onclick=e=>{const b=e.target.closest('[data-id]');if(b)openStation(b.dataset.id)};
@@ -1307,12 +1864,12 @@ $('resetBtn').onclick=()=>{const b=$('resetBtn');
   if(b.dataset.arm){clearTimeout(b._t);delete b.dataset.arm;store.best={};save();renderHall();b.textContent='Progreso borrado';b._t=setTimeout(()=>b.textContent='Borrar progreso',2500);return}
   b.dataset.arm=1;b.textContent='¿Seguro? Tocá de nuevo';b._t=setTimeout(()=>{delete b.dataset.arm;b.textContent='Borrar progreso'},4000)};
 $('homeBtn').onclick=goHome;
-function goHome(){stopTimer();cur=null;$('station').hidden=true;$('hall').style.display='';$('homeBtn').hidden=true;renderHall();scrollTo(0,0)}
+function goHome(){stopTimer();cur=null;document.body.classList.remove('st');$('rndBtn').hidden=false;$('station').hidden=true;$('hall').style.display='';$('homeBtn').hidden=true;renderHall();scrollTo(0,0)}
 
 /* ============ Estación ============ */
 function openStation(id){
   cur=ST.find(s=>s.id===id);run={asked:new Set(),exam:new Set(),done:new Set(),chat:[],left:480,phase:'door',mode:sample?'free':'guided',ticks:{}};
-  stopTimer();$('hall').style.display='none';$('station').hidden=false;$('homeBtn').hidden=false;$('aiPanel').hidden=true;
+  stopTimer();document.body.classList.add('st');$('rndBtn').hidden=true;$('hall').style.display='none';$('station').hidden=false;$('homeBtn').hidden=false;$('aiPanel').hidden=true;
   $('station').style.setProperty('--c',AREAS[cur.area][1]);
   $('door').hidden=false;$('roomWrap').hidden=true;$('review').hidden=true;
   $('doorAv').innerHTML=avatar(cur.pt.av,true);
@@ -1508,73 +2065,6 @@ $('aiSave').onclick=async()=>{
 renderHall();
 if(inClaude){claude.use('sample').then(s=>{sample=s||null;if(sample&&run&&run.phase==='door')run.mode='free'}).catch(()=>{})}
 else{$('aiBtn').hidden=false;if(store.ai&&store.ai.key)sample=makeAI(store.ai);aiUI()}
-</script>
-<script type="module">
-/* ============ Cuenta de Google + progreso en la nube (Firebase) ============
-   Pegá acá la configuración de tu proyecto de Firebase
-   (Consola de Firebase → Configuración del proyecto → Tus apps → SDK config).
-   Mientras quede vacía, el botón de inicio de sesión no aparece y todo
-   funciona como antes, guardando sólo en este navegador. */
-const firebaseConfig = {
-  apiKey: "AIzaSyDsx19z7Vn27LcNAINw8osBELbyUvLPqH0",
-  authDomain: "ecoe-final.firebaseapp.com",
-  projectId: "ecoe-final",
-  storageBucket: "ecoe-final.firebasestorage.app",
-  messagingSenderId: "577496590506",
-  appId: "1:577496590506:web:7244710b6d85e5fbb208d3"
-};
-
-if (firebaseConfig.apiKey && !(window.claude && claude.use)) {
-  const V = '10.12.2', base = `https://www.gstatic.com/firebasejs/${V}/`;
-  const { initializeApp } = await import(base + 'firebase-app.js');
-  const { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signInWithRedirect, signOut } = await import(base + 'firebase-auth.js');
-  const { getFirestore, doc, getDoc, setDoc } = await import(base + 'firebase-firestore.js');
-
-  const app = initializeApp(firebaseConfig), auth = getAuth(app), db = getFirestore(app);
-  const btn = $('loginBtn'), msg = $('syncMsg');
-  let user = null, ready = false, timer = null;
-  btn.hidden = false;
-
-  const pack = () => JSON.parse(JSON.stringify({ best: store.best || {}, theme: store.theme || null, ai: store.ai || null }));
-  const push = async () => {
-    if (!user || !ready) return;
-    try { await setDoc(doc(db, 'users', user.uid), { data: pack(), updated: Date.now() }); msg.textContent = 'Progreso guardado ✓'; }
-    catch (e) { msg.textContent = 'No se pudo guardar en la nube'; console.error(e); }
-  };
-  window.cloudSave = () => { if (!user || !ready) return; clearTimeout(timer); msg.textContent = 'Guardando…'; timer = setTimeout(push, 800); };
-
-  btn.onclick = async () => {
-    if (user) { await signOut(auth); return; }
-    const prov = new GoogleAuthProvider(); prov.setCustomParameters({ prompt: 'select_account' });
-    try { await signInWithPopup(auth, prov); }
-    catch (e) {
-      if (e.code === 'auth/popup-blocked' || e.code === 'auth/operation-not-supported-in-this-environment') signInWithRedirect(auth, prov);
-      else if (e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request') { msg.textContent = 'No se pudo iniciar sesión'; console.error(e); }
-    }
-  };
-
-  onAuthStateChanged(auth, async u => {
-    user = u; ready = false;
-    if (!u) { btn.textContent = 'Iniciar sesión con Google'; msg.textContent = ''; return; }
-    btn.textContent = 'Cerrar sesión'; msg.textContent = 'Sincronizando…';
-    try {
-      const snap = await getDoc(doc(db, 'users', u.uid));
-      const c = (snap.exists() && snap.data().data) || {};
-      // Fusión: por estación queda el mejor puntaje entre este navegador y la nube.
-      const best = { ...(c.best || {}) };
-      for (const [k, v] of Object.entries(store.best || {})) if (best[k] == null || v > best[k]) best[k] = v;
-      store.best = best;
-      if (c.theme) store.theme = c.theme;
-      if (c.ai && c.ai.key) store.ai = c.ai;
-      try { localStorage.setItem('ecoe-sim', JSON.stringify(store)); } catch (e) {}
-      if (store.theme) setTheme(store.theme);
-      renderHall();
-      if (store.ai && store.ai.key) { sample = makeAI(store.ai); aiUI(); }
-      ready = true; await push();
-      msg.textContent = (u.displayName ? u.displayName.split(' ')[0] + ' · ' : '') + 'progreso sincronizado ✓';
-    } catch (e) { msg.textContent = 'No se pudo leer el progreso de la nube'; console.error(e); }
-  });
-}
 </script>
 </body>
 </html>
