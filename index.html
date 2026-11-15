@@ -370,6 +370,20 @@ img.avimg.talk{animation:avtalk .3s ease-in-out infinite alternate}
 /* avatares quietos */
 .av,.av *,img.avimg{animation:none!important}
 .door:hover .av,.door:hover img.avimg{transform:none}
+
+/* opciones en la página */
+.hopts{display:flex;flex-wrap:wrap;align-items:center;gap:4px 18px}
+.hopts>button{background:none;border:0;padding:4px 0;font-size:.86rem;font-weight:500;color:var(--muted);transition:color .3s var(--ease)}
+.hopts>button:hover{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.hopts>#resetBtn[data-arm]{color:var(--bad)}
+body.st #aiBtn,body.st #loginBtn,body.st #resetBtn{display:none}
+body.st .hl .row{gap:8px 18px}
+/* pestañas siempre a mano */
+.tabs{position:sticky;top:var(--tabtop,96px);z-index:4;background:var(--surface);margin:-6px -20px 0;padding:16px 20px 0;box-shadow:0 -12px 0 var(--bg)}
+#work{overflow:visible}
+.tabnav{display:flex;justify-content:space-between;gap:8px;margin-top:14px;padding-top:14px;border-top:0.5px solid var(--sep)}
+.tabnav:empty{display:none}
+@media (max-width:700px){.tabs{gap:14px;margin:-6px -14px 0;padding:16px 14px 0}.tab{font-size:.86rem}.tabnav .btn{font-size:.84rem;padding:8px 12px}}
 </style>
 </head>
 <body>
@@ -381,13 +395,12 @@ img.avimg.talk{animation:avtalk .3s ease-in-out infinite alternate}
     <p class="tag">Paciente simulado · 8 minutos · lista de cotejo</p>
     <div class="row">
       <button class="btn" id="homeBtn" hidden>← Volver al pasillo</button>
-      <div class="dd"><button class="btn ddb" aria-haspopup="true" aria-expanded="false">Opciones<i class="chev"></i></button>
-        <div class="ddm" role="menu" hidden>
-          <button role="menuitem" id="aiBtn" hidden>Configurar IA</button>
-          <button role="menuitem" id="loginBtn" hidden>Iniciar sesión con Google</button>
-          <button role="menuitem" id="themeBtn">Modo nocturno</button>
-          <button role="menuitem" id="resetBtn">Borrar progreso</button>
-        </div></div>
+      <div class="hopts" role="group" aria-label="Opciones">
+          <button id="themeBtn">Modo nocturno</button>
+          <button id="aiBtn" hidden>Configurar IA</button>
+          <button id="loginBtn" hidden>Iniciar sesión con Google</button>
+          <button id="resetBtn">Borrar progreso</button>
+        </div>
       <span class="sync" id="syncMsg" role="status"></span>
     </div>
   </div>
@@ -467,9 +480,10 @@ img.avimg.talk{animation:avtalk .3s ease-in-out infinite alternate}
               <p class="muted small" id="freeMsg" style="margin-top:6px"></p>
             </div>
             <div class="opts" id="askOpts"></div>
+            <div class="tabnav" id="nav-ask"></div>
           </div>
-          <div id="tab-exam" hidden><p class="muted small" style="margin-bottom:8px">Elegí qué examinás y qué pedís. Tocá de nuevo para deseleccionar. Los estudios innecesarios descuentan.</p><div class="opts" id="examOpts"></div></div>
-          <div id="tab-do" hidden><p class="muted small" style="margin-bottom:8px">Marcá lo que dirías o indicarías. Tocá de nuevo para deseleccionar. Hay opciones incorrectas que descuentan.</p><div class="opts" id="doOpts"></div></div>
+          <div id="tab-exam" hidden><p class="muted small" style="margin-bottom:8px">Elegí qué examinás y qué pedís. Tocá de nuevo para deseleccionar. Los estudios innecesarios descuentan.</p><div class="opts" id="examOpts"></div><div class="tabnav" id="nav-exam"></div></div>
+          <div id="tab-do" hidden><p class="muted small" style="margin-bottom:8px">Marcá lo que dirías o indicarías. Tocá de nuevo para deseleccionar. Hay opciones incorrectas que descuentan.</p><div class="opts" id="doOpts"></div><div class="tabnav" id="nav-do"></div></div>
         </div>
       </div>
     </div>
@@ -1963,12 +1977,21 @@ function fmt(s){return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}
 function stopTimer(){clearInterval(tick);tick=null;$('timerBox').classList.remove('running')}
 $('startBtn').onclick=()=>{
   run.phase='run';$('door').hidden=true;$('roomWrap').hidden=false;$('timerBox').classList.add('running');
-  say(cur.abre);renderWork();scrollTo(0,0);
+  say(cur.abre);renderWork();scrollTo(0,0);requestAnimationFrame(syncTabTop);
   tick=setInterval(()=>{run.left--;$('clock').textContent=fmt(Math.max(0,run.left));$('cBar').style.width=(100*Math.max(0,run.left)/480)+'%';if(run.left<=60)$('clock').classList.add('low');if(run.left<=0)finish(true)},1000);
 };
 $('endBtn').onclick=()=>finish(false);
 
-document.querySelector('.tabs').onclick=e=>{const b=e.target.closest('.tab');if(!b)return;document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected',t===b));['ask','exam','do'].forEach(t=>$('tab-'+t).hidden=t!==b.dataset.t)};
+function tabTop(){const tb=$('timerBox'),r=tb.getBoundingClientRect();return Math.round(r.height+parseFloat(getComputedStyle(tb).top||0)-1)}
+function syncTabTop(){if(!$('roomWrap').hidden)document.documentElement.style.setProperty('--tabtop',tabTop()+'px')}
+addEventListener('resize',syncTabTop);
+function goTab(name,scroll){const b=document.querySelector(`.tab[data-t="${name}"]`);document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected',t===b));['ask','exam','do'].forEach(t=>$('tab-'+t).hidden=t!==name);
+  if(scroll){const w=$('work'),y=w.getBoundingClientRect().top+scrollY-tabTop();if(scrollY>y)scrollTo({top:y,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})}}
+document.querySelector('.tabs').onclick=e=>{const b=e.target.closest('.tab');if(b)goTab(b.dataset.t,true)};
+function tabNav(){const tabs=['ask','exam','do'].filter(t=>!document.querySelector(`.tab[data-t="${t}"]`).hidden),L={ask:'Preguntar',exam:'Examinar y pedir',do:'Decir e indicar'};
+  ['ask','exam','do'].forEach(t=>{const i=tabs.indexOf(t),el=$('nav-'+t);if(!el)return;const prev=tabs[i-1],next=tabs[i+1];
+    el.innerHTML=(prev?`<button class="btn" data-go="${prev}">← ${L[prev]}</button>`:'<span></span>')+(next?`<button class="btn primary" data-go="${next}">${L[next]} →</button>`:`<button class="btn primary" data-go="end">Salir y corregir</button>`)})}
+document.querySelectorAll('.tabnav').forEach(n=>n.onclick=e=>{const b=e.target.closest('[data-go]');if(!b)return;b.dataset.go==='end'?finish(false):goTab(b.dataset.go,true)});
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function counts(){$('nExam').textContent=run.exam.size?' '+run.exam.size:'';$('nDo').textContent=run.done.size?' '+run.done.size:''}
 function renderWork(){
@@ -1979,7 +2002,7 @@ function renderWork(){
   $('askOpts').innerHTML=cur.q.map((q,i)=>`<button class="opt" data-k="${i}"><span class="cat">${esc(q[0])}</span>${esc(q[1])}</button>`).join('');
   $('examOpts').innerHTML=cur.x.map((x,i)=>`<button class="opt pick" data-k="${i}" aria-pressed="false"><span>${esc(x[0])}</span></button>`).join('');
   $('doOpts').innerHTML=shuffle(cur.d.map((_,i)=>i)).map(i=>`<button class="opt pick" data-k="${i}" aria-pressed="false"><span>${esc(cur.d[i][0])}</span></button>`).join('');
-  counts();
+  counts();tabNav();
 }
 function setMode(m){run.mode=m;$('modeRow').hidden=!sample;$('aiHint').hidden=!!sample||inClaude;$('mFree').setAttribute('aria-pressed',m==='free');$('mGuided').setAttribute('aria-pressed',m==='guided');$('freeBox').hidden=m!=='free';$('askOpts').hidden=m!=='guided'}
 $('mFree').onclick=()=>setMode('free');$('mGuided').onclick=()=>setMode('guided');
