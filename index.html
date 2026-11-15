@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Simulador ECOE</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&family=Inter+Tight:wght@600;700&display=swap">
 <style>
 /* Paleta: verde esmeralda de la portada del cuadernillo. Layout: pasillo de estaciones → consultorio en dos columnas (paciente y reloj | preguntar, examinar, indicar) → lista de cotejo. */
 :root{
@@ -178,182 +178,172 @@ details.fold li.miss{color:var(--ink)} details.fold li.got::marker{color:var(--o
 .revgrid .col{display:flex;flex-direction:column;gap:14px;min-width:0}
 @media (min-width:980px){.revhead{grid-template-columns:minmax(0,1fr) auto;align-items:center}.revgrid{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}}
 details.fold{background:var(--surface)}
-/* ===== Estilo tipográfico amarillo y rojo (plantilla de Canva) ===== */
-:root{--bg:#FFF6EC;--surface:#FFFFFF;--ink:#1D1916;--muted:#6A5F55;--line:#EBD9C2;--accent:#E0241B;--accent-ink:#fff;--accent-soft:#FFE6A3;--yellow:#FFDF80;--ok:#1b7a43;--ok-soft:#dff1e4;--mixp:0%;
-  --f-display:"Montserrat",system-ui,sans-serif;--f-body:"DM Sans",system-ui,sans-serif;--f-num:"Montserrat",system-ui,sans-serif;color-scheme:light}
-:root[data-theme="dark"]{--bg:#181310;--surface:#231C17;--ink:#F6EDE2;--muted:#B5A698;--line:#3B3028;--accent:#FF5A4E;--accent-ink:#1A0605;--accent-soft:#4A3A12;--yellow:#3A2D0E;--ok:#6fd8a0;--ok-soft:#11301f;--mixp:40%;color-scheme:dark}
-body::before,body::after{display:none}
-h1,h2,h3{font-family:var(--f-display);font-weight:800;letter-spacing:-.035em}
-.panel,.btn,.door,.opt,.tab,.chip,.sec,.grp,.minus,details.fold,.bubble,.badge,.real,.fact,.msg,.ask textarea,.cfg input,.cfg select,.note,.steps,.bar,.bar>i,.opt.pick::before{border-radius:0}
-.av>rect,.av clipPath>rect{rx:0}
-.btn{background:transparent;border:2px solid var(--ink);text-transform:uppercase;font-size:.76rem;letter-spacing:.09em;font-weight:700;padding:10px 16px}
-.btn:hover{border-color:var(--accent);box-shadow:none}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
-.eyebrow{letter-spacing:.14em;font-weight:700;color:var(--ink)}
-.hero{background:var(--yellow)}
-.in{max-width:1240px;margin:0 auto;padding:0 clamp(16px,4vw,48px)}
-.hero .in{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(240px,1fr);padding-right:0}
-.hl{padding:clamp(28px,6vw,64px) 24px clamp(28px,5vw,48px) 0;display:flex;flex-direction:column;gap:16px}
-.hero h1{font-size:clamp(3rem,10vw,5.6rem);font-weight:900;line-height:.92;color:var(--accent)}
-.tag{text-transform:uppercase;letter-spacing:.1em;font-size:.78rem;font-weight:700;max-width:34ch}
-.hr{background:var(--accent);color:#fff;padding:clamp(24px,4vw,48px);justify-content:center;gap:8px}
-:root[data-theme="dark"] .hr{color:#1A0605}
-.hr>b{font-family:var(--f-num);font-weight:900;font-size:clamp(3rem,8vw,4.6rem);line-height:.9;letter-spacing:-.04em;color:inherit}
-.hr>span{text-transform:uppercase;letter-spacing:.1em;font-size:.78rem;font-weight:700}
-.hr .bar{background:#ffffff55;height:6px;margin-top:6px}.hr .bar>i{background:#fff}
-.hr .mini{color:inherit;font-size:.86rem}.hr .mini b{color:inherit}
-body.st .hero h1{font-size:clamp(1.6rem,5vw,2.2rem)}
-body.st .hero h1 br{display:none}
-body.st .hr,body.st .tag{display:none}
-body.st .hero .in{grid-template-columns:1fr;padding-right:clamp(16px,4vw,48px)}
-body.st .hl{padding:18px 0;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 20px}
-body.st .hl .eyebrow{display:none}
-.wrap{padding-top:28px}
-.hall{display:flex;flex-direction:column;gap:8px}
-#filters{display:flex;flex-direction:row;flex-wrap:wrap;gap:8px;margin-bottom:8px}
-.sec{width:auto;border:2px solid var(--ink);padding:5px 12px;text-transform:uppercase;font-size:.72rem;letter-spacing:.08em;font-weight:700;background:none}
-.sec:hover{background:var(--accent-soft)}
-.sec[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.sec[aria-pressed="true"] .cnt{color:inherit}
-.sec .dot{border-radius:0;width:9px;height:9px}
-.main{gap:0}
-.block{display:grid;grid-template-columns:1fr;gap:12px 40px;padding:clamp(28px,5vw,52px) 0}
-.block:nth-child(even){background:var(--yellow);box-shadow:0 0 0 100vmax var(--yellow);clip-path:inset(0 -100vmax)}
-@media (min-width:860px){.block{grid-template-columns:minmax(220px,.8fr) minmax(0,1.6fr)}}
-.block>header{flex-direction:column;align-items:flex-start;gap:8px;margin:0}
-.block>header::after{display:none}
-.block>header h2{font-size:clamp(2rem,5vw,3rem);font-weight:900;line-height:.95;color:var(--accent)}
-.block>header .mono{font-size:.76rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink)}
-.grid{grid-template-columns:1fr;gap:0}
-.door{grid-template-columns:56px minmax(0,1fr) auto;gap:14px;background:none;border:0;border-bottom:1px solid color-mix(in oklab,var(--ink) 22%,transparent);padding:12px 4px;align-items:center}
-.door:first-child{border-top:1px solid color-mix(in oklab,var(--ink) 22%,transparent)}
-.door:hover{transform:none;box-shadow:none;background:color-mix(in oklab,var(--accent) 9%,transparent)}
-.door .av{width:56px;height:64px}
-.door .dt{display:flex;flex-direction:column;gap:2px;min-width:0}
-.door h3{font-family:var(--f-body);font-weight:700;letter-spacing:0;font-size:1.08rem;color:var(--ink)}
-.door:hover h3{color:var(--accent)}
-.badge{border:1.5px solid var(--ink);color:var(--ink);background:none;text-transform:uppercase;letter-spacing:.04em}
-.real{background:var(--accent);color:var(--accent-ink);border:0;text-transform:uppercase;letter-spacing:.06em;padding:1px 6px}
-.foot{background:var(--accent);color:#fff;margin-top:24px}
-:root[data-theme="dark"] .foot{color:#1A0605}
-.foot .in{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding-top:32px;padding-bottom:32px}
-.foot h2{font-size:clamp(1.8rem,5vw,2.6rem);font-weight:900}
-.foot .btn{border-color:currentColor;color:inherit}
-.panel{border:0;background:var(--surface)}
-.doorview{background:var(--yellow);border-top:0;padding:clamp(20px,4vw,40px)}
-.doorview h2{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:900;line-height:.98;color:var(--accent)}
-.doorgo{border-top:2px solid var(--ink)}
-.topbar{background:var(--accent);color:#fff;border-left:0}
-:root[data-theme="dark"] .topbar{color:#1A0605}
-.topbar .eyebrow,.topbar .clock{color:inherit}
-.topbar .clock{font-weight:900;letter-spacing:-.03em}
-.topbar .clock.low{color:var(--yellow)}
-.topbar .btn{border-color:currentColor;color:inherit}
-.timer.running{animation:none}
-.stage{border:0;background:var(--yellow)}
-.stage h2{font-size:1.5rem}
-.bubble{background:var(--surface);border:0}.bubble::before{background:var(--surface);border:0}
-.tabs{border-bottom:2px solid var(--ink)}
-.tab{border:2px solid var(--ink);color:var(--ink);text-transform:uppercase;font-size:.74rem;letter-spacing:.08em;font-weight:700}
-.tab[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.chip{border:2px solid var(--ink);color:var(--ink);font-weight:700}
-.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.opt{border:1.5px solid color-mix(in oklab,var(--ink) 30%,transparent)}
-.opt.used{background:var(--accent-soft);border-color:var(--ink)}
-.opt.pick.used::before{background-color:var(--accent);border-color:var(--accent)}
-.revhead{border-top:0;background:var(--yellow)}
-.revhead h2{font-size:clamp(1.5rem,4vw,2.2rem);font-weight:900;color:var(--accent)}
-.res b{font-weight:900;letter-spacing:-.04em}
-.res .verdict{font-family:var(--f-display);font-weight:800;text-transform:uppercase;letter-spacing:.02em}
-.grp{border:1.5px solid var(--ink)}
-.grp header{background:var(--ink)}
-.grp header span:first-child,.grp header .mono{color:var(--bg)}
-.grp header span:first-child{text-transform:uppercase;font-size:.78rem;letter-spacing:.08em}
-details.fold{border:1.5px solid var(--ink)}
-.fact{border:1.5px solid var(--ink);color:var(--ink);background:var(--surface)}
-#aiPanel{background:var(--yellow)}
-#aiPanel h2{color:var(--accent);font-size:1.8rem;font-weight:900}
-.steps{background:var(--surface)}
-@media (max-width:700px){.hero .in{grid-template-columns:1fr;padding-right:clamp(16px,4vw,48px)}.hl{padding-right:0}.hr{margin:0 calc(-1*clamp(16px,4vw,48px));}.door{grid-template-columns:48px minmax(0,1fr)}.door .badge{grid-column:2;justify-self:start}.door .av{width:48px;height:55px}}
-/* ===== Ajuste de espacios, menús desplegables y animaciones ===== */
-.hero h1{font-size:clamp(2.2rem,6.5vw,3.8rem);line-height:.95;animation:slideL .6s cubic-bezier(.2,.8,.2,1) both}
-.hl{padding:clamp(20px,3.5vw,36px) 24px clamp(20px,3.5vw,32px) 0;gap:10px}
-.tag{font-size:.72rem;max-width:none;animation:slideL .6s .08s cubic-bezier(.2,.8,.2,1) both}
-.hl .row{animation:slideL .6s .14s cubic-bezier(.2,.8,.2,1) both;position:relative;z-index:6}
-.hero .in{grid-template-columns:minmax(0,1.7fr) minmax(220px,.8fr)}
-.hr{padding:clamp(16px,2.6vw,28px);gap:4px;animation:slideR .6s cubic-bezier(.2,.8,.2,1) both}
-.hr>b{font-size:clamp(2.2rem,5.5vw,3.2rem)}
-.hr>span{font-size:.7rem}
+/* ===== Liquid glass: paneles de vidrio esmerilado sobre degradé coral → azul noche ===== */
+:root{--ink:#FFFFFF;--muted:rgba(255,255,255,.8);--line:rgba(255,255,255,.42);--sep:rgba(255,255,255,.2);--surface:rgba(255,255,255,.14);--bg:rgba(10,22,48,.16);
+  --accent:#FFFFFF;--accent-ink:#D32A48;--accent-soft:rgba(255,255,255,.2);--glass:rgba(255,255,255,.13);--glass-hi:rgba(255,255,255,.28);--seg:rgba(255,255,255,.13);
+  --shadow:0 14px 40px -16px rgba(10,22,48,.6);--dim:.74;--g1:#FFB3B8;--g2:#FF6F86;--g3:#16345E;--g4:#FF9AA8;--mixc:#ffffff;--mixp:42%;
+  --ok:#CFFCE0;--ok-soft:rgba(70,225,150,.3);--warn:#FFEAB8;--warn-soft:rgba(255,205,90,.32);--bad:#FFE0E3;--bad-soft:rgba(255,40,80,.38);
+  --f-display:-apple-system,BlinkMacSystemFont,"SF Pro Display","Inter Tight","Inter","Helvetica Neue",Arial,sans-serif;--f-body:-apple-system,BlinkMacSystemFont,"SF Pro Text","Inter","Helvetica Neue",Arial,sans-serif;--f-num:var(--f-display);--f-mono:ui-monospace,"SF Mono",Menlo,monospace;color-scheme:dark}
+:root[data-theme="dark"]{--dim:.6;--g1:#7A2C40;--g2:#A8324F;--g3:#081428;--g4:#4A2446;--accent-ink:#8C1B33}
+html{background:#0E2A4A}
+body{background:linear-gradient(125deg,#EE7888,#F23F58,#C4335E,#632F62,#0E2A4A,#34305F,#D83B62,#EE7888);background-size:420% 420%;animation:bgflow 36s ease-in-out infinite;min-height:100vh;letter-spacing:-.006em;-webkit-font-smoothing:antialiased;text-shadow:0 1px 2px rgba(10,22,48,.3);font-feature-settings:"ss01","cv11","calt";font-optical-sizing:auto;line-height:1.47}
+h1,h2,h3,.bt,.hr>b,.clock,.res b{font-feature-settings:"ss01","cv11","tnum"}
+:root[data-theme="dark"] body{background-image:linear-gradient(125deg,#8C3346,#5E2748,#2A2048,#0A1830,#1C2450,#6A2A4C,#8C3346)}
+@keyframes bgflow{0%{background-position:0% 30%}25%{background-position:60% 80%}50%{background-position:100% 50%}75%{background-position:40% 0%}100%{background-position:0% 30%}}
+@keyframes bgA{0%{transform:translate(0,0) scale(1)}50%{transform:translate(-14vw,10vh) scale(1.18) rotate(8deg)}100%{transform:translate(6vw,-8vh) scale(1.05) rotate(-6deg)}}
+@keyframes bgB{0%{transform:translate(0,0) scale(1.05)}50%{transform:translate(16vw,-9vh) scale(.92) rotate(-10deg)}100%{transform:translate(-8vw,8vh) scale(1.15) rotate(6deg)}}
+select option{color:#111}
+::placeholder{color:rgba(255,255,255,.6)}
+body::before,body::after{filter:blur(40px);opacity:.85}
+body::before{animation:bgA 22s ease-in-out infinite alternate}
+body::after{animation:bgB 27s ease-in-out infinite alternate}
+h1,h2,h3{font-family:var(--f-display);font-weight:700;letter-spacing:-.022em}
+h2{font-size:1.32rem} h3{font-size:1.02rem;font-weight:600}
+.eyebrow{letter-spacing:.05em;font-weight:600;font-size:.72rem}
 @keyframes slideL{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:none}}
 @keyframes slideR{from{opacity:0;transform:translateX(32px)}to{opacity:1;transform:none}}
-@keyframes drop{from{opacity:0;transform:translateY(-8px) scaleY(.96)}to{opacity:1;transform:none}}
+@keyframes drop{from{opacity:0;transform:translateY(-8px) scale(.97)}to{opacity:1;transform:none}}
 @keyframes rowIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @keyframes tick{50%{transform:scale(1.35)}}
+/* vidrio */
+.panel,.block,.ddm,.topbar,.hr,details.fold,.doorview{background:linear-gradient(135deg,rgba(255,255,255,.24),rgba(255,255,255,.07) 42%,rgba(255,255,255,.04) 62%,rgba(255,255,255,.15));-webkit-backdrop-filter:blur(30px) saturate(185%) brightness(var(--dim));backdrop-filter:blur(30px) saturate(185%) brightness(var(--dim));border:1px solid var(--line);box-shadow:var(--shadow),inset 0 1px 1px rgba(255,255,255,.55),inset 0 -1px 1px rgba(255,255,255,.12),inset 0 0 22px rgba(255,255,255,.06);border-radius:26px}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.panel,.block,.ddm,.topbar,.hr,details.fold,.doorview{background:var(--glass-hi)}}
+.panel{padding:16px;gap:12px}
+/* botones */
+.btn{border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.26),rgba(255,255,255,.1));-webkit-backdrop-filter:blur(22px) saturate(185%) brightness(var(--dim));backdrop-filter:blur(22px) saturate(185%) brightness(var(--dim));text-shadow:inherit;border:1px solid var(--line);color:var(--ink);font-weight:600;font-size:.9rem;padding:8px 16px;box-shadow:inset 0 1px 0 var(--glass-hi),0 6px 16px -8px rgba(14,30,60,.4);transition:transform .22s cubic-bezier(.2,.8,.2,1),box-shadow .22s,background-color .2s}
+.btn:hover{transform:translateY(-1px) scale(1.03);background:var(--glass-hi);border-color:var(--line);box-shadow:inset 0 1px 0 var(--glass-hi),0 10px 22px -10px rgba(14,30,60,.5)}
+.btn:active{transform:scale(.96)}
+.btn.primary{background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(255,255,255,.82));color:var(--accent-ink);text-shadow:none;border-color:rgba(255,255,255,.9);box-shadow:inset 0 1px 0 #fff,0 10px 26px -12px rgba(14,30,60,.6)}
+.btn.primary:hover{background:#fff}
+.btn.big{padding:12px 24px;font-size:1rem}
+.link{color:var(--accent)}
+/* cabecera */
+.in{max-width:1240px;margin:0 auto;padding:0 clamp(16px,4vw,48px)}
+.hero{display:block;background:none}
+.hero .in{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:end;padding-top:clamp(22px,4.5vw,44px)}
+.hl{display:flex;flex-direction:column;gap:8px;min-width:0}
+.hl .eyebrow{color:rgba(255,255,255,.88)}
+.hero h1{color:#fff;font-size:clamp(2.2rem,6vw,3.4rem);letter-spacing:-.035em;line-height:1;text-shadow:0 2px 24px rgba(14,30,60,.28);animation:slideL .6s cubic-bezier(.2,.8,.2,1) both}
+.tag{color:rgba(255,255,255,.92);font-size:.98rem;animation:slideL .6s .08s cubic-bezier(.2,.8,.2,1) both}
+.hl .row{margin-top:8px;position:relative;z-index:6;animation:slideL .6s .14s cubic-bezier(.2,.8,.2,1) both}
+.sync{font-size:.82rem;color:rgba(255,255,255,.9)}
+.hr{min-width:250px;padding:14px 18px;gap:4px;border-radius:22px;animation:slideR .6s cubic-bezier(.2,.8,.2,1) both}
+.hr>b{font-family:var(--f-num);font-weight:700;font-size:2.3rem;line-height:1;letter-spacing:-.03em;color:var(--ink)}
+.hr>span{font-size:.82rem;color:var(--muted)}
+.hr .bar{height:6px;background:var(--seg);margin-top:6px}
+.bar>i{background:linear-gradient(90deg,rgba(255,255,255,.7),#fff)}
+.mini{font-size:.84rem;flex-wrap:wrap;gap:2px 14px}
+.mini b{font-family:var(--f-body)}
+body.st .hero h1{font-size:1.5rem}
+body.st .hr,body.st .tag,body.st .hl .eyebrow{display:none}
+body.st .hero .in{grid-template-columns:1fr;padding-top:16px}
+body.st .hl{flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 20px}
+body.st .hl .row{margin-top:0}
 .wrap{padding-top:18px;gap:16px}
-.btn{font-size:.72rem;padding:8px 13px;background-image:linear-gradient(var(--ink),var(--ink));background-repeat:no-repeat;background-size:0 100%;transition:background-size .28s cubic-bezier(.2,.8,.2,1),color .2s,border-color .2s,transform .12s}
-.btn:hover{background-size:100% 100%;color:var(--bg);border-color:var(--ink);transform:none}
-.btn.primary:hover{color:#fff}
-.btn:active{transform:scale(.97)}
-.chev{display:inline-block;width:7px;height:7px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg) translateY(-2px);margin-left:9px;transition:transform .25s}
+/* menús */
+.chev{display:inline-block;width:7px;height:7px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg) translateY(-2px);margin-left:9px;transition:transform .28s cubic-bezier(.2,.8,.2,1);opacity:.7}
 [aria-expanded="true"]>.chev{transform:rotate(225deg) translate(-2px,-1px)}
 .dd{position:relative;display:inline-block}
-.ddm{position:absolute;top:calc(100% + 6px);left:0;z-index:20;min-width:230px;background:var(--surface);border:2px solid var(--ink);box-shadow:6px 6px 0 var(--ink);display:flex;flex-direction:column;padding:4px;transform-origin:top;animation:drop .18s ease-out}
-.ddm>button{display:flex;align-items:center;gap:9px;width:100%;text-align:left;border:0;background:none;padding:8px 10px;font-size:.86rem;font-weight:500;text-transform:none;letter-spacing:0;transition:background-color .12s,padding-left .15s}
-.ddm>button:hover{background:var(--accent-soft);padding-left:14px}
-.ddm>button[aria-current="true"]{background:var(--ink);color:var(--bg)}
+.ddm{position:absolute;top:calc(100% + 8px);left:0;z-index:20;min-width:240px;display:flex;flex-direction:column;padding:6px;border-radius:20px;background:linear-gradient(135deg,rgba(22,32,62,.78),rgba(14,24,50,.7));-webkit-backdrop-filter:blur(40px) saturate(190%);backdrop-filter:blur(40px) saturate(190%);border-color:rgba(255,255,255,.3);box-shadow:0 22px 50px -14px rgba(6,14,34,.75),inset 0 1px 1px rgba(255,255,255,.35);transform-origin:top left;animation:drop .22s cubic-bezier(.2,.8,.2,1)}
+.ddm>button{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:0;background:none;border-radius:14px;padding:9px 12px;font-size:.92rem;font-weight:500;color:var(--ink);transition:background-color .15s}
+.ddm>button{text-shadow:none}
+.ddm>button:hover{background:rgba(255,255,255,.16)}
+.ddm>button[aria-current="true"]{background:rgba(255,255,255,.92);color:var(--accent-ink);text-shadow:none}
 .ddm>button[aria-current="true"] .cnt{color:inherit}
-.ddm .cnt{margin-left:auto;font-family:var(--f-mono);font-size:.74rem;color:var(--muted)}
-.ddm .dot{width:9px;height:9px;background:var(--cc);flex:none}
-#filters{flex-direction:column;flex-wrap:nowrap;gap:0;margin:0;max-height:min(70vh,460px);overflow:auto}
+.ddm .cnt{margin-left:auto;font-size:.78rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.ddm .dot{width:9px;height:9px;border-radius:50%;background:var(--cc);flex:none}
+#filters{flex-direction:column;flex-wrap:nowrap;gap:0;margin:0;max-height:min(70vh,470px);overflow:auto}
+.sec{width:100%;border:0}
+/* pasillo */
+.hall{display:flex;flex-direction:column;gap:12px;align-items:stretch}
 .bar2{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.hall{gap:10px;align-items:stretch}
-.hero{display:block}
-.hr .mini{flex-wrap:wrap;gap:2px 14px;justify-content:flex-start}
-.block{display:block;padding:0}
-.block:nth-child(even){background:none;box-shadow:none;clip-path:none}
-.block+.block{border-top:2px solid var(--ink)}
-.block:first-child{border-top:2px solid var(--ink)}.block:last-child{border-bottom:2px solid var(--ink)}
-.bh{display:flex;align-items:baseline;gap:14px;width:100%;text-align:left;background:none;border:0;padding:12px 6px;transition:background-color .2s,padding-left .2s}
-.bh:hover{background:var(--yellow);padding-left:14px}
-.bt{font-family:var(--f-display);font-weight:900;letter-spacing:-.035em;font-size:clamp(1.35rem,3.2vw,1.9rem);line-height:1;color:var(--accent)}
-.bh .mono{font-size:.74rem;color:var(--muted);margin-left:auto}
-.bh .chev{color:var(--ink);align-self:center}
-.block.open>.bh{background:var(--yellow)}
-.acc{display:grid;grid-template-rows:0fr;transition:grid-template-rows .38s cubic-bezier(.2,.8,.2,1)}
+.bar2 .link{color:#fff;text-decoration:none;font-size:.92rem}
+.bar2 .link:hover{text-decoration:underline}
+.main{gap:12px}
+.block{display:block;padding:0;overflow:hidden;border-radius:22px;transition:box-shadow .3s}
+.bh{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:none;border:0;padding:14px 18px;transition:background-color .2s}
+.bh:hover{background:rgba(255,255,255,.2)}
+.bh::before{content:"";width:11px;height:11px;border-radius:50%;background:var(--cc);box-shadow:0 0 0 4px color-mix(in oklab,var(--cc) 22%,transparent);flex:none}
+.bt{font-family:var(--f-display);font-weight:700;letter-spacing:-.02em;font-size:1.22rem;color:var(--ink)}
+.bh .mono{font-family:var(--f-body);font-size:.84rem;color:var(--muted);margin-left:auto;font-variant-numeric:tabular-nums}
+.acc{display:grid;grid-template-rows:0fr;transition:grid-template-rows .42s cubic-bezier(.2,.8,.2,1)}
 .block.open>.acc{grid-template-rows:1fr}
-.acc>.grid{overflow:hidden;min-height:0;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));column-gap:32px}
-.block.open .door{animation:rowIn .35s calc(var(--i)*35ms + 80ms) both}
-.door{padding:8px 4px;gap:12px;grid-template-columns:44px minmax(0,1fr) auto;transition:background-color .15s,padding-left .2s}
-.door:first-child{border-top:0}
-.door:hover{padding-left:12px}
-.door .av{width:44px;height:51px;transition:transform .25s}
-.door:hover .av{transform:scale(1.12) rotate(-2deg)}
-.door h3{font-size:.98rem;line-height:1.25}
-.door .meta{font-size:.8rem}
-.badge{font-size:.68rem}
-.foot{margin-top:8px}.foot .in{padding-top:18px;padding-bottom:18px}
-.foot h2{font-size:clamp(1.3rem,3.5vw,1.8rem)}.foot p{font-size:.86rem}
-.doorview,#roomWrap,#review,#aiPanel{animation:rowIn .35s cubic-bezier(.2,.8,.2,1) both}
-.doorview{padding:clamp(16px,3vw,28px);gap:14px}
-.doorview h2{font-size:clamp(1.5rem,4vw,2.2rem)}
-.doorview .av{width:130px;height:150px}
-.doorgo{padding-top:12px}
-.btn.big{padding:11px 20px;font-size:.84rem}
-.panel{padding:14px;gap:12px}
-.topbar{padding:8px 14px}.topbar .clock{font-size:clamp(1.5rem,5vw,2rem)}
-.stage .av{width:140px;height:161px}.stage h2{font-size:1.25rem}
-.opt{padding:8px 11px;transition:border-color .15s,background-color .2s,transform .12s,padding-left .2s}
-.opt:hover{padding-left:15px;border-color:var(--ink)}
-.opt.pick:hover{padding-left:11px}
-.opts{gap:6px}
-.tab{padding:6px 11px;transition:background-color .2s,color .2s}
-.revhead h2{font-size:clamp(1.3rem,3.5vw,1.8rem)}
-.res b{font-size:clamp(2.2rem,7vw,3rem)}
-.ci{padding:6px 12px;transition:background-color .2s}
+.acc>.grid{overflow:hidden;min-height:0;padding:0 10px;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:2px 10px}
+.acc>.grid::after{content:"";grid-column:1/-1;height:8px}
+.block.open .door{animation:rowIn .4s calc(var(--i)*35ms + 90ms) cubic-bezier(.2,.8,.2,1) both}
+.door{grid-template-columns:54px minmax(0,1fr) auto;gap:12px;background:none;border:0;border-radius:18px;padding:8px;align-items:center;transition:background-color .2s,transform .22s cubic-bezier(.2,.8,.2,1)}
+.door:hover{transform:scale(1.015);box-shadow:none;background:var(--glass-hi)}
+.av{overflow:visible}
+.door .av{width:54px;height:62px;transition:transform .3s cubic-bezier(.2,.8,.2,1);filter:drop-shadow(0 5px 8px rgba(14,30,60,.3))}
+.door:hover .av{transform:scale(1.1) rotate(-2deg)}
+.door .dt{display:flex;flex-direction:column;gap:1px;min-width:0}
+.door h3{font-family:var(--f-body);font-weight:600;letter-spacing:-.01em;font-size:.98rem;line-height:1.25;color:var(--ink)}
+.door .meta{font-size:.82rem;color:var(--muted)}
+.badge{font-family:var(--f-body);font-size:.74rem;font-weight:600;border-radius:999px;padding:2px 9px;border:0;background:var(--seg);color:var(--muted);font-variant-numeric:tabular-nums}
+.badge.ok{background:var(--ok-soft);color:var(--ok)}.badge.warn{background:var(--warn-soft);color:var(--warn)}.badge.bad{background:var(--bad-soft);color:var(--bad)}
+.real{background:var(--accent-soft);color:var(--accent);border:0;border-radius:999px;padding:1px 8px;font-size:.7rem}
+.foot{background:none;color:rgba(255,255,255,.85);margin-top:0}
+.foot .in{padding-top:8px;padding-bottom:28px}
+.foot h2{font-size:1rem;font-weight:600;color:#fff}.foot p{font-size:.84rem}
+/* estación */
+.doorview,#roomWrap,#review,#aiPanel{animation:rowIn .4s cubic-bezier(.2,.8,.2,1) both}
+.doorview{border-top:1px solid var(--line);border-radius:28px;padding:clamp(18px,3vw,30px);gap:16px}
+.doorview h2{font-size:clamp(1.5rem,4vw,2rem);letter-spacing:-.03em}
+.doorview .av{width:140px;height:161px;filter:drop-shadow(0 12px 18px rgba(14,30,60,.3))}
+.doorgo{border-top:1px solid var(--sep);padding-top:14px}
+.topbar{border-left:1px solid var(--line);border-radius:22px;padding:9px 10px 9px 18px}
+.tbtitle{font-weight:600}
+.topbar .clock{font-family:var(--f-num);font-weight:700;letter-spacing:-.03em;font-size:clamp(1.6rem,5vw,2rem);color:var(--ink)}
+.topbar .clock.low{color:var(--bad)}
+.revgrid .col>p{color:rgba(255,255,255,.88)}
+.timer.running{animation:none}
+.stage{border-color:var(--line)}
+.stage .av{width:150px;height:172px;filter:drop-shadow(0 12px 18px rgba(14,30,60,.3))}
+.stage h2{font-size:1.2rem}
+.bubble{background:var(--glass-hi);border:0;border-radius:18px;box-shadow:0 6px 18px -10px rgba(14,30,60,.4)}
+.bubble::before{background:var(--glass-hi);border:0}
+.left .sheet{border:0}
+.sheet{border-left:0}
+.tabs{display:inline-flex;align-self:flex-start;gap:2px;padding:3px;border-radius:999px;background:var(--seg);border:0}
+.tab{border:0;border-radius:999px;padding:7px 14px;color:var(--muted);font-weight:600;font-size:.9rem;background:none;transition:background-color .25s,color .2s,box-shadow .25s}
+.tab[aria-selected="true"]{background:var(--glass-hi);color:var(--ink);box-shadow:0 2px 8px -2px rgba(14,30,60,.3)}
+.chip{border:0;background:var(--seg);color:var(--muted);font-weight:600}
+.chip[aria-pressed="true"]{background:rgba(255,255,255,.92);color:var(--accent-ink);text-shadow:none}
+.msg.me{text-shadow:none}
+.link{text-decoration:underline}
+.opts{gap:7px}
+.opt{background:var(--bg);border:1px solid var(--sep);border-radius:16px;padding:10px 13px;transition:background-color .2s,border-color .2s,transform .2s cubic-bezier(.2,.8,.2,1)}
+.opt:hover{background:var(--glass-hi);border-color:var(--line);transform:scale(1.008)}
+.opt.used{background:var(--accent-soft);border-color:color-mix(in oklab,var(--accent) 40%,transparent)}
+.opt.pick::before{border-radius:8px;border:1.5px solid color-mix(in oklab,var(--ink) 30%,transparent);background:var(--bg)}
+.opt.pick.used::before{background-color:var(--accent);border-color:var(--accent)}
+.opt .ans{border-top:1px solid var(--sep)}
+.msg{border-radius:18px}.msg.pt{background:var(--glass-hi);border:0}
+.ask textarea,.cfg input,.cfg select{background:var(--bg);border:1px solid var(--sep);border-radius:14px}
+/* corrección */
+#review{display:flex;flex-direction:column;gap:14px}
+.revhead{border-top:1px solid var(--line)}
+.revhead h2{font-size:clamp(1.3rem,3.5vw,1.7rem);letter-spacing:-.03em}
+.res b{font-family:var(--f-num);font-weight:700;letter-spacing:-.04em;font-size:clamp(2.4rem,7vw,3.2rem);color:var(--accent)}
+.res .verdict{font-weight:600}
+.bar{background:var(--seg)}
+.fact{border:0;background:var(--seg);color:var(--ink);font-weight:500}
+.fact.bad{background:var(--bad-soft);color:var(--bad)}
+.grp{border:1px solid var(--sep);border-radius:16px;background:var(--bg)}
+.grp header{background:var(--seg);padding:7px 12px}
+.grp header span:first-child{color:var(--ink);font-size:.86rem}
+.grp header .mono{font-family:var(--f-body);font-variant-numeric:tabular-nums}
+.ci{border-top:1px solid var(--sep);padding:7px 12px;transition:background-color .2s}
+.ci:hover{background:var(--accent-soft)}
 .ci.hit input{animation:tick .3s}
-.grp header{padding:6px 12px}
-body.st .hl{padding:10px 0}
-@media (max-width:700px){.hero .in{grid-template-columns:1fr;padding-right:clamp(16px,4vw,48px)}.hl{padding-right:0}.hr{margin:0 calc(-1*clamp(16px,4vw,48px));padding:12px clamp(16px,4vw,48px)}.hr>b{font-size:2rem}.ddm{min-width:min(86vw,300px)}.acc>.grid{grid-template-columns:1fr}.hr{flex-direction:row;flex-wrap:wrap;align-items:baseline;gap:6px 12px}.hr .bar{flex-basis:100%}.hr .mini{flex-basis:100%}}
+.ci .pts{font-family:var(--f-body);font-variant-numeric:tabular-nums}
+.minus{border:1px solid color-mix(in oklab,var(--bad) 35%,transparent);border-radius:16px;background:var(--bg)}
+.minus .mi{border-top:1px solid var(--sep)}
+.minus .mi .pts{font-family:var(--f-body)}
+details.fold{border-radius:18px;padding:0 14px}
+.note{border-radius:14px}.steps{border-radius:16px;background:var(--bg)}
+.mono{font-family:var(--f-body);font-variant-numeric:tabular-nums}
+@media (max-width:700px){.hero .in{grid-template-columns:1fr}.hr{flex-direction:row;flex-wrap:wrap;align-items:baseline;gap:4px 12px;min-width:0}.hr .bar,.hr .mini{flex-basis:100%}.hr>b{font-size:1.8rem}.ddm{min-width:min(86vw,300px)}.acc>.grid{grid-template-columns:1fr}.door{grid-template-columns:48px minmax(0,1fr)}.door .badge{grid-column:2;justify-self:start}.door .av{width:48px;height:55px}.tabs{display:flex;flex-wrap:wrap;border-radius:18px}}
 [hidden]{display:none!important}
 /* avatar */
 .av{display:block}
@@ -370,7 +360,7 @@ body.st .hl{padding:10px 0}
 .av .baby{animation:rock 3s ease-in-out infinite alternate;transform-origin:150px 200px}
 @keyframes breathe{50%{transform:scaleY(1.02) translateY(-1px)}}
 @keyframes blink{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.08)}}
-@keyframes talk{from{transform:scaleY(.85)}to{transform:scaleY(1.45)}}
+@keyframes talk{from{transform:scaleY(.8)}to{transform:scaleY(1.3)}}
 @keyframes tear{0%{opacity:0;transform:translateY(0)}20%{opacity:1}100%{opacity:0;transform:translateY(24px)}}
 @keyframes wince{0%,60%,100%{transform:rotate(0)}70%{transform:rotate(-1.6deg)}85%{transform:rotate(.8deg)}}
 @keyframes shake{from{transform:rotate(-.6deg)}to{transform:rotate(.6deg)}}
@@ -386,14 +376,15 @@ body.st .hl{padding:10px 0}
     <h1>Simulador ECOE</h1>
     <p class="tag">Paciente simulado · 8 minutos · lista de cotejo</p>
     <div class="row">
-      <button class="btn primary" id="rndBtn">Estación al azar</button>
       <button class="btn" id="homeBtn" hidden>← Volver al pasillo</button>
       <div class="dd"><button class="btn ddb" aria-haspopup="true" aria-expanded="false">Opciones<i class="chev"></i></button>
         <div class="ddm" role="menu" hidden>
           <button role="menuitem" id="aiBtn" hidden>Configurar IA</button>
+          <button role="menuitem" id="loginBtn" hidden>Iniciar sesión con Google</button>
           <button role="menuitem" id="themeBtn">Modo nocturno</button>
           <button role="menuitem" id="resetBtn">Borrar progreso</button>
         </div></div>
+      <span class="sync" id="syncMsg" role="status"></span>
     </div>
   </div>
   <div class="hr prog">
@@ -1806,110 +1797,92 @@ const SKIN=['#F2CDB1','#E2B28C','#C48B62','#96643F'];
 function mixHex(a,b,t){const p=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));const x=p(a),y=p(b);return '#'+x.map((v,i)=>Math.round(v+(y[i]-v)*t).toString(16).padStart(2,'0')).join('')}
 let avN=0;
 function avatar(a,big){
+  /* Busto estilo animación 3D: cabeza grande, ojos redondos, cejas gruesas, nariz pequeña y cuello fino. */
   const id='a'+(++avN), f=a.sex==='f', m=a.mood||'neutral', old=!!a.old;
-  const s=SKIN[a.skin||0], sh=mixHex(s,'#5a2a18',.36), sh2=mixHex(s,'#35160d',.55), hi=mixHex(s,'#fff6ea',.42), rim=mixHex(s,'#ffd9b8',.3);
-  const lipB=mixHex(s,'#b0403d',f?.6:.34), lipD=mixHex(lipB,'#4a1714',.4), lipL=mixHex(lipB,'#ffe1d8',.35);
-  const h=a.hc||'#333', hd=mixHex(h,'#000000',.42), hl=mixHex(h,'#ffffff',.32), browC=mixHex(h,'#1c1410',old?.15:.4);
-  const top=a.top||'#557', topd=mixHex(top,'#000000',.42), topl=mixHex(top,'#ffffff',.3);
-  const iris=a.iris||(a.skin>=2?'#4a2c18':'#6a5236'), irisL=mixHex(iris,'#ffd9a0',.35), irisD=mixHex(iris,'#000000',.55);
-  const face=f?'M63 100 C62 70 78 52 100 52 C122 52 138 70 137 100 C137 113 135 125 130.5 136 C125.5 148 113.5 158 100 158.5 C86.5 158 74.5 148 69.5 136 C65 125 63 113 63 100Z'
-              :'M62 100 C61 70 77 51 100 51 C123 51 139 70 138 100 C138 114 136.5 127 133 138 C128.5 151 114 160.5 100 160.5 C86 160.5 71.5 151 67 138 C63.5 127 62 114 62 100Z';
-  const X={neutral:{k:1,bi:0,bo:0,c:0,o:0},angustia:{k:.92,bi:-3.6,bo:1.6,c:1.5,o:0},triste:{k:.82,bi:-3,bo:1.8,c:1.7,o:0},dolor:{k:.64,bi:3,bo:-1.2,c:.6,o:1.1},agitado:{k:1.22,bi:-2.6,bo:-2.6,c:.3,o:1.9}}[m];
-  const B1=`filter="url(#${id}b)"`, B2=`filter="url(#${id}b2)"`;
-  const eye=(cx,side)=>{const y=108,k=X.k,t=y-6.6*k,b=y+4.6*k,cid=id+'e'+(side>0?'r':'l'),ep=`M${cx-9} ${y+.3} Q${cx} ${t} ${cx+9} ${y+.3} Q${cx} ${b} ${cx-9} ${y+.3}Z`;
-    return `<g transform="translate(${cx} ${y}) scale(1.34) translate(${-cx} ${-y})"><g class="eye ${side>0?'r':''}"><clipPath id="${cid}"><path d="${ep}"/></clipPath>
-     <ellipse cx="${cx}" cy="${y-2}" rx="13" ry="8.5" fill="${sh2}" opacity="${old?.34:.24}" ${B1}/>
-     <path d="${ep}" fill="url(#${id}w)"/>
-     <g clip-path="url(#${cid})"><circle cx="${cx}" cy="${y-.4}" r="4.6" fill="url(#${id}i)"/><circle cx="${cx}" cy="${y-.4}" r="4.6" fill="none" stroke="${irisD}" stroke-width="1.1" opacity=".8"/><circle cx="${cx}" cy="${y-.4}" r="2" fill="#070504"/><path d="M${cx-10} ${y-1} Q${cx} ${t-.6} ${cx+10} ${y-1} L${cx+10} ${t-3} L${cx-10} ${t-3}Z" fill="#1a0d08" opacity=".3" ${B2}/><circle cx="${cx-1.7}" cy="${y-2.3}" r="1.25" fill="#fff"/><circle cx="${cx+1.9}" cy="${y+1.2}" r=".6" fill="#fff" opacity=".7"/></g>
-     <path d="M${cx-9.4} ${y+.6} Q${cx} ${t-.7} ${cx+9.4} ${y+.3}" stroke="#23150f" stroke-width="${f?2.3:1.7}" fill="none" stroke-linecap="round"/>
-     ${f?`<path d="M${cx+side*9.2} ${y+.1} q${side*2.6} -1 ${side*3.8} -3.2" stroke="#23150f" stroke-width="1.4" fill="none" stroke-linecap="round"/>`:''}
-     <path d="M${cx-8} ${y-5*k-1.6} Q${cx} ${t-4.8} ${cx+8.4} ${y-4.6*k-1.6}" stroke="${sh2}" stroke-width="1.1" fill="none" opacity=".5"/>
-     <path d="M${cx-7.4} ${b+.4} Q${cx} ${b+2.2} ${cx+7.4} ${b}" stroke="${hi}" stroke-width="1.2" fill="none" opacity=".5" ${B2}/>
-     ${old?`<path d="M${cx-7} ${y+8} Q${cx} ${y+11.5} ${cx+7} ${y+8}" stroke="${sh2}" stroke-width="1.6" fill="none" opacity=".4" ${B2}/>`:''}</g></g>`};
-  const brow=side=>{const ix=100+side*9.5,ox=100+side*28.5,mx=100+side*19,iy=92.5+X.bi,oy=95.5+X.bo,my=(iy+oy)/2-3.4,th=f?2.8:4.4;
-    return `<path d="M${ix} ${iy+.4} Q${mx} ${my} ${ox} ${oy+.6} Q${mx} ${my+th*.75} ${ix} ${iy+th}Z" fill="${browC}" opacity="${old?.8:.95}"/>`};
-  const c=X.c,o=X.o,my=143;
-  const mouth=`<ellipse cx="100" cy="${my+2+o}" rx="13" ry="5" fill="${sh2}" opacity=".18" ${B1}/>
-    ${o?`<path d="M90.5 ${my+c} Q100 ${my-.8} 109.5 ${my+c} Q100 ${my+1.6+o*2.6} 90.5 ${my+c}Z" fill="#2c0c0c"/><path d="M92.5 ${my+c*.6} Q100 ${my-.4} 107.5 ${my+c*.6} Q100 ${my+1.5} 92.5 ${my+c*.6}Z" fill="#f4eee7"/>`:''}
-    <path d="M89.5 ${my+c} Q94.5 ${my-2.9} 98.2 ${my-1.8} Q100 ${my-1.1} 101.8 ${my-1.8} Q105.5 ${my-2.9} 110.5 ${my+c} Q100 ${my+1.1-(o?1.4:0)} 89.5 ${my+c}Z" fill="${lipD}"/>
-    <path d="M90.8 ${my+.5+c} Q100 ${my+1.4+o*2.4} 109.2 ${my+.5+c} Q105.5 ${my+6.4+o*2.4} 100 ${my+6.6+o*2.4} Q94.5 ${my+6.4+o*2.4} 90.8 ${my+.5+c}Z" fill="url(#${id}p)"/>
-    <ellipse cx="98.4" cy="${my+3.5+o*2.4}" rx="4.4" ry="1.3" fill="#fff" opacity=".42" ${B2}/>
-    ${o?'':`<path d="M89.5 ${my+c} Q100 ${my+1.5} 110.5 ${my+c}" stroke="${mixHex(lipD,'#200808',.6)}" stroke-width="1" fill="none" stroke-linecap="round"/>`}
-    <path d="M88.4 ${my+c-.4} q-1.2 ${c?1.2:.2} -1.6 ${c?2.4:.6} M111.6 ${my+c-.4} q1.2 ${c?1.2:.2} 1.6 ${c?2.4:.6}" stroke="${sh2}" stroke-width="1" fill="none" opacity=".45" stroke-linecap="round"/>`;
-  const H=`url(#${id}h)`;
-  const back={long:`<path d="M56 98 C51 56 76 39 100 39 C124 39 149 56 144 98 C149 132 153 172 148 204 L52 204 C47 172 51 132 56 98Z" fill="${hd}"/><path d="M56 98 C51 56 76 39 100 39 C124 39 149 56 144 98 C147 130 149 168 145 200 L128 200 C132 160 134 130 131 104 L69 104 C66 130 68 160 72 200 L55 200 C51 168 53 130 56 98Z" fill="${H}"/>`,
-    bob:`<path d="M55 98 C50 56 76 39 100 39 C124 39 150 56 145 98 C148 118 149 140 144 154 Q136 160 126 156 L130 104 L70 104 L74 156 Q64 160 56 154 C51 140 52 118 55 98Z" fill="${H}"/>`,
-    pony:`<path d="M128 60 C162 64 170 124 153 168 C151 138 144 112 132 96Z" fill="${H}"/><path d="M146 86 C156 106 156 134 152 154" stroke="${hl}" stroke-width="3" fill="none" opacity=".3" ${B2}/>`,
-    bun:`<ellipse cx="100" cy="36" rx="17" ry="15" fill="${H}"/><ellipse cx="94" cy="30" rx="7" ry="4" fill="#fff" opacity=".22" ${B2}/>`}[a.hair]||'';
-  const FP={pulled:'M61 104 C56 73 71 45 100 43 C129 45 144 73 139 104 C136 85 125 68 100 66 C75 68 64 85 61 104Z',
-    parted:'M61 106 C55 73 70 44 100 42 C130 44 145 73 139 106 C136 90 129 76 116 68 C104 76 82 80 68 92 C65 96 63 101 61 106Z',
-    short:'M60.5 106 C56 86 58 61 76 49 C89 39 114 39 126 47 C143 59 144 86 139.5 106 C138 94 135 84 129 76 C119 69 104 67 92 69 C80 71 71 77 66 87 C63 93 62 99 60.5 106Z',
-    messy:'M60.5 106 C55 84 57 61 72 51 C76 40 90 38 97 44 C104 36 120 38 125 46 C141 50 146 82 139.5 106 C138 94 134 84 128 77 L119 82 L112 72 L103 80 L95 71 L86 80 L78 74 C70 79 63 92 60.5 106Z',
-    thin:'M61 108 C58 90 61 74 70 64 C66 78 64.5 94 64 110Z M139 108 C142 90 139 74 130 64 C134 78 135.5 94 136 110Z'};
-  const fk={long:'parted',bob:'parted',pony:'pulled',bun:'pulled',short:'short',messy:'messy',thin:'thin'}[a.hair||'short'], fp=FP[fk];
-  const front=`<path d="${fp}" fill="${H}"/>${fk==='thin'?`<path d="M76 58 Q100 50 124 58 Q100 55 76 58Z" fill="${h}" opacity=".28"/>`:`<path d="M72 68 Q84 50 104 48" stroke="#fff" stroke-width="7" fill="none" opacity=".22" stroke-linecap="round" ${B1}/><path d="M118 52 Q132 62 135 84" stroke="${hd}" stroke-width="6" fill="none" opacity=".35" stroke-linecap="round" ${B1}/>`}`;
-  const beard=a.beard?`<path d="M64 120 C65 146 76 160 100 162 C124 160 135 146 136 120 C133 134 126 141 115 138.5 Q100 134.5 85 138.5 C74 141 67 134 64 120Z" fill="${H}" opacity=".94"/><path d="M86 139.6 Q93 135.2 100 137.2 Q107 135.2 114 139.6 Q107 138.6 100 139.4 Q93 138.6 86 139.6Z" fill="${hd}"/>`
-    :(!f&&!a.young?`<path d="M66 124 C68 146 78 158 100 160 C122 158 132 146 134 124 C131 142 120 150 100 150 C80 150 69 142 66 124Z" fill="#2c2623" opacity=".1" ${B2}/>`:'');
-  return `<svg class="av ${m==='dolor'?'dolor':''} ${m==='agitado'?'agitado':''}" viewBox="0 0 200 230" role="img" aria-label="Paciente simulado" ${big?'':'width="64" height="74"'}>
+  const s=SKIN[a.skin||0], hi=mixHex(s,'#fff3e6',.45), sh=mixHex(s,'#7a3520',.34), sh2=mixHex(s,'#3a160c',.5), pink=mixHex(s,'#f0606a',.42);
+  const h=a.hc||'#333', hd=mixHex(h,'#000000',.45), hl=mixHex(h,'#ffffff',.38), browC=mixHex(h,'#17100c',old?.2:.5);
+  const top=a.top||'#557', topd=mixHex(top,'#000000',.4), topl=mixHex(top,'#ffffff',.32);
+  const iris=a.iris||(a.skin>=2?'#5a3418':'#7a4a22'), irisL=mixHex(iris,'#ffc27a',.55), irisD=mixHex(iris,'#000000',.6);
+  const lip=mixHex(s,'#c2444a',f?.6:.38), lipD=mixHex(lip,'#3a0f10',.5);
+  const X={neutral:{k:1,bi:0,bo:0},angustia:{k:.96,bi:-5,bo:3},triste:{k:.8,bi:-4.5,bo:3},dolor:{k:.5,bi:5,bo:-3},agitado:{k:1.12,bi:-5,bo:-4}}[m];
+  const B1=`filter="url(#${id}b)"`, B2=`filter="url(#${id}c)"`, H=`url(#${id}h)`;
+  const eye=(cx,side)=>{const y=104,ry=15.5*X.k,cid=id+(side>0?'r':'l');
+    return `<g class="eye ${side>0?'r':''}"><clipPath id="${cid}"><ellipse cx="${cx}" cy="${y}" rx="14.5" ry="${ry}"/></clipPath>
+     <ellipse cx="${cx}" cy="${y+1}" rx="16.5" ry="${ry+2}" fill="${sh}" opacity=".35" ${B2}/>
+     <ellipse cx="${cx}" cy="${y}" rx="14.5" ry="${ry}" fill="url(#${id}w)"/>
+     <g clip-path="url(#${cid})"><circle cx="${cx+side*-1.2}" cy="${y+1.5}" r="9.6" fill="url(#${id}i)"/><circle cx="${cx+side*-1.2}" cy="${y+1.5}" r="9.6" fill="none" stroke="${irisD}" stroke-width="1.4" opacity=".85"/><circle cx="${cx+side*-1.2}" cy="${y+1.5}" r="4.7" fill="#0a0605"/><ellipse cx="${cx}" cy="${y-ry}" rx="17" ry="7" fill="#2a120a" opacity=".28" ${B2}/><circle cx="${cx-4.2}" cy="${y-3.2}" r="3.1" fill="#fff"/><circle cx="${cx+3}" cy="${y+5.4}" r="1.4" fill="#fff" opacity=".8"/></g>
+     <path d="M${cx-15.5} ${y-1} Q${cx} ${y-ry*1.32} ${cx+15.5} ${y-1}" stroke="#24150f" stroke-width="${f?3.6:2.6}" fill="none" stroke-linecap="round"/>
+     ${f?`<path d="M${cx+side*14.6} ${y-3} q${side*4} -1.6 ${side*5.4} -5.4 M${cx+side*12} ${y-7.5} q${side*3} -2 ${side*3.6} -5" stroke="#24150f" stroke-width="1.8" fill="none" stroke-linecap="round"/>`:''}
+     <path d="M${cx-11} ${y+ry-1} Q${cx} ${y+ry+2.6} ${cx+11} ${y+ry-1}" stroke="${sh2}" stroke-width="1.1" fill="none" opacity=".35"/>
+     ${old?`<path d="M${cx-12} ${y+ry+4} Q${cx} ${y+ry+8} ${cx+12} ${y+ry+4}" stroke="${sh2}" stroke-width="1.6" fill="none" opacity=".35" ${B2}/>`:''}</g>`};
+  const brow=side=>{const ix=100+side*8,ox=100+side*40,mx=100+side*25,iy=80+X.bi,oy=82+X.bo,my=(iy+oy)/2-7;
+    return `<path d="M${ix} ${iy} Q${mx} ${my} ${ox} ${oy}" stroke="${browC}" stroke-width="${f?5:7}" fill="none" stroke-linecap="round" opacity="${old?.85:1}"/>`};
+  const mouth={
+    neutral:`<path d="M88 137 Q100 147 112 137" stroke="${lipD}" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M91 139.6 Q100 147.6 109 139.6 Q100 151 91 139.6Z" fill="${lip}"/><ellipse cx="99" cy="145" rx="3.4" ry="1.1" fill="#fff" opacity=".4"/>`,
+    triste:`<path d="M89 143 Q100 134.5 111 143" stroke="${lipD}" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M92 142 Q100 138.4 108 142 Q100 147.4 92 142Z" fill="${lip}"/>`,
+    dolor:`<path d="M86 137 Q100 132 114 137 Q113 148 100 149 Q87 148 86 137Z" fill="#3a0f10"/><path d="M89 137.4 Q100 133.6 111 137.4 L110.4 141.6 Q100 138.6 89.6 141.6Z" fill="#fbf7f2"/><path d="M86 137 Q100 132 114 137 Q113 148 100 149 Q87 148 86 137Z" fill="none" stroke="${lip}" stroke-width="2.6"/>`,
+    agitado:`<ellipse cx="100" cy="141" rx="8" ry="8.6" fill="#3a0f10"/><ellipse cx="100" cy="145.6" rx="5" ry="3.4" fill="#d9606a"/><path d="M94 136.6 Q100 134.4 106 136.6 L105.6 138.6 Q100 137 94.4 138.6Z" fill="#fbf7f2"/><ellipse cx="100" cy="141" rx="8" ry="8.6" fill="none" stroke="${lip}" stroke-width="2.6"/>`};
+  mouth.angustia=mouth.triste;
+  const pulled='M44 98 C38 54 68 26 100 26 C132 26 162 54 156 98 C152 76 136 58 100 56 C64 58 48 76 44 98Z';
+  const parted='M44 102 C37 54 68 25 100 25 C132 25 163 54 156 102 C152 82 143 66 124 57 C106 70 78 75 59 85 C52 89 47 95 44 102Z';
+  const FP={long:parted,bob:parted,pony:pulled,bun:pulled,
+    short:'M44 94 C39 52 66 25 102 25 C137 25 161 50 156 94 C151 75 141 63 125 58 C108 67 84 65 70 58 C58 64 48 77 44 94Z',
+    messy:'M44 94 C37 60 51 33 73 31 C81 18 104 18 112 29 C129 20 151 33 153 56 C161 67 159 81 156 94 C151 77 141 65 127 60 C112 69 88 67 72 58 C58 64 48 77 44 94Z',
+    thin:'M45 104 C40 86 44 68 55 59 C51 74 50 90 51 107Z M155 104 C160 86 156 68 145 59 C149 74 150 90 149 107Z'}[a.hair||'short'];
+  const back={long:`<path d="M40 96 C33 43 70 20 100 20 C130 20 167 43 160 96 C165 140 167 182 158 218 L42 218 C33 182 35 140 40 96Z" fill="${H}"/><path d="M66 112 C63 150 66 186 72 218 L128 218 C134 186 137 150 134 112Z" fill="${hd}"/>`,
+    bob:`<path d="M40 96 C33 43 70 20 100 20 C130 20 167 43 160 96 C165 128 163 152 152 165 Q142 170 132 164 L134 110 L66 110 L68 164 Q58 170 48 165 C37 152 35 128 40 96Z" fill="${H}"/>`,
+    pony:`<path d="M138 48 C178 52 186 122 167 172 C163 138 156 110 142 92Z" fill="${H}"/><path d="M160 80 C170 104 170 134 165 154" stroke="${hl}" stroke-width="4" fill="none" opacity=".35" ${B2}/>`,
+    bun:`<ellipse cx="100" cy="19" rx="23" ry="19" fill="${H}"/><ellipse cx="92" cy="12" rx="9" ry="5" fill="#fff" opacity=".25" ${B2}/>`}[a.hair]||'';
+  return `<svg class="av ${m==='dolor'?'dolor':''} ${m==='agitado'?'agitado':''}" viewBox="0 -6 200 236" role="img" aria-label="Paciente simulado" ${big?'':'width="64" height="74"'}>
   <defs>
-   <filter id="${id}b" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="3.4"/></filter>
-   <filter id="${id}b2" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="1.1"/></filter>
-   <radialGradient id="${id}k" cx=".37" cy=".3" r=".8"><stop offset="0" stop-color="${hi}"/><stop offset=".42" stop-color="${s}"/><stop offset=".82" stop-color="${mixHex(s,sh,.62)}"/><stop offset="1" stop-color="${mixHex(s,sh2,.6)}"/></radialGradient>
-   <linearGradient id="${id}n" x1="0" x2="1"><stop offset="0" stop-color="${mixHex(s,hi,.3)}"/><stop offset=".55" stop-color="${mixHex(s,sh,.45)}"/><stop offset="1" stop-color="${mixHex(s,sh2,.7)}"/></linearGradient>
-   <linearGradient id="${id}h" x1=".15" y1="0" x2=".85" y2="1"><stop offset="0" stop-color="${hl}"/><stop offset=".35" stop-color="${h}"/><stop offset="1" stop-color="${hd}"/></linearGradient>
-   <radialGradient id="${id}t" cx=".3" cy=".08" r="1.05"><stop offset="0" stop-color="${topl}"/><stop offset=".5" stop-color="${top}"/><stop offset="1" stop-color="${topd}"/></radialGradient>
-   <radialGradient id="${id}i" cx=".5" cy=".68" r=".62"><stop offset="0" stop-color="${irisL}"/><stop offset=".6" stop-color="${iris}"/><stop offset="1" stop-color="${irisD}"/></radialGradient>
-   <linearGradient id="${id}w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cfc6bd"/><stop offset=".45" stop-color="#f6f1eb"/><stop offset="1" stop-color="#fffdfa"/></linearGradient>
-   <linearGradient id="${id}p" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${lipB}"/><stop offset=".5" stop-color="${lipL}"/><stop offset="1" stop-color="${lipD}"/></linearGradient>
-   <linearGradient id="${id}g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${top}" stop-opacity=".3"/><stop offset="1" stop-color="${top}" stop-opacity=".08"/></linearGradient>
-   <clipPath id="${id}c"><path d="${face}"/></clipPath><clipPath id="${id}r"><rect x="3" y="6" width="194" height="224" rx="44"/></clipPath>
+   <filter id="${id}b" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="4"/></filter>
+   <filter id="${id}c" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="1.4"/></filter>
+   <radialGradient id="${id}k" cx=".36" cy=".3" r=".82"><stop offset="0" stop-color="${hi}"/><stop offset=".45" stop-color="${s}"/><stop offset=".86" stop-color="${mixHex(s,sh,.7)}"/><stop offset="1" stop-color="${mixHex(s,sh2,.55)}"/></radialGradient>
+   <linearGradient id="${id}n" x1="0" x2="1"><stop offset="0" stop-color="${mixHex(s,hi,.35)}"/><stop offset=".6" stop-color="${mixHex(s,sh,.55)}"/><stop offset="1" stop-color="${mixHex(s,sh2,.6)}"/></linearGradient>
+   <linearGradient id="${id}h" x1=".1" y1="0" x2=".9" y2="1"><stop offset="0" stop-color="${hl}"/><stop offset=".3" stop-color="${h}"/><stop offset="1" stop-color="${hd}"/></linearGradient>
+   <radialGradient id="${id}t" cx=".3" cy=".05" r="1.1"><stop offset="0" stop-color="${topl}"/><stop offset=".5" stop-color="${top}"/><stop offset="1" stop-color="${topd}"/></radialGradient>
+   <radialGradient id="${id}i" cx=".5" cy=".72" r=".66"><stop offset="0" stop-color="${irisL}"/><stop offset=".55" stop-color="${iris}"/><stop offset="1" stop-color="${irisD}"/></radialGradient>
+   <linearGradient id="${id}w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d9d0c8"/><stop offset=".4" stop-color="#fbf8f4"/><stop offset="1" stop-color="#ffffff"/></linearGradient>
+   <clipPath id="${id}f"><path d="M46 96 C46 58 70 38 100 38 C130 38 154 58 154 96 C154 130 134 160 100 160 C66 160 46 130 46 96Z"/></clipPath>
   </defs>
-  <rect x="3" y="6" width="194" height="224" rx="44" fill="url(#${id}g)"/>
-  <g clip-path="url(#${id}r)">
   ${a.hair==='long'||a.hair==='bob'||a.hair==='pony'?back:''}
   <g class="body">
-   <ellipse cx="100" cy="226" rx="84" ry="14" fill="#000" opacity=".16" ${B1}/>
-   <path d="M84 138 L84 168 C84 177 72 182 54 186 L146 186 C128 182 116 177 116 168 L116 138Z" fill="url(#${id}n)"/><path d="M54 186 L146 186 L140 212 L60 212Z" fill="url(#${id}n)"/>
-   <ellipse cx="101" cy="158" rx="19" ry="10" fill="${sh2}" opacity=".6" ${B1}/>
-   ${f?`<path d="M14 232 C16 202 36 192 62 185 Q100 214 138 185 C164 192 184 202 186 232Z" fill="url(#${id}t)"/><path d="M62 185 Q100 214 138 185 L141 189 Q100 221 59 189Z" fill="${topd}" opacity=".55"/><path d="M66 190 Q100 220 134 190" stroke="#000" stroke-width="5" fill="none" opacity=".2" ${B1}/>`
-      :`<path d="M14 232 C16 202 36 192 66 185 L100 204 L134 185 C164 192 184 202 186 232Z" fill="url(#${id}t)"/><path d="M66 185 L80 180 L100 204 L88 215Z" fill="${topl}"/><path d="M134 185 L120 180 L100 204 L112 215Z" fill="${mixHex(top,topd,.45)}"/><path d="M88 215 L100 204 L112 215" stroke="#000" stroke-width="4" fill="none" opacity=".22" ${B1}/><path d="M100 206 L100 232" stroke="${topd}" stroke-width="1.3" opacity=".7"/><circle cx="100" cy="219" r="1.7" fill="${topd}"/>`}
-   <ellipse cx="46" cy="206" rx="22" ry="9" fill="#fff" opacity=".22" transform="rotate(-24 46 206)" ${B1}/><ellipse cx="160" cy="214" rx="24" ry="14" fill="#000" opacity=".2" ${B1}/>
+   <path d="M88 148 L88 180 Q100 190 112 180 L112 148Z" fill="url(#${id}n)"/>
+   <ellipse cx="101" cy="160" rx="15" ry="8" fill="${sh2}" opacity=".55" ${B1}/>
+   <path d="M38 230 C38 202 60 188 86 183 Q100 196 114 183 C140 188 162 202 162 230Z" fill="url(#${id}t)"/>
+   ${f?`<path d="M84 183 Q100 199 116 183" stroke="${topd}" stroke-width="5" fill="none" stroke-linecap="round" opacity=".8"/>`
+      :`<path d="M86 183 L78 180 L92 203 L100 195Z" fill="${topl}"/><path d="M114 183 L122 180 L108 203 L100 195Z" fill="${mixHex(top,topd,.5)}"/><path d="M100 196 L100 230" stroke="${topd}" stroke-width="1.4" opacity=".7"/>`}
+   <ellipse cx="60" cy="204" rx="16" ry="7" fill="#fff" opacity=".22" transform="rotate(-24 60 204)" ${B1}/><ellipse cx="146" cy="216" rx="18" ry="12" fill="#000" opacity=".22" ${B1}/>
   </g>
-  <g class="head" ${a.young?'transform="translate(2.5 5) scale(.975)"':''}>
+  <g class="head" ${a.young?'transform="translate(4 6) scale(.96)"':''}>
    ${a.hair==='bun'?back:''}
-   <path d="M62.5 103 C55 101 54 116 58 123.5 C60.4 128 64.6 128.6 66.4 124Z" fill="url(#${id}k)"/><path d="M61 109 q-2.8 5 .6 11" stroke="${sh2}" stroke-width="1.6" fill="none" opacity=".45" ${B2}/>
-   <path d="M137.5 103 C145 101 146 116 142 123.5 C139.6 128 135.4 128.6 133.6 124Z" fill="${mixHex(s,sh2,.5)}"/>
-   <path d="${face}" fill="url(#${id}k)"/>
-   <g clip-path="url(#${id}c)">
-    <path d="${fp}" fill="#1a0d06" opacity=".42" transform="translate(1.5 5)" ${B1}/>
-    <ellipse cx="139" cy="112" rx="13" ry="46" fill="${sh2}" opacity=".42" ${B1}/>
-    <path d="M60 140 Q100 178 140 140 L140 168 L60 168Z" fill="${sh2}" opacity=".3" ${B1}/>
-    <ellipse cx="88" cy="82" rx="17" ry="9" fill="#fff" opacity=".2" ${B1}/>
-    <ellipse cx="76" cy="123" rx="9" ry="7" fill="#fff" opacity=".2" ${B1}/><ellipse cx="122" cy="124" rx="7" ry="5" fill="#fff" opacity=".08" ${B1}/>
-    <ellipse cx="74" cy="128" rx="10" ry="6.5" fill="#e0524a" opacity="${f?.17:.09}" ${B1}/><ellipse cx="126" cy="128" rx="10" ry="6.5" fill="#e0524a" opacity="${f?.15:.08}" ${B1}/>
-    <ellipse cx="98" cy="153" rx="8" ry="3.4" fill="#fff" opacity=".2" ${B1}/>
-    <path d="M132 150 Q140 128 138 104" stroke="${rim}" stroke-width="2.4" fill="none" opacity=".45" ${B2}/>
-    ${a.hives?`<g fill="#d9483d" opacity=".5" ${B2}><ellipse cx="74" cy="134" rx="6" ry="4"/><ellipse cx="126" cy="130" rx="5" ry="3.6"/><ellipse cx="112" cy="84" rx="4.6" ry="3"/><ellipse cx="84" cy="88" rx="3.6" ry="2.6"/><ellipse cx="118" cy="148" rx="4" ry="2.6"/></g>`:''}
-    ${a.sweat?`<g fill="#ffffff" opacity=".5" ${B2}><ellipse cx="84" cy="78" rx="5" ry="1.4" transform="rotate(-18 84 78)"/><ellipse cx="112" cy="74" rx="4" ry="1.4"/><ellipse cx="73" cy="118" rx="1.6" ry="3"/><ellipse cx="127" cy="96" rx="1.4" ry="2.6"/></g>`:''}
-    ${beard}
+   <ellipse cx="44" cy="106" rx="9.5" ry="13.5" fill="url(#${id}k)"/><ellipse cx="44.5" cy="107" rx="4.6" ry="8" fill="${pink}" opacity=".55"/>
+   <ellipse cx="156" cy="106" rx="9.5" ry="13.5" fill="${mixHex(s,sh,.6)}"/><ellipse cx="155.5" cy="107" rx="4.6" ry="8" fill="${mixHex(pink,sh2,.3)}" opacity=".6"/>
+   <path d="M46 96 C46 58 70 38 100 38 C130 38 154 58 154 96 C154 130 134 160 100 160 C66 160 46 130 46 96Z" fill="url(#${id}k)"/>
+   <g clip-path="url(#${id}f)">
+    <path d="${FP}" fill="#1a0c06" opacity=".4" transform="translate(2 6)" ${B1}/>
+    <ellipse cx="66" cy="126" rx="13" ry="8" fill="${pink}" opacity="${f?.5:.32}" ${B1}/><ellipse cx="134" cy="126" rx="13" ry="8" fill="${pink}" opacity="${f?.45:.28}" ${B1}/>
+    <ellipse cx="78" cy="70" rx="20" ry="9" fill="#fff" opacity=".18" ${B1}/>
+    <path d="M148 150 Q158 122 154 92" stroke="#ffd9c0" stroke-width="3" fill="none" opacity=".35" ${B2}/>
+    ${a.beard?`<path d="M48 110 C50 142 70 161 100 162 C130 161 150 142 152 110 C147 128 137 136 121 133 Q100 127 79 133 C63 136 53 128 48 110Z" fill="${H}" opacity=".96"/><path d="M82 134 Q91 127.6 100 130.6 Q109 127.6 118 134 Q109 132.4 100 133.4 Q91 132.4 82 134Z" fill="${hd}"/>`:''}
+    ${a.hives?`<g fill="#e0434a" opacity=".5" ${B2}><ellipse cx="62" cy="134" rx="7" ry="5"/><ellipse cx="138" cy="130" rx="6" ry="4.4"/><ellipse cx="120" cy="64" rx="5" ry="3.4"/><ellipse cx="80" cy="68" rx="4" ry="3"/><ellipse cx="124" cy="148" rx="5" ry="3.4"/></g>`:''}
+    ${a.sweat?`<g fill="#fff" opacity=".6" ${B2}><ellipse cx="74" cy="64" rx="7" ry="2" transform="rotate(-18 74 64)"/><ellipse cx="116" cy="58" rx="5" ry="1.6"/></g><path d="M146 84 q-4 8 0 11 q4 -3 0 -11z" fill="#bfe6ff" opacity=".85"/>`:''}
    </g>
-   ${front}
-   ${old?`<path d="M82 80 Q100 76.5 118 80 M85 86.5 Q100 83.5 115 86.5" stroke="${sh2}" stroke-width="1.2" fill="none" opacity=".4" ${B2}/><path d="M70 111 l-4.2 -1.6 M70 113.6 l-4.4 1 M130 111 l4.2 -1.6 M130 113.6 l4.4 1" stroke="${sh2}" stroke-width=".9" opacity=".5"/><path d="M88.5 131 Q83.5 139 86 149 M111.5 131 Q116.5 139 114 149" stroke="${sh2}" stroke-width="1.8" fill="none" opacity=".45" ${B2}/>`:`<path d="M89.5 132 Q86.5 138 87.5 143 M110.5 132 Q113.5 138 112.5 143" stroke="${sh2}" stroke-width="1.6" fill="none" opacity=".2" ${B2}/>`}
-   ${m==='dolor'?`<path d="M97.6 91 q-1.4 4.4 0 8.4 M102.4 91 q1.4 4.4 0 8.4" stroke="${sh2}" stroke-width="1.4" fill="none" opacity=".55" ${B2}/>`:''}
+   <path d="${FP}" fill="${H}"/>
+   ${a.hair==='thin'?`<ellipse cx="88" cy="50" rx="24" ry="8" fill="#fff" opacity=".3" ${B1}/>`:`<path d="M62 62 Q78 36 106 34" stroke="#fff" stroke-width="8" fill="none" opacity=".26" stroke-linecap="round" ${B1}/><path d="M128 40 Q148 54 152 84" stroke="${hd}" stroke-width="7" fill="none" opacity=".4" stroke-linecap="round" ${B1}/>`}
+   ${old?`<path d="M80 62 Q100 58 120 62 M84 69 Q100 66 116 69" stroke="${sh2}" stroke-width="1.4" fill="none" opacity=".35" ${B2}/><path d="M57 112 l-5 -2 M57 116 l-5 1.6 M143 112 l5 -2 M143 116 l5 1.6" stroke="${sh2}" stroke-width="1" opacity=".4"/><path d="M84 126 Q78 136 82 147 M116 126 Q122 136 118 147" stroke="${sh2}" stroke-width="2" fill="none" opacity=".35" ${B2}/>`:''}
+   ${m==='dolor'?`<path d="M97 72 q-1.6 5 0 10 M103 72 q1.6 5 0 10" stroke="${sh2}" stroke-width="1.6" fill="none" opacity=".5" ${B2}/>`:''}
    ${brow(-1)}${brow(1)}
-   ${eye(82.5,-1)}${eye(117.5,1)}
-   ${a.glasses?`<g fill="none" stroke="#1d1d22" stroke-width="2.4"><rect x="66" y="95" width="32" height="26" rx="9.5" fill="#ffffff" fill-opacity=".12"/><rect x="102" y="95" width="32" height="26" rx="9.5" fill="#ffffff" fill-opacity=".12"/><path d="M98 105 q2 -2.4 4 0 M66 104 l-6 -2 M134 104 l6 -2"/></g><path d="M70 99.6 l9 -2.2 M106 99.6 l9 -2.2" stroke="#fff" stroke-width="1.6" opacity=".6" stroke-linecap="round"/><path d="M68 123.4 h28 M104 123.4 h28" stroke="#000" stroke-width="3" opacity=".16" ${B2}/>`:''}
-   <path d="M103 104 Q107 119 110.4 126 Q112 132 107 134.2 Q102.6 135.4 100 134.6 L100 127 Q102 116 103 104Z" fill="${sh2}" opacity=".42" ${B2}/>
-   <ellipse cx="100" cy="128.6" rx="7.4" ry="6" fill="${mixHex(s,hi,.5)}" opacity=".85" ${B2}/>
-   <path d="M98 106 Q96.8 117 97.4 123" stroke="#fff" stroke-width="2.2" fill="none" opacity=".38" stroke-linecap="round" ${B2}/><ellipse cx="98" cy="126.4" rx="2.4" ry="1.8" fill="#fff" opacity=".55" ${B2}/>
-   <path d="M91.2 128.4 Q89.4 132.8 93.6 134 Q96.8 134.4 98.6 133 M108.8 128.4 Q110.6 132.8 106.4 134 Q103.2 134.4 101.4 133" stroke="${sh2}" stroke-width="1.2" fill="none" opacity=".6" stroke-linecap="round"/>
-   <path d="M94.4 133.2 q2 1.5 3.8 .4 M105.6 133.2 q-2 1.5 -3.8 .4" stroke="#1f0d08" stroke-width="1.5" fill="none" opacity=".7" stroke-linecap="round"/>
-   <ellipse cx="100" cy="137" rx="7" ry="2" fill="${sh2}" opacity=".4" ${B2}/>
-   <g class="mouth">${mouth}</g>
+   ${eye(78,-1)}${eye(122,1)}
+   ${a.glasses?`<g fill="none" stroke="#26262c" stroke-width="2.8"><circle cx="78" cy="104" r="20" fill="#fff" fill-opacity=".1"/><circle cx="122" cy="104" r="20" fill="#fff" fill-opacity=".1"/><path d="M98 102 q2 -2 4 0 M58 101 l-10 -3 M142 101 l10 -3"/></g><path d="M64 94 q5 -7 12 -8 M108 94 q5 -7 12 -8" stroke="#fff" stroke-width="2" fill="none" opacity=".65" stroke-linecap="round"/>`:''}
+   <ellipse cx="100" cy="123" rx="8" ry="6.4" fill="${mixHex(s,hi,.35)}"/><ellipse cx="100" cy="124" rx="7.4" ry="5.6" fill="${pink}" opacity=".5" ${B2}/>
+   <ellipse cx="97.6" cy="120.6" rx="2.6" ry="1.9" fill="#fff" opacity=".6" ${B2}/>
+   <path d="M95 127.6 q2 1.6 4 .4 M105 127.6 q-2 1.6 -4 .4" stroke="${sh2}" stroke-width="1.5" fill="none" opacity=".55" stroke-linecap="round"/>
+   <ellipse cx="100" cy="131" rx="7" ry="2" fill="${sh2}" opacity=".22" ${B2}/>
+   <g class="mouth">${mouth[m]}</g>
   </g>
-  ${a.hives?`<g fill="#d9483d" opacity=".45" ${B2}><ellipse cx="94" cy="178" rx="4" ry="2.6"/><ellipse cx="108" cy="172" rx="3" ry="2"/></g>`:''}
-  ${a.baby?`<g class="baby"><ellipse cx="150" cy="226" rx="40" ry="8" fill="#000" opacity=".2" ${B1}/><path d="M110 208 C110 186 130 177 156 181 C184 185 192 206 181 224 C150 232 122 228 110 208Z" fill="#f7efe0"/><path d="M150 184 C182 188 190 206 180 223 C170 226 160 227 150 226 C168 214 168 196 150 184Z" fill="#000" opacity=".12" ${B1}/><path d="M116 206 Q150 190 184 216 M124 220 Q150 206 178 224" stroke="#d9cbb0" stroke-width="1.8" fill="none"/><ellipse cx="136" cy="188" rx="14.5" ry="15.5" fill="url(#${id}k)"/><path d="M121 185 Q136 166 151 185 Q136 176 121 185Z" fill="#fbf5e9"/><path d="M129 189 q2.6 1.8 5.2 0 M139 189 q2.6 1.8 5.2 0" stroke="#23150f" stroke-width="1.4" fill="none" stroke-linecap="round"/><ellipse cx="136.6" cy="192.6" rx="2" ry="1.4" fill="#fff" opacity=".4" ${B2}/><path d="M133.6 196.4 Q136.6 198.2 139.6 196.4 Q136.6 199.6 133.6 196.4Z" fill="${lipB}"/><ellipse cx="128" cy="194" rx="3.4" ry="2.2" fill="#e0524a" opacity=".28" ${B2}/><ellipse cx="145" cy="194" rx="3.4" ry="2.2" fill="#e0524a" opacity=".28" ${B2}/></g>`:''}
-  </g>
+  ${a.hives?`<g fill="#e0434a" opacity=".45" ${B2}><ellipse cx="96" cy="172" rx="4" ry="2.6"/><ellipse cx="106" cy="166" rx="3" ry="2"/></g>`:''}
+  ${a.baby?`<g class="baby"><path d="M112 210 C112 188 132 179 158 183 C186 187 194 208 183 226 C152 234 124 230 112 210Z" fill="#f7efe0"/><path d="M152 186 C184 190 192 208 182 225 C172 228 162 229 152 228 C170 216 170 198 152 186Z" fill="#000" opacity=".12" ${B1}/><path d="M118 208 Q152 192 186 218" stroke="#d9cbb0" stroke-width="1.8" fill="none"/><ellipse cx="138" cy="190" rx="15" ry="16" fill="url(#${id}k)"/><path d="M122 187 Q138 167 154 187 Q138 177 122 187Z" fill="#fbf5e9"/><path d="M130 191 q3 2.2 6 0 M141 191 q3 2.2 6 0" stroke="#24150f" stroke-width="1.6" fill="none" stroke-linecap="round"/><ellipse cx="138.4" cy="195" rx="2.4" ry="1.8" fill="${pink}" opacity=".7"/><path d="M135 199 Q138.4 201.4 141.8 199" stroke="${lipD}" stroke-width="1.4" fill="none" stroke-linecap="round"/><ellipse cx="129" cy="196.6" rx="3.6" ry="2.4" fill="${pink}" opacity=".5" ${B2}/><ellipse cx="148" cy="196.6" rx="3.6" ry="2.4" fill="${pink}" opacity=".5" ${B2}/></g>`:''}
   </svg>`;
 }
 
@@ -1917,7 +1890,7 @@ function avatar(a,big){
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let store={};try{store=JSON.parse(localStorage.getItem('ecoe-sim')||'{}')}catch(e){}
-const save=()=>{try{localStorage.setItem('ecoe-sim',JSON.stringify(store))}catch(e){}};
+const save=()=>{try{localStorage.setItem('ecoe-sim',JSON.stringify(store))}catch(e){};if(window.cloudSave)window.cloudSave()};
 store.best=store.best||{};
 let cur=null, run=null, tick=null, sample=null, filter='all';
 const inClaude=!!(window.claude&&claude.use);
@@ -1936,7 +1909,7 @@ function renderHall(){
   const used=ORDER.filter(a=>ST.some(s=>s.area===a));
   const cnt=a=>{const l=ST.filter(s=>a==='all'||s.area===a);return l.filter(s=>store.best[s.id]!=null).length+'/'+l.length};
   $('secBtn').innerHTML=`Sección: ${filter==='all'?'Todas':AREAS[filter][0]}<i class="chev"></i>`;
-  $('filters').innerHTML=`<button role="menuitem" class="sec" data-f="all" data-c style="--c:#E0241B" aria-current="${filter==='all'}"><span class="dot"></span>Todas<span class="cnt">${cnt('all')}</span></button>`+used.map(a=>`<button role="menuitem" class="sec" data-f="${a}" data-c style="--c:${AREAS[a][1]}" aria-current="${filter===a}"><span class="dot"></span>${AREAS[a][0]}<span class="cnt">${cnt(a)}</span></button>`).join('');
+  $('filters').innerHTML=`<button role="menuitem" class="sec" data-f="all" data-c style="--c:#EE3A55" aria-current="${filter==='all'}"><span class="dot"></span>Todas<span class="cnt">${cnt('all')}</span></button>`+used.map(a=>`<button role="menuitem" class="sec" data-f="${a}" data-c style="--c:${AREAS[a][1]}" aria-current="${filter===a}"><span class="dot"></span>${AREAS[a][0]}<span class="cnt">${cnt(a)}</span></button>`).join('');
   const shown=used.filter(a=>filter==='all'||a===filter);
   if(openSecs==null)openSecs=new Set([shown[0]]);
   if(filter!=='all')openSecs.add(filter);
@@ -1955,17 +1928,16 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelect
 function countUp(el,n,suf){if(matchMedia('(prefers-reduced-motion: reduce)').matches||!n){el.textContent=n+suf;return}const t0=performance.now();(function f(t){const k=Math.min(1,(t-t0)/600);el.textContent=Math.round(n*(1-Math.pow(1-k,3)))+suf;if(k<1)requestAnimationFrame(f)})(t0)}
 $('filters').onclick=e=>{const b=e.target.closest('[data-f]');if(b){filter=b.dataset.f;renderHall()}};
 $('grid').onclick=e=>{const h=e.target.closest('[data-acc]');if(h){const a=h.dataset.acc,bl=h.parentElement,op=!bl.classList.contains('open');bl.classList.toggle('open',op);h.setAttribute('aria-expanded',op);bl.querySelector('.acc').toggleAttribute('inert',!op);op?openSecs.add(a):openSecs.delete(a);return}const b=e.target.closest('[data-id]');if(b)openStation(b.dataset.id)};
-$('rndBtn').onclick=()=>{const base=ST.filter(s=>filter==='all'||s.area===filter);const pool=base.filter(s=>store.best[s.id]==null);const l=pool.length?pool:base;openStation(l[Math.floor(Math.random()*l.length)].id)};
 $('resetBtn').onclick=()=>{const b=$('resetBtn');
   if(b.dataset.arm){clearTimeout(b._t);delete b.dataset.arm;store.best={};save();renderHall();b.textContent='Progreso borrado';b._t=setTimeout(()=>b.textContent='Borrar progreso',2500);return}
   b.dataset.arm=1;b.textContent='¿Seguro? Tocá de nuevo';b._t=setTimeout(()=>{delete b.dataset.arm;b.textContent='Borrar progreso'},4000)};
 $('homeBtn').onclick=goHome;
-function goHome(){stopTimer();cur=null;document.body.classList.remove('st');$('rndBtn').hidden=false;$('station').hidden=true;$('hall').style.display='';$('homeBtn').hidden=true;renderHall();scrollTo(0,0)}
+function goHome(){stopTimer();cur=null;document.body.classList.remove('st');$('station').hidden=true;$('hall').style.display='';$('homeBtn').hidden=true;renderHall();scrollTo(0,0)}
 
 /* ============ Estación ============ */
 function openStation(id){
   cur=ST.find(s=>s.id===id);run={asked:new Set(),exam:new Set(),done:new Set(),chat:[],left:480,phase:'door',mode:sample?'free':'guided',ticks:{}};
-  stopTimer();document.body.classList.add('st');$('rndBtn').hidden=true;$('hall').style.display='none';$('station').hidden=false;$('homeBtn').hidden=false;$('aiPanel').hidden=true;
+  stopTimer();document.body.classList.add('st');$('hall').style.display='none';$('station').hidden=false;$('homeBtn').hidden=false;$('aiPanel').hidden=true;
   $('station').style.setProperty('--c',AREAS[cur.area][1]);
   $('door').hidden=false;$('roomWrap').hidden=true;$('review').hidden=true;
   $('doorAv').innerHTML=avatar(cur.pt.av,true);
@@ -2161,6 +2133,73 @@ $('aiSave').onclick=async()=>{
 renderHall();
 if(inClaude){claude.use('sample').then(s=>{sample=s||null;if(sample&&run&&run.phase==='door')run.mode='free'}).catch(()=>{})}
 else{$('aiBtn').hidden=false;if(store.ai&&store.ai.key)sample=makeAI(store.ai);aiUI()}
+</script>
+<script type="module">
+/* ============ Cuenta de Google + progreso en la nube (Firebase) ============
+   Pegá acá la configuración de tu proyecto de Firebase
+   (Consola de Firebase → Configuración del proyecto → Tus apps → SDK config).
+   Mientras quede vacía, el botón de inicio de sesión no aparece y todo
+   funciona como antes, guardando sólo en este navegador. */
+const firebaseConfig = {
+  apiKey: "AIzaSyDsx19z7Vn27LcNAINw8osBELbyUvLPqH0",
+  authDomain: "ecoe-final.firebaseapp.com",
+  projectId: "ecoe-final",
+  storageBucket: "ecoe-final.firebasestorage.app",
+  messagingSenderId: "577496590506",
+  appId: "1:577496590506:web:7244710b6d85e5fbb208d3"
+};
+
+if (firebaseConfig.apiKey && !(window.claude && claude.use)) {
+  const V = '10.12.2', base = `https://www.gstatic.com/firebasejs/${V}/`;
+  const { initializeApp } = await import(base + 'firebase-app.js');
+  const { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signInWithRedirect, signOut } = await import(base + 'firebase-auth.js');
+  const { getFirestore, doc, getDoc, setDoc } = await import(base + 'firebase-firestore.js');
+
+  const app = initializeApp(firebaseConfig), auth = getAuth(app), db = getFirestore(app);
+  const btn = $('loginBtn'), msg = $('syncMsg');
+  let user = null, ready = false, timer = null;
+  btn.hidden = false;
+
+  const pack = () => JSON.parse(JSON.stringify({ best: store.best || {}, theme: store.theme || null, ai: store.ai || null }));
+  const push = async () => {
+    if (!user || !ready) return;
+    try { await setDoc(doc(db, 'users', user.uid), { data: pack(), updated: Date.now() }); msg.textContent = 'Progreso guardado ✓'; }
+    catch (e) { msg.textContent = 'No se pudo guardar en la nube'; console.error(e); }
+  };
+  window.cloudSave = () => { if (!user || !ready) return; clearTimeout(timer); msg.textContent = 'Guardando…'; timer = setTimeout(push, 800); };
+
+  btn.onclick = async () => {
+    if (user) { await signOut(auth); return; }
+    const prov = new GoogleAuthProvider(); prov.setCustomParameters({ prompt: 'select_account' });
+    try { await signInWithPopup(auth, prov); }
+    catch (e) {
+      if (e.code === 'auth/popup-blocked' || e.code === 'auth/operation-not-supported-in-this-environment') signInWithRedirect(auth, prov);
+      else if (e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request') { msg.textContent = 'No se pudo iniciar sesión'; console.error(e); }
+    }
+  };
+
+  onAuthStateChanged(auth, async u => {
+    user = u; ready = false;
+    if (!u) { btn.textContent = 'Iniciar sesión con Google'; msg.textContent = ''; return; }
+    btn.textContent = 'Cerrar sesión'; msg.textContent = 'Sincronizando…';
+    try {
+      const snap = await getDoc(doc(db, 'users', u.uid));
+      const c = (snap.exists() && snap.data().data) || {};
+      // Fusión: por estación queda el mejor puntaje entre este navegador y la nube.
+      const best = { ...(c.best || {}) };
+      for (const [k, v] of Object.entries(store.best || {})) if (best[k] == null || v > best[k]) best[k] = v;
+      store.best = best;
+      if (c.theme) store.theme = c.theme;
+      if (c.ai && c.ai.key) store.ai = c.ai;
+      try { localStorage.setItem('ecoe-sim', JSON.stringify(store)); } catch (e) {}
+      if (store.theme) setTheme(store.theme);
+      renderHall();
+      if (store.ai && store.ai.key) { sample = makeAI(store.ai); aiUI(); }
+      ready = true; await push();
+      msg.textContent = (u.displayName ? u.displayName.split(' ')[0] + ' · ' : '') + 'progreso sincronizado ✓';
+    } catch (e) { msg.textContent = 'No se pudo leer el progreso de la nube'; console.error(e); }
+  });
+}
 </script>
 </body>
 </html>
