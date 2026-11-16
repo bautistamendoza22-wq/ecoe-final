@@ -486,6 +486,14 @@ body.st .hl .row{gap:8px 18px}
 .wok span{display:block;font-weight:400;font-size:.86rem;margin-top:2px}
 .wok em{font-style:normal;font-weight:400;opacity:.7}
 .wno{background:var(--soft);color:var(--muted);border-radius:8px;padding:8px 12px}
+
+/* panel de voces */
+.vpanel{display:flex;flex-direction:column;gap:8px;padding:12px 14px;margin-top:10px;border-radius:10px;background:var(--glass-strong,var(--surface));border:.5px solid var(--line);max-width:620px}
+.vrow{display:grid;grid-template-columns:110px minmax(0,1fr) auto;gap:8px;align-items:center}
+.vrow label{font-size:.86rem;color:var(--muted);font-weight:500}
+.vrow select{font:inherit;font-size:.9rem;background:var(--surface);color:var(--ink);border:.5px solid var(--btn-line);border-radius:6px;padding:7px 8px;min-width:0}
+@media (max-width:520px){.vrow{grid-template-columns:1fr auto}.vrow label{grid-column:1/-1}}
+body.st .vpanel{display:none}
 </style>
 </head>
 <body><div class="aurora" aria-hidden="true"><i></i><i></i><i></i><i></i></div><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><radialGradient id="fxdg" cx="40%" cy="60%" r="70%"><stop offset="0" stop-color="rgba(235,248,255,.55)"/><stop offset="1" stop-color="rgba(150,195,230,.55)"/></radialGradient></defs></svg>
@@ -500,11 +508,17 @@ body.st .hl .row{gap:8px 18px}
       <div class="hopts" role="group" aria-label="Opciones">
           <button id="themeBtn">Modo nocturno</button>
           <button id="voiceBtn">Voz del paciente: sí</button>
+          <button id="voicesBtn">Elegir voces</button>
           <button id="aiBtn" hidden>Configurar IA</button>
           <button id="loginBtn" hidden>Iniciar sesión con Google</button>
           <button id="resetBtn">Borrar progreso</button>
         </div>
-      <span class="sync" id="syncMsg" role="status"></span>
+      <div class="vpanel" id="vPanel" hidden>
+          <div class="vrow"><label for="vF">Voz de mujer</label><select id="vF"></select><button class="btn" data-try="f">Probar</button></div>
+          <div class="vrow"><label for="vM">Voz de hombre</label><select id="vM"></select><button class="btn" data-try="m">Probar</button></div>
+          <p class="muted small" id="vNote"></p>
+        </div>
+        <span class="sync" id="syncMsg" role="status"></span>
     </div>
   </div>
   <div class="hr prog">
@@ -2149,20 +2163,37 @@ syncVoiceBtn();
 $('voiceBtn').onclick=()=>{voiceOn=!voiceOn;try{localStorage.setItem('ecoe_voice',voiceOn?'1':'0')}catch(e){}syncVoiceBtn();if(!voiceOn)hush()};
 const F_NAMES=/elena|sabina|paulina|m[oó]nica|helena|laura|dalia|lucia|luc[ií]a|paloma|camila|valentina|isabela|francisca|ximena|elvira|marisol|sof[ií]a|female|mujer/i,
       M_NAMES=/tom[aá]s|jorge|diego|pablo|ra[uú]l|[aá]lvaro|alonso|gerardo|lorenzo|alex|carlos|dar[ií]o|enrique|juan|male|hombre/i;
-function pickVoice(sex){if(!SYN)return null;const vs=SYN.getVoices().filter(v=>/^es/i.test(v.lang));if(!vs.length)return null;
-  const rank=v=>(/es[-_]AR/i.test(v.lang)?40:/es[-_](419|US|MX|CO|CL|UY)/i.test(v.lang)?25:/es[-_]ES/i.test(v.lang)?10:15)+(/natural|neural|online|google/i.test(v.name)?8:0)+((sex==='f'?F_NAMES:M_NAMES).test(v.name)?30:(sex==='f'?M_NAMES:F_NAMES).test(v.name)?-30:0);
+let voicePref={};try{voicePref=JSON.parse(localStorage.getItem('ecoe_voices')||'{}')}catch(e){}
+const esVoices=()=>SYN?SYN.getVoices().filter(v=>/^es/i.test(v.lang)):[];
+function pickVoice(sex){if(!SYN)return null;const vs=esVoices();if(!vs.length)return null;
+  const pref=voicePref[sex==='f'?'f':'m'];if(pref){const v=vs.find(v=>v.name===pref);if(v)return v}
+  const rank=v=>(/es[-_]AR/i.test(v.lang)?60:/es[-_](UY)/i.test(v.lang)?45:/es[-_](419|US|MX|CO|CL|PY)/i.test(v.lang)?25:/es[-_]ES/i.test(v.lang)?5:15)+(/natural|neural|online|google/i.test(v.name)?8:0)+((sex==='f'?F_NAMES:M_NAMES).test(v.name)?30:(sex==='f'?M_NAMES:F_NAMES).test(v.name)?-30:0);
   return vs.slice().sort((a,b)=>rank(b)-rank(a))[0]}
+/* edad de quien habla: los padres y familiares se toman como adultos */
+function speakerAge(pt){if(/\(/.test(pt.n))return /hija|hijo/.test(pt.n)?45:32;const m=String(pt.e).match(/(\d+)\s*años/);return m?+m[1]:35}
+function ageTone(age){return age<18?{p:1.18,r:1.05}:age<30?{p:1.06,r:1.03}:age<60?{p:1,r:1}:age<75?{p:.9,r:.92}:{p:.84,r:.85}}
 if(SYN&&SYN.onvoiceschanged!==undefined)SYN.onvoiceschanged=()=>{};
 function hush(){if(SYN)SYN.cancel()}
 function speak(text){
   if(!SYN||!voiceOn||!cur||!text){afterSay();return}
   hush();const a=cur.pt.av||{},u=new SpeechSynthesisUtterance(String(text).replace(/…/g,', '));
   const v=pickVoice(a.sex);if(v){u.voice=v;u.lang=v.lang}else u.lang='es-AR';
-  const gendered=v&&((a.sex==='f'?F_NAMES:M_NAMES).test(v.name));
-  u.pitch=gendered?1:(a.sex==='f'?1.15:0.82);
-  u.rate=Math.min(2,(({triste:.9,angustia:.95,agitado:1.08,dolor:1.02}[a.mood])||1)*1.3);
+  const gendered=v&&(voicePref[a.sex==='f'?'f':'m']===v.name||(a.sex==='f'?F_NAMES:M_NAMES).test(v.name));
+  const tone=ageTone(speakerAge(cur.pt));
+  u.pitch=Math.max(.1,Math.min(2,(gendered?1:(a.sex==='f'?1.15:0.82))*tone.p));
+  u.rate=Math.min(2,(({triste:.9,angustia:.95,agitado:1.08,dolor:1.02}[a.mood])||1)*1.3*tone.r);
   u.onend=u.onerror=()=>afterSay();
   SYN.speak(u)}
+/* elegir voces */
+function fillVoices(){const vs=esVoices();const opt=sex=>`<option value="">Automática</option>`+vs.map(v=>`<option value="${esc(v.name)}"${voicePref[sex]===v.name?' selected':''}>${esc(v.name.replace(/^Microsoft |^Google /,''))} · ${esc(v.lang)}</option>`).join('');
+  $('vF').innerHTML=opt('f');$('vM').innerHTML=opt('m');
+  const ar=vs.filter(v=>/es[-_]AR/i.test(v.lang));
+  $('vNote').textContent=!vs.length?'Este navegador no tiene voces en español.':ar.length?`Tenés ${ar.length} voz${ar.length>1?'es':''} con acento argentino. Por defecto se usan esas.`:'Este navegador no trae voces con acento argentino. En Microsoft Edge están Elena y Tomás (español de Argentina), que son las más naturales.'}
+$('voicesBtn').hidden=!SYN;
+$('voicesBtn').onclick=()=>{const p=$('vPanel');p.hidden=!p.hidden;if(!p.hidden)fillVoices()};
+if(SYN)SYN.addEventListener&&SYN.addEventListener('voiceschanged',()=>{if(!$('vPanel').hidden)fillVoices()});
+['vF','vM'].forEach(id=>$(id).onchange=()=>{voicePref[id==='vF'?'f':'m']=$(id).value||undefined;try{localStorage.setItem('ecoe_voices',JSON.stringify(voicePref))}catch(e){}});
+document.querySelectorAll('[data-try]').forEach(b=>b.onclick=()=>{if(!SYN)return;const sex=b.dataset.try;SYN.cancel();const u=new SpeechSynthesisUtterance(sex==='f'?'Hola, doctora. Vengo porque me duele la cabeza desde ayer.':'Hola, doctor. Me duele el pecho desde hace un rato.');const v=pickVoice(sex);if(v){u.voice=v;u.lang=v.lang}else u.lang='es-AR';u.rate=1.3;SYN.speak(u)});
 /* conversación: escucha, envía al terminar de hablar y vuelve a escuchar cuando el paciente responde */
 const conv={on:false,rec:null,listening:false};
 function vstat(t){$('vStat').textContent=t||''}
