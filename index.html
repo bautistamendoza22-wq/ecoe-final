@@ -474,6 +474,18 @@ body.st .hl .row{gap:8px 18px}
 /* barra del reloj pegada arriba y opaca, sin texto asomando por encima */
 .topbar{top:var(--sat,0px)!important;border-top-left-radius:0;border-top-right-radius:0;border-top-color:transparent}
 :root:not([data-theme="dark"]) .topbar{background:rgba(255,255,255,.95)}
+
+/* escribir en examen y tratamiento */
+.wbox{margin:0 0 10px}
+.wlog{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.wlog:empty{display:none}
+.wentry{display:flex;flex-direction:column;gap:6px;animation:rise .4s var(--ease)}
+.wme{align-self:flex-end;max-width:85%;background:var(--btn);color:var(--btn-ink);padding:8px 12px;border-radius:10px;font-size:.92rem;white-space:pre-wrap}
+.wres{display:flex;flex-direction:column;gap:4px;font-size:.9rem}
+.wok{background:var(--tint);color:var(--tink);border-radius:8px;padding:8px 12px;font-weight:500}
+.wok span{display:block;font-weight:400;font-size:.86rem;margin-top:2px}
+.wok em{font-style:normal;font-weight:400;opacity:.7}
+.wno{background:var(--soft);color:var(--muted);border-radius:8px;padding:8px 12px}
 </style>
 </head>
 <body><div class="aurora" aria-hidden="true"><i></i><i></i><i></i><i></i></div><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><radialGradient id="fxdg" cx="40%" cy="60%" r="70%"><stop offset="0" stop-color="rgba(235,248,255,.55)"/><stop offset="1" stop-color="rgba(150,195,230,.55)"/></radialGradient></defs></svg>
@@ -574,8 +586,8 @@ body.st .hl .row{gap:8px 18px}
             <div class="opts" id="askOpts"></div>
             <div class="tabnav" id="nav-ask"></div>
           </div>
-          <div id="tab-exam" hidden><p class="muted small" style="margin-bottom:8px">Elegí qué examinás y qué pedís. Tocá de nuevo para deseleccionar. Los estudios innecesarios descuentan.</p><div class="opts" id="examOpts"></div><div class="tabnav" id="nav-exam"></div></div>
-          <div id="tab-do" hidden><p class="muted small" style="margin-bottom:8px">Marcá lo que dirías o indicarías. Tocá de nuevo para deseleccionar. Hay opciones incorrectas que descuentan.</p><div class="opts" id="doOpts"></div><div class="tabnav" id="nav-do"></div></div>
+          <div id="tab-exam" hidden><p class="muted small" style="margin-bottom:8px">Escribí qué examinás y qué pedís, o elegilo de la lista. Tocá de nuevo para deseleccionar. Los estudios innecesarios descuentan.</p><form class="ask wbox" id="xForm"><textarea id="xIn" placeholder="Ej.: signos vitales, auscultación, ECG y troponina…" aria-label="Lo que examinás o pedís"></textarea><button class="btn primary" id="xBtn">Pedir</button></form><div class="wlog" id="xLog" role="status"></div><div class="opts" id="examOpts"></div><div class="tabnav" id="nav-exam"></div></div>
+          <div id="tab-do" hidden><p class="muted small" style="margin-bottom:8px">Escribí lo que dirías o indicarías, o marcalo en la lista. Tocá de nuevo para deseleccionar. Hay opciones incorrectas que descuentan.</p><form class="ask wbox" id="dForm"><textarea id="dIn" placeholder="Ej.: aspirina masticada, le explico el diagnóstico, derivo para reperfusión…" aria-label="Lo que dirías o indicarías"></textarea><button class="btn primary" id="dBtn">Indicar</button></form><div class="wlog" id="dLog" role="status"></div><div class="opts" id="doOpts"></div><div class="tabnav" id="nav-do"></div></div>
         </div>
       </div>
     </div>
@@ -2093,6 +2105,38 @@ $('startBtn').onclick=()=>{
   tick=setInterval(()=>{run.el++;const c=$('clock');c.textContent=fmt(run.el);$('cBar').style.width=Math.min(100,100*run.el/run.limit)+'%';c.classList.toggle('over',run.el>=IDEAL);if(run.limit-run.el<=60)c.classList.add('low');if(run.el>=run.limit)finish(true)},1000);
 };
 $('endBtn').onclick=()=>finish(false);
+/* ============ Escribir lo que examinás, pedís, decís o indicás ============ */
+function optText(kind,i){return kind==='x'?cur.x[i][0]:cur.d[i][0]}
+function selectOpt(kind,i){const set=kind==='x'?run.exam:run.done;if(set.has(i))return false;const b=document.querySelector(`#${kind==='x'?'examOpts':'doOpts'} .opt[data-k="${i}"]`);if(b)b.click();return true}
+function localMatch(kind,t){
+  const list=(kind==='x'?cur.x:cur.d).map(o=>new Set(norm(o[0]))),df={};list.forEach(B=>B.forEach(w=>df[w]=(df[w]||0)+1));
+  const W=w=>Math.log(1+(list.length+1)/((df[w]||0)+1));
+  const pieces=String(t).split(/[,;.\n]+|\s+y\s+|\s+e\s+|\s*\+\s*/i).map(s=>s.trim()).filter(Boolean);
+  const ids=new Set(),otros=[];
+  pieces.forEach(p=>{const A=new Set(norm(p));if(!A.size)return;let best=-1,bs=0;
+    list.forEach((B,i)=>{let sh=0,sa=0,sb=0;A.forEach(w=>{sa+=W(w);if(B.has(w))sh+=W(w)});B.forEach(w=>sb+=W(w));const s=sa&&sb?.7*sh/sa+.3*2*sh/(sa+sb):0;if(s>bs){bs=s;best=i}});
+    if(best>=0&&bs>=0.45)ids.add(best);else otros.push(p)});
+  return {ids:[...ids],otros}}
+async function aiMatch(kind,t){
+  const list=(kind==='x'?cur.x:cur.d).map((o,i)=>i+'. '+o[0]).join('\n');
+  const what=kind==='x'?'examina o pide (examen físico y estudios complementarios)':'le diría al paciente o indicaría (diagnóstico, explicación, tratamiento, derivación)';
+  const r=await sample.json(`Sos el evaluador de una estación de ECOE de Medicina. El estudiante escribió lo que ${what}:\n«${t}»\n\nOPCIONES DE LA ESTACIÓN:\n${list}\n\nIdentificá qué opciones expresó el estudiante, aunque use otras palabras, sinónimos o abreviaturas. No agregues opciones que no expresó. Si dijo algo equivalente a una opción incorrecta, incluila igual.\nDevolvé sólo JSON: {"ids":[números de las opciones que expresó],"otros":["lo que escribió que no corresponde a ninguna opción, en pocas palabras"]}`,{modelTier:'quick'});
+  return {ids:(r.ids||[]).map(Number).filter(i=>Number.isInteger(i)&&i>=0&&i<(kind==='x'?cur.x:cur.d).length),otros:r.otros||[]}}
+async function writeSubmit(kind){
+  const inp=$(kind+'In'),btn=$(kind+'Btn'),log=$(kind+'Log'),t=inp.value.trim();
+  if(!t||run.phase!=='run'||run.wbusy)return;
+  run.wbusy=true;btn.disabled=true;
+  const entry=document.createElement('div');entry.className='wentry';entry.innerHTML=`<div class="wme">${esc(t)}</div><div class="wres muted">${sample?'Buscando en la estación…':''}</div>`;log.appendChild(entry);
+  let res;try{res=sample?await aiMatch(kind,t):localMatch(kind,t)}catch(e){res=localMatch(kind,t)}
+  const out=[];
+  res.ids.forEach(i=>{const added=selectOpt(kind,i);out.push(`<div class="wok">${added?'+':'·'} ${esc(optText(kind,i))}${kind==='x'?`<span>${esc(cur.x[i][1])}</span>`:''}${added?'':'<em> (ya estaba elegido)</em>'}</div>`)});
+  res.otros.forEach(o=>out.push(`<div class="wno">${kind==='x'?'No disponible en esta estación':'No figura entre las opciones evaluadas'}: ${esc(o)}</div>`));
+  if(!out.length)out.push(`<div class="wno">No encontré ${kind==='x'?'estudios ni maniobras':'indicaciones'} que coincidan. Probá con otras palabras o elegí de la lista.</div>`);
+  entry.querySelector('.wres').outerHTML=`<div class="wres">${out.join('')}</div>`;
+  inp.value='';run.wbusy=false;btn.disabled=false;inp.focus()}
+$('xForm').onsubmit=e=>{e.preventDefault();writeSubmit('x')};$('dForm').onsubmit=e=>{e.preventDefault();writeSubmit('d')};
+['xIn','dIn'].forEach(id=>$(id).onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$(id==='xIn'?'xForm':'dForm').requestSubmit()}});
+
 /* ============ Voz del paciente y conversación por voz ============ */
 let voiceOn=true;try{voiceOn=localStorage.getItem('ecoe_voice')!=='0'}catch(e){}
 const SYN=window.speechSynthesis||null,SR=window.SpeechRecognition||window.webkitSpeechRecognition||null;
@@ -2185,6 +2229,7 @@ function renderWork(){
   $('doOpts').innerHTML=shuffle(cur.d.map((_,i)=>i)).map(i=>`<button class="opt pick" data-k="${i}" aria-pressed="false"><span>${esc(cur.d[i][0])}</span></button>`).join('');
   counts();tabNav();
   $('voiceBar').hidden=!SR;conv.on=false;syncConv();
+  $('xLog').innerHTML='';$('dLog').innerHTML='';$('xIn').value='';$('dIn').value='';
 }
 function setMode(m){run.mode=m;$('modeRow').hidden=!sample;$('aiHint').hidden=!!sample||inClaude;$('mFree').setAttribute('aria-pressed',m==='free');$('mGuided').setAttribute('aria-pressed',m==='guided');$('freeBox').hidden=m!=='free';$('askOpts').hidden=m!=='guided'}
 $('mFree').onclick=()=>setMode('free');$('mGuided').onclick=()=>setMode('guided');
