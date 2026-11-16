@@ -2163,12 +2163,14 @@ syncVoiceBtn();
 $('voiceBtn').onclick=()=>{voiceOn=!voiceOn;try{localStorage.setItem('ecoe_voice',voiceOn?'1':'0')}catch(e){}syncVoiceBtn();if(!voiceOn)hush()};
 const F_NAMES=/elena|sabina|paulina|m[oó]nica|helena|laura|dalia|lucia|luc[ií]a|paloma|camila|valentina|isabela|francisca|ximena|elvira|marisol|sof[ií]a|female|mujer/i,
       M_NAMES=/tom[aá]s|jorge|diego|pablo|ra[uú]l|[aá]lvaro|alonso|gerardo|lorenzo|alex|carlos|dar[ií]o|enrique|juan|male|hombre/i;
+const IS_WIN=/windows/i.test((navigator.userAgentData&&navigator.userAgentData.platform)||navigator.userAgent||'');
 let voicePref={};try{voicePref=JSON.parse(localStorage.getItem('ecoe_voices')||'{}')}catch(e){}
 const esVoices=()=>SYN?SYN.getVoices().filter(v=>/^es/i.test(v.lang)):[];
 function pickVoice(sex){if(!SYN)return null;const vs=esVoices();if(!vs.length)return null;
   const pref=voicePref[sex==='f'?'f':'m'];if(pref){const v=vs.find(v=>v.name===pref);if(v)return v}
-  const want=sex==='f'?/es[-_]US/i:/es[-_]ES/i;
-  const rank=v=>(want.test(v.lang)?80:/es[-_]AR/i.test(v.lang)?40:/es[-_](419|US|MX|CO|CL|PY|UY)/i.test(v.lang)?25:15)+(/natural|neural|online|google/i.test(v.name)?8:0)+((sex==='f'?F_NAMES:M_NAMES).test(v.name)?30:(sex==='f'?M_NAMES:F_NAMES).test(v.name)?-30:0);
+  const rank=IS_WIN
+    ? v=>((sex==='f'?/es[-_]US/i:/es[-_]ES/i).test(v.lang)?80:/es[-_]AR/i.test(v.lang)?40:/es[-_](419|US|MX|CO|CL|PY|UY)/i.test(v.lang)?25:15)
+    : v=>(/es[-_]AR/i.test(v.lang)?60:/es[-_]UY/i.test(v.lang)?45:/es[-_](419|US|MX|CO|CL|PY)/i.test(v.lang)?25:/es[-_]ES/i.test(v.lang)?5:15)+(/natural|neural|online|google/i.test(v.name)?8:0)+((sex==='f'?F_NAMES:M_NAMES).test(v.name)?30:(sex==='f'?M_NAMES:F_NAMES).test(v.name)?-30:0);
   return vs.slice().sort((a,b)=>rank(b)-rank(a))[0]}
 /* edad de quien habla: los padres y familiares se toman como adultos */
 function speakerAge(pt){if(/\(/.test(pt.n))return /hija|hijo/.test(pt.n)?45:32;const m=String(pt.e).match(/(\d+)\s*años/);return m?+m[1]:35}
@@ -2189,7 +2191,7 @@ function speak(text){
 function fillVoices(){const vs=esVoices();const opt=sex=>`<option value="">Automática</option>`+vs.map(v=>`<option value="${esc(v.name)}"${voicePref[sex]===v.name?' selected':''}>${esc(v.name.replace(/^Microsoft |^Google /,''))} · ${esc(v.lang)}</option>`).join('');
   $('vF').innerHTML=opt('f');$('vM').innerHTML=opt('m');
   const ar=vs.filter(v=>/es[-_]AR/i.test(v.lang));
-  $('vNote').textContent=!vs.length?'Este navegador no tiene voces en español.':ar.length?'Por defecto: mujeres con español de Estados Unidos y hombres con español de España.':'Por defecto: mujeres con español de Estados Unidos y hombres con español de España.'}
+  $('vNote').textContent=!vs.length?'Este navegador no tiene voces en español.':ar.length?(IS_WIN?'Por defecto en Windows: mujeres con español de Estados Unidos y hombres con español de España.':'Por defecto se usan las voces con acento argentino.'):(IS_WIN?'Por defecto en Windows: mujeres con español de Estados Unidos y hombres con español de España.':'No hay voces con acento argentino; se usa la latinoamericana más parecida.')}
 $('voicesBtn').hidden=!SYN;
 $('voicesBtn').onclick=()=>{const p=$('vPanel');p.hidden=!p.hidden;if(!p.hidden)fillVoices()};
 if(SYN)SYN.addEventListener&&SYN.addEventListener('voiceschanged',()=>{if(!$('vPanel').hidden)fillVoices()});
@@ -2239,7 +2241,7 @@ $('quitBtn').onclick=e=>{const b=e.currentTarget;if(b.dataset.arm){clearTimeout(
   b.dataset.arm=1;b.textContent='¿Seguro? Confirmar';b._t=setTimeout(()=>{delete b.dataset.arm;b.textContent='Volver sin guardar'},3000)};
 /* transiciones suaves entre pantallas y vuelta al mismo lugar del pasillo */
 let hallY=0;
-function vt(fn){if(document.startViewTransition&&!matchMedia('(prefers-reduced-motion: reduce)').matches){document.startViewTransition(fn)}else fn()}
+function vt(fn){if(document.startViewTransition&&!matchMedia('(prefers-reduced-motion: reduce)').matches){const t=document.startViewTransition(fn);[t.ready,t.finished,t.updateCallbackDone].forEach(p=>p&&p.catch(()=>{}))}else fn()}
 {const _os=openStation,_gh=goHome,_fin=finish,_sb=$('startBtn').onclick;
  openStation=id=>{if($('hall').style.display!=='none')hallY=scrollY;vt(()=>_os(id))};
  goHome=()=>vt(()=>{hush();conv.on=false;stopListen();_gh();scrollTo({top:hallY,left:0,behavior:'instant'})});
