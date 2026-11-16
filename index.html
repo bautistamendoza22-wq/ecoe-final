@@ -436,6 +436,17 @@ body.st .hl .row{gap:8px 18px}
 /* tarjetas del pasillo: texto pegado al avatar */
 .door{align-content:start;min-height:0;gap:10px 8px}
 @media (max-width:700px){.door{min-height:0}}
+
+/* reloj: tiempo ideal y máximo */
+.cbar{position:relative;overflow:visible}
+.cbar::after{content:"";position:absolute;left:var(--ideal,66%);top:-3px;width:1.5px;height:9px;background:var(--ink);opacity:.55}
+.cbar>i{transition:width 1s linear,background-color .6s var(--ease)}
+.clock.over{color:var(--warn)}
+.clock.over+.cbar>i{background:var(--warn)}
+.clock.low,.clock.low.over{color:var(--bad)}
+.clock.low+.cbar>i{background:var(--bad)}
+.csub{font-size:.7rem;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.fact.warn{background:var(--warn-soft);color:var(--warn)}
 </style>
 </head>
 <body><div class="aurora" aria-hidden="true"><i></i><i></i><i></i><i></i></div><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><radialGradient id="fxdg" cx="40%" cy="60%" r="70%"><stop offset="0" stop-color="rgba(235,248,255,.55)"/><stop offset="1" stop-color="rgba(150,195,230,.55)"/></radialGradient></defs></svg>
@@ -444,7 +455,7 @@ body.st .hl .row{gap:8px 18px}
   <div class="hl">
     <div class="eyebrow">Examen Final de Carrera · Medicina UNS</div>
     <h1>Simulador ECOE</h1>
-    <p class="tag">Paciente simulado · 8 minutos · lista de cotejo</p>
+    <p class="tag">Paciente simulado · tiempo ideal 8 minutos · lista de cotejo</p>
     <div class="row">
       <button class="btn" id="homeBtn" hidden>← Volver al pasillo</button>
       <div class="hopts" role="group" aria-label="Opciones">
@@ -492,13 +503,13 @@ body.st .hl .row{gap:8px 18px}
     <div class="panel doorview" id="door">
       <div id="doorAv"></div>
       <div class="sheet" id="sheet"></div>
-      <div class="row doorgo"><button class="btn primary big" id="startBtn">Entrar a la estación</button><span class="muted small">El reloj de 8 minutos arranca al entrar.</span></div>
+      <div class="row doorgo"><button class="btn primary big" id="startBtn">Entrar a la estación</button><span class="muted small" id="doorTime">El reloj arranca al entrar.</span></div>
     </div>
 
     <div id="roomWrap" hidden>
       <div class="panel topbar" id="timerBox">
         <div class="tbt"><div class="eyebrow" id="tbArea"></div><div class="tbtitle" id="tbTitle"></div></div>
-        <div class="clockw"><div class="clock" id="clock">8:00</div><div class="cbar"><i id="cBar"></i></div></div>
+        <div class="clockw"><div class="clock" id="clock">0:00</div><div class="cbar"><i id="cBar"></i></div><div class="csub" id="clockSub"></div></div>
         <button class="btn" id="endBtn">Salir y corregir</button>
       </div>
       <div class="room">
@@ -2029,20 +2040,28 @@ function openStation(id){
   const sheet=`<div class="eyebrow">${AREAS[cur.area][0]} · Instrucciones para el estudiante ${cur.real?'<span class="real">estación real</span>':''}</div>
     <h2>${esc(cur.motivo)}</h2>
     <p><b>Lugar:</b> ${esc(cur.lugar)}</p><p><b>Paciente:</b> ${esc(cur.pt.n)}, ${esc(cur.pt.e)}</p>
-    <p>${esc(cur.sit)}</p><p><b>Tenés 8 minutos para:</b></p><ol>${cur.tareas.map(t=>`<li>${esc(t)}</li>`).join('')}</ol>`;
+    <p>${esc(cur.sit)}</p><p><b>Tiempo ideal: 8 minutos.</b> En el simulador tenés hasta ${limitFor(cur,run.mode)/60} minutos para leer y elegir. Tareas:</p><ol>${cur.tareas.map(t=>`<li>${esc(t)}</li>`).join('')}</ol>`;
   $('sheet').innerHTML=sheet;$('sheet2').innerHTML=sheet.replace(/<div class="eyebrow">.*?<\/div>/s,'');
   $('tbArea').textContent=AREAS[cur.area][0];$('tbTitle').textContent=cur.motivo;
   $('avBox').innerHTML=avatar(cur.pt.av,true,cur.id);$('ptName').textContent=cur.pt.n;$('ptMeta').textContent=cur.pt.e;
-  $('bubble').hidden=true;$('clock').textContent='8:00';$('cBar').style.width='100%';$('clock').classList.remove('low');
+  $('bubble').hidden=true;$('clock').textContent='0:00';$('cBar').style.width='0';$('clock').classList.remove('low','over');$('doorTime').textContent=`El reloj arranca al entrar. Ideal: 8 min · máximo: ${limitFor(cur,run.mode)/60} min.`;
   scrollTo({top:0,left:0,behavior:'instant'});
 }
 function say(text){const b=$('bubble');b.hidden=false;b.textContent=text;const av=$('avBox').firstElementChild;av.classList.add('talk');clearTimeout(say.t);say.t=setTimeout(()=>av.classList.remove('talk'),Math.min(4500,900+text.length*28))}
+const IDEAL=480;
+function limitFor(s,mode){const w=t=>String(t||'').trim().split(/\s+/).length;
+  const opts=s.q.reduce((a,q)=>a+w(q[1]),0)+(s.x||[]).reduce((a,x)=>a+w(x[0]),0)+s.d.reduce((a,d)=>a+w(d[0]),0);
+  const ans=s.q.reduce((a,q)=>a+w(q[2]),0)+(s.x||[]).reduce((a,x)=>a+w(x[1]),0);
+  const n=s.q.length+(s.x||[]).length+s.d.length;
+  const read=(opts+ans*0.6)/180*60+n*0.6*3;
+  return Math.ceil((IDEAL+2*read+(mode==='free'?180:0))/60)*60}
 function fmt(s){return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}
 function stopTimer(){clearInterval(tick);tick=null;$('timerBox').classList.remove('running')}
 $('startBtn').onclick=()=>{
   run.phase='run';$('door').hidden=true;$('roomWrap').hidden=false;$('timerBox').classList.add('running');
   say(cur.abre);renderWork();scrollTo({top:0,left:0,behavior:'instant'});requestAnimationFrame(syncTabTop);
-  tick=setInterval(()=>{run.left--;$('clock').textContent=fmt(Math.max(0,run.left));$('cBar').style.width=(100*Math.max(0,run.left)/480)+'%';if(run.left<=60)$('clock').classList.add('low');if(run.left<=0)finish(true)},1000);
+  run.limit=limitFor(cur,run.mode);run.el=0;const cb=$('cBar').parentElement;cb.style.setProperty('--ideal',(100*IDEAL/run.limit)+'%');$('clockSub').textContent=`ideal 8:00 · máx ${fmt(run.limit)}`;$('clock').textContent='0:00';$('cBar').style.width='0';
+  tick=setInterval(()=>{run.el++;const c=$('clock');c.textContent=fmt(run.el);$('cBar').style.width=Math.min(100,100*run.el/run.limit)+'%';c.classList.toggle('over',run.el>=IDEAL);if(run.limit-run.el<=60)c.classList.add('low');if(run.el>=run.limit)finish(true)},1000);
 };
 $('endBtn').onclick=()=>finish(false);
 
@@ -2102,7 +2121,7 @@ $('askIn').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('
 /* ============ Corrección ============ */
 function finish(bell){
   if(!cur||run.phase!=='run')return;run.phase='review';stopTimer();
-  $('roomWrap').hidden=true;run.used=480-Math.max(0,run.left);run.bell=bell;
+  $('roomWrap').hidden=true;run.used=run.el||0;run.bell=bell;
   run.ticks={};run.auto={};
   const hit=it=>{if(it>=0){run.ticks[it]=true;run.auto[it]=true}};
   run.asked.forEach(i=>hit(cur.q[i][3]));run.exam.forEach(i=>hit(cur.x[i][2]));run.done.forEach(i=>hit(cur.d[i][2]));
@@ -2151,7 +2170,7 @@ function updScore(){
   const s=score(),t=total(),p=Math.round(100*s/t),n=cur.cot.filter((c,i)=>run.ticks[i]).length,m=minus();
   $('scNum').textContent=p+' %';$('scBar').style.width=p+'%';$('scNum').classList.toggle('low',p<60);$('scBar').classList.toggle('low',p<60);
   $('scVer').textContent=p>=85?'Superior':p>=70?'Suficiente':p>=60?'Limítrofe':'Insuficiente';
-  $('facts').innerHTML=`<span class="fact">${s} de ${t} puntos</span><span class="fact">${n} de ${cur.cot.length} ítems</span>${m?`<span class="fact bad">−${m} por errores</span>`:''}<span class="fact">${fmt(run.used)} de 8:00</span>`;
+  $('facts').innerHTML=`<span class="fact">${s} de ${t} puntos</span><span class="fact">${n} de ${cur.cot.length} ítems</span>${m?`<span class="fact bad">−${m} por errores</span>`:''}<span class="fact${run.used>IDEAL?' warn':''}">${fmt(run.used)} · ideal 8:00</span>`;
   document.querySelectorAll('#cot [data-g]').forEach(el=>{const g=el.dataset.g;const got=cur.cot.reduce((a,c,i)=>a+(c[2]===g&&run.ticks[i]?c[1]:0),0),all=cur.cot.reduce((a,c)=>a+(c[2]===g?c[1]:0),0);el.textContent=got+' / '+all});
   if(store.best[cur.id]==null||p>store.best[cur.id]){store.best[cur.id]=p;save()}
 }
