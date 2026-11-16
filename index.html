@@ -2126,7 +2126,7 @@ async function writeSubmit(kind){
   const inp=$(kind+'In'),btn=$(kind+'Btn'),log=$(kind+'Log'),t=inp.value.trim();
   if(!t||run.phase!=='run'||run.wbusy)return;
   run.wbusy=true;btn.disabled=true;
-  const entry=document.createElement('div');entry.className='wentry';entry.innerHTML=`<div class="wme">${esc(t)}</div><div class="wres muted">${sample?'Buscando en la estación…':''}</div>`;log.appendChild(entry);
+  const entry=document.createElement('div');entry.className='wentry';entry.innerHTML=`<div class="wres muted">${sample?'Buscando en la estación…':''}</div>`;log.appendChild(entry);
   let res;try{res=sample?await aiMatch(kind,t):localMatch(kind,t)}catch(e){res=localMatch(kind,t)}
   const out=[];
   res.ids.forEach(i=>{const added=selectOpt(kind,i);out.push(`<div class="wok">${added?'+':'·'} ${esc(optText(kind,i))}${kind==='x'?`<span>${esc(cur.x[i][1])}</span>`:''}${added?'':'<em> (ya estaba elegido)</em>'}</div>`)});
