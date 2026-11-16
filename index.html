@@ -2167,15 +2167,19 @@ function speak(text){
 const conv={on:false,rec:null,listening:false};
 function vstat(t){$('vStat').textContent=t||''}
 function afterSay(){if(conv.on)setTimeout(listen,350)}
+const PAUSE_MS=2000;
 function listen(){
   if(!conv.on||conv.listening||!SR||!run||run.phase!=='run'||run.busy)return;
   if(SYN&&SYN.speaking)return;
-  const r=new SR();conv.rec=r;r.lang='es-AR';r.interimResults=true;r.continuous=false;r.maxAlternatives=1;
-  let finalT='';conv.listening=true;vstat('Escuchando…');
-  r.onresult=e=>{let it='';for(let i=e.resultIndex;i<e.results.length;i++){const t=e.results[i][0].transcript;if(e.results[i].isFinal)finalT+=t;else it+=t}
-    vstat('«'+(finalT+it).trim()+'»');if(run.mode==='free')$('askIn').value=(finalT+it).trim()};
+  const r=new SR();conv.rec=r;r.lang='es-AR';r.interimResults=true;r.continuous=true;r.maxAlternatives=1;
+  let finalT='',interimT='',timer=null,sent=false;conv.listening=true;vstat('Escuchando…');
+  const text=()=>(finalT+' '+interimT).replace(/\s+/g,' ').trim();
+  const send=()=>{if(sent)return;sent=true;clearTimeout(timer);try{r.stop()}catch(e){}};
+  r.onresult=e=>{interimT='';for(let i=e.resultIndex;i<e.results.length;i++){const t=e.results[i][0].transcript;if(e.results[i].isFinal)finalT+=' '+t;else interimT+=t}
+    const t=text();vstat('«'+t+'»');if(run.mode==='free')$('askIn').value=t;
+    clearTimeout(timer);if(t)timer=setTimeout(send,PAUSE_MS)};
   r.onerror=e=>{if(e.error==='not-allowed'||e.error==='service-not-allowed'){conv.on=false;syncConv();vstat('El navegador no permite usar el micrófono acá. Probá desde la web en Chrome, Edge o Safari.')}};
-  r.onend=()=>{conv.listening=false;conv.rec=null;const t=finalT.trim();
+  r.onend=()=>{clearTimeout(timer);conv.listening=false;conv.rec=null;const t=text();
     if(!conv.on)return;
     if(t){vstat('');heard(t)}else setTimeout(listen,250)};
   try{r.start()}catch(e){conv.listening=false}}
