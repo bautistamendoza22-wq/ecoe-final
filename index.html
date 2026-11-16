@@ -447,6 +447,13 @@ body.st .hl .row{gap:8px 18px}
 .clock.low+.cbar>i{background:var(--bad)}
 .csub{font-size:.7rem;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
 .fact.warn{background:var(--warn-soft);color:var(--warn)}
+
+/* transiciones entre pantallas */
+::view-transition-old(root){animation:vtOut .3s cubic-bezier(.4,0,1,1) both}
+::view-transition-new(root){animation:vtIn .5s cubic-bezier(.22,1,.36,1) both}
+@keyframes vtOut{to{opacity:0}}
+@keyframes vtIn{from{opacity:0;transform:translateY(10px)}}
+@supports (view-transition-name:none){.doorview,#roomWrap,#review{animation:none}}
 </style>
 </head>
 <body><div class="aurora" aria-hidden="true"><i></i><i></i><i></i><i></i></div><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><radialGradient id="fxdg" cx="40%" cy="60%" r="70%"><stop offset="0" stop-color="rgba(235,248,255,.55)"/><stop offset="1" stop-color="rgba(150,195,230,.55)"/></radialGradient></defs></svg>
@@ -457,7 +464,7 @@ body.st .hl .row{gap:8px 18px}
     <h1>Simulador ECOE</h1>
     <p class="tag">Paciente simulado · tiempo ideal 8 minutos · lista de cotejo</p>
     <div class="row">
-      <button class="btn" id="homeBtn" hidden>← Volver al pasillo</button>
+      <button class="btn primary" id="homeBtn" hidden>Volver al pasillo</button>
       <div class="hopts" role="group" aria-label="Opciones">
           <button id="themeBtn">Modo nocturno</button>
           <button id="aiBtn" hidden>Configurar IA</button>
@@ -2064,6 +2071,15 @@ $('startBtn').onclick=()=>{
   tick=setInterval(()=>{run.el++;const c=$('clock');c.textContent=fmt(run.el);$('cBar').style.width=Math.min(100,100*run.el/run.limit)+'%';c.classList.toggle('over',run.el>=IDEAL);if(run.limit-run.el<=60)c.classList.add('low');if(run.el>=run.limit)finish(true)},1000);
 };
 $('endBtn').onclick=()=>finish(false);
+/* transiciones suaves entre pantallas y vuelta al mismo lugar del pasillo */
+let hallY=0;
+function vt(fn){if(document.startViewTransition&&!matchMedia('(prefers-reduced-motion: reduce)').matches){document.startViewTransition(fn)}else fn()}
+{const _os=openStation,_gh=goHome,_fin=finish,_sb=$('startBtn').onclick;
+ openStation=id=>{if($('hall').style.display!=='none')hallY=scrollY;vt(()=>_os(id))};
+ goHome=()=>vt(()=>{_gh();scrollTo({top:hallY,left:0,behavior:'instant'})});
+ finish=b=>vt(()=>_fin(b));
+ $('startBtn').onclick=()=>vt(_sb);
+ $('homeBtn').onclick=()=>goHome();}
 
 function tabTop(){const tb=$('timerBox'),r=tb.getBoundingClientRect();return Math.round(r.height+parseFloat(getComputedStyle(tb).top||0)-1)}
 function syncTabTop(){if(!$('roomWrap').hidden)document.documentElement.style.setProperty('--tabtop',tabTop()+'px')}
