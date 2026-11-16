@@ -466,6 +466,14 @@ body.st .hl .row{gap:8px 18px}
 #convBtn[aria-pressed="true"]::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:#fff;margin-right:8px;vertical-align:1px;animation:recPulse 1.2s ease-in-out infinite}
 @keyframes recPulse{50%{opacity:.25}}
 .vstat{font-size:.86rem;color:var(--muted)}
+
+/* pestañas fijas legibles sobre el contenido que pasa por detrás */
+:root:not([data-theme="dark"]) .tabs{background:rgba(255,255,255,.94);backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2);box-shadow:0 1px 0 rgba(0,0,0,.06)}
+:root[data-theme="dark"] .tabs{background:var(--surface);box-shadow:0 1px 0 var(--line)}
+
+/* barra del reloj pegada arriba y opaca, sin texto asomando por encima */
+.topbar{top:var(--sat,0px)!important;border-top-left-radius:0;border-top-right-radius:0;border-top-color:transparent}
+:root:not([data-theme="dark"]) .topbar{background:rgba(255,255,255,.95)}
 </style>
 </head>
 <body><div class="aurora" aria-hidden="true"><i></i><i></i><i></i><i></i></div><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><radialGradient id="fxdg" cx="40%" cy="60%" r="70%"><stop offset="0" stop-color="rgba(235,248,255,.55)"/><stop offset="1" stop-color="rgba(150,195,230,.55)"/></radialGradient></defs></svg>
