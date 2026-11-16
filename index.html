@@ -2252,7 +2252,7 @@ function vt(fn){if(document.startViewTransition&&!matchMedia('(prefers-reduced-m
 function tabTop(){const tb=$('timerBox'),r=tb.getBoundingClientRect();return Math.round(r.height+parseFloat(getComputedStyle(tb).top||0)-1)}
 function syncTabTop(){if(!$('roomWrap').hidden)document.documentElement.style.setProperty('--tabtop',tabTop()+'px')}
 addEventListener('resize',syncTabTop);
-function goTab(name,scroll){const b=document.querySelector(`.tab[data-t="${name}"]`);document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected',t===b));['ask','exam','do'].forEach(t=>$('tab-'+t).hidden=t!==name);
+function goTab(name,scroll){if(name!=='ask'&&typeof conv!=='undefined'&&conv.on){conv.on=false;syncConv()}const b=document.querySelector(`.tab[data-t="${name}"]`);document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected',t===b));['ask','exam','do'].forEach(t=>$('tab-'+t).hidden=t!==name);
   if(scroll){const w=$('work'),y=w.getBoundingClientRect().top+scrollY-tabTop();if(scrollY>y)scrollTo({top:y,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})}}
 document.querySelector('.tabs').onclick=e=>{const b=e.target.closest('.tab');if(b)goTab(b.dataset.t,true)};
 function tabNav(){const tabs=['ask','exam','do'].filter(t=>!document.querySelector(`.tab[data-t="${t}"]`).hidden),L={ask:'Preguntar',exam:'Examinar y pedir',do:'Decir e indicar'};
