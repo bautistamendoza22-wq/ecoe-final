@@ -454,6 +454,11 @@ body.st .hl .row{gap:8px 18px}
 @keyframes vtOut{to{opacity:0}}
 @keyframes vtIn{from{opacity:0;transform:translateY(10px)}}
 @supports (view-transition-name:none){.doorview,#roomWrap,#review{animation:none}}
+
+/* acciones del consultorio */
+.tbacts{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+#quitBtn[data-arm]{color:var(--bad);border-color:var(--bad)}
+@media (max-width:700px){.topbar{flex-wrap:wrap}.tbacts{width:100%;justify-content:space-between}.tbacts .btn{flex:1}}
 </style>
 </head>
 <body><div class="aurora" aria-hidden="true"><i></i><i></i><i></i><i></i></div><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><radialGradient id="fxdg" cx="40%" cy="60%" r="70%"><stop offset="0" stop-color="rgba(235,248,255,.55)"/><stop offset="1" stop-color="rgba(150,195,230,.55)"/></radialGradient></defs></svg>
@@ -517,7 +522,7 @@ body.st .hl .row{gap:8px 18px}
       <div class="panel topbar" id="timerBox">
         <div class="tbt"><div class="eyebrow" id="tbArea"></div><div class="tbtitle" id="tbTitle"></div></div>
         <div class="clockw"><div class="clock" id="clock">0:00</div><div class="cbar"><i id="cBar"></i></div><div class="csub" id="clockSub"></div></div>
-        <button class="btn" id="endBtn">Salir y corregir</button>
+        <div class="tbacts"><button class="btn ghost" id="quitBtn">Volver sin guardar</button><button class="btn" id="endBtn">Salir y corregir</button></div>
       </div>
       <div class="room">
         <div class="left">
@@ -2033,7 +2038,7 @@ $('filters').onclick=e=>{const b=e.target.closest('[data-f]');if(b){filter=b.dat
 $('grid').onclick=e=>{const h=e.target.closest('[data-acc]');if(h){const a=h.dataset.acc,bl=h.parentElement,op=!bl.classList.contains('open');const setB=(x,o)=>{x.classList.toggle('open',o);x.querySelector('.bh').setAttribute('aria-expanded',o);x.querySelector('.acc').toggleAttribute('inert',!o)};if(op){document.querySelectorAll('#grid .block.open').forEach(x=>{if(x!==bl)setB(x,false)});openSecs=new Set([a])}else openSecs.delete(a);setB(bl,op);$('allBtn').textContent='Desplegar todas';if(op){clearTimeout(window._accT);window._accT=setTimeout(()=>{const t=h.getBoundingClientRect().top;if(t<8||t>innerHeight*.55)h.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'})},560)}return}const b=e.target.closest('[data-id]');if(b)openStation(b.dataset.id)};
 $('resetBtn').onclick=()=>{const b=$('resetBtn');
   if(b.dataset.arm){clearTimeout(b._t);delete b.dataset.arm;store.best={};save();renderHall();b.textContent='Progreso borrado';b._t=setTimeout(()=>b.textContent='Borrar progreso',2500);return}
-  b.dataset.arm=1;b.textContent='¿Seguro? Tocá de nuevo';b._t=setTimeout(()=>{delete b.dataset.arm;b.textContent='Borrar progreso'},4000)};
+  b.dataset.arm=1;b.textContent='¿Seguro? Confirmar';b._t=setTimeout(()=>{delete b.dataset.arm;b.textContent='Borrar progreso'},4000)};
 $('homeBtn').onclick=goHome;
 function goHome(){stopTimer();cur=null;document.body.classList.remove('st');$('station').hidden=true;$('hall').style.display='';$('homeBtn').hidden=true;renderHall();scrollTo({top:0,left:0,behavior:'instant'})}
 
@@ -2071,6 +2076,8 @@ $('startBtn').onclick=()=>{
   tick=setInterval(()=>{run.el++;const c=$('clock');c.textContent=fmt(run.el);$('cBar').style.width=Math.min(100,100*run.el/run.limit)+'%';c.classList.toggle('over',run.el>=IDEAL);if(run.limit-run.el<=60)c.classList.add('low');if(run.el>=run.limit)finish(true)},1000);
 };
 $('endBtn').onclick=()=>finish(false);
+$('quitBtn').onclick=e=>{const b=e.currentTarget;if(b.dataset.arm){clearTimeout(b._t);delete b.dataset.arm;b.textContent='Volver sin guardar';goHome();return}
+  b.dataset.arm=1;b.textContent='¿Seguro? Confirmar';b._t=setTimeout(()=>{delete b.dataset.arm;b.textContent='Volver sin guardar'},3000)};
 /* transiciones suaves entre pantallas y vuelta al mismo lugar del pasillo */
 let hallY=0;
 function vt(fn){if(document.startViewTransition&&!matchMedia('(prefers-reduced-motion: reduce)').matches){document.startViewTransition(fn)}else fn()}
