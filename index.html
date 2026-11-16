@@ -586,8 +586,8 @@ body.st .hl .row{gap:8px 18px}
             <div class="opts" id="askOpts"></div>
             <div class="tabnav" id="nav-ask"></div>
           </div>
-          <div id="tab-exam" hidden><p class="muted small" style="margin-bottom:8px">Escribí qué examinás y qué pedís, o elegilo de la lista. Tocá de nuevo para deseleccionar. Los estudios innecesarios descuentan.</p><form class="ask wbox" id="xForm"><textarea id="xIn" placeholder="Ej.: signos vitales, auscultación, ECG y troponina…" aria-label="Lo que examinás o pedís"></textarea><button class="btn primary" id="xBtn">Pedir</button></form><div class="wlog" id="xLog" role="status"></div><div class="opts" id="examOpts"></div><div class="tabnav" id="nav-exam"></div></div>
-          <div id="tab-do" hidden><p class="muted small" style="margin-bottom:8px">Escribí lo que dirías o indicarías, o marcalo en la lista. Tocá de nuevo para deseleccionar. Hay opciones incorrectas que descuentan.</p><form class="ask wbox" id="dForm"><textarea id="dIn" placeholder="Ej.: aspirina masticada, le explico el diagnóstico, derivo para reperfusión…" aria-label="Lo que dirías o indicarías"></textarea><button class="btn primary" id="dBtn">Indicar</button></form><div class="wlog" id="dLog" role="status"></div><div class="opts" id="doOpts"></div><div class="tabnav" id="nav-do"></div></div>
+          <div id="tab-exam" hidden><p class="muted small" style="margin-bottom:8px">Los estudios innecesarios descuentan.</p><div class="row" style="margin-bottom:10px"><span class="muted small">Examen y estudios:</span><button class="chip" data-wm="x" data-v="free">Libre (escribís)</button><button class="chip" data-wm="x" data-v="guided">Guiada (opciones sugeridas)</button></div><div id="xFree"><form class="ask wbox" id="xForm"><textarea id="xIn" placeholder="Ej.: signos vitales, auscultación, ECG y troponina…" aria-label="Lo que examinás o pedís"></textarea><button class="btn primary" id="xBtn">Pedir</button></form><div class="wlog" id="xLog" role="status"></div></div><div class="opts" id="examOpts"></div><div class="tabnav" id="nav-exam"></div></div>
+          <div id="tab-do" hidden><p class="muted small" style="margin-bottom:8px">Hay opciones incorrectas que descuentan.</p><div class="row" style="margin-bottom:10px"><span class="muted small">Diagnóstico y tratamiento:</span><button class="chip" data-wm="d" data-v="free">Libre (escribís)</button><button class="chip" data-wm="d" data-v="guided">Guiada (opciones sugeridas)</button></div><div id="dFree"><form class="ask wbox" id="dForm"><textarea id="dIn" placeholder="Ej.: aspirina masticada, le explico el diagnóstico, derivo para reperfusión…" aria-label="Lo que dirías o indicarías"></textarea><button class="btn primary" id="dBtn">Indicar</button></form><div class="wlog" id="dLog" role="status"></div></div><div class="opts" id="doOpts"></div><div class="tabnav" id="nav-do"></div></div>
         </div>
       </div>
     </div>
@@ -2134,6 +2134,10 @@ async function writeSubmit(kind){
   if(!out.length)out.push(`<div class="wno">No encontré ${kind==='x'?'estudios ni maniobras':'indicaciones'} que coincidan. Probá con otras palabras o elegí de la lista.</div>`);
   entry.querySelector('.wres').outerHTML=`<div class="wres">${out.join('')}</div>`;
   inp.value='';run.wbusy=false;btn.disabled=false;inp.focus()}
+
+function setWMode(kind,m){run['wm'+kind]=m;document.querySelectorAll(`[data-wm="${kind}"]`).forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===m));
+  $(kind+'Free').hidden=m!=='free';$(kind==='x'?'examOpts':'doOpts').hidden=m!=='guided'}
+document.querySelectorAll('[data-wm]').forEach(b=>b.onclick=()=>setWMode(b.dataset.wm,b.dataset.v));
 $('xForm').onsubmit=e=>{e.preventDefault();writeSubmit('x')};$('dForm').onsubmit=e=>{e.preventDefault();writeSubmit('d')};
 ['xIn','dIn'].forEach(id=>$(id).onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$(id==='xIn'?'xForm':'dForm').requestSubmit()}});
 
@@ -2230,6 +2234,7 @@ function renderWork(){
   counts();tabNav();
   $('voiceBar').hidden=!SR;conv.on=false;syncConv();
   $('xLog').innerHTML='';$('dLog').innerHTML='';$('xIn').value='';$('dIn').value='';
+  setWMode('x',run.mode);setWMode('d',run.mode);
 }
 function setMode(m){run.mode=m;$('modeRow').hidden=!sample;$('aiHint').hidden=!!sample||inClaude;$('mFree').setAttribute('aria-pressed',m==='free');$('mGuided').setAttribute('aria-pressed',m==='guided');$('freeBox').hidden=m!=='free';$('askOpts').hidden=m!=='guided'}
 $('mFree').onclick=()=>setMode('free');$('mGuided').onclick=()=>setMode('guided');
