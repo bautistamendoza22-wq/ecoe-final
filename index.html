@@ -2163,6 +2163,8 @@ syncVoiceBtn();
 $('voiceBtn').onclick=()=>{voiceOn=!voiceOn;try{localStorage.setItem('ecoe_voice',voiceOn?'1':'0')}catch(e){}syncVoiceBtn();if(!voiceOn)hush()};
 const F_NAMES=/elena|sabina|paulina|m[oó]nica|helena|laura|dalia|lucia|luc[ií]a|paloma|camila|valentina|isabela|francisca|ximena|elvira|marisol|sof[ií]a|female|mujer/i,
       M_NAMES=/tom[aá]s|jorge|diego|pablo|ra[uú]l|[aá]lvaro|alonso|gerardo|lorenzo|alex|carlos|dar[ií]o|enrique|juan|male|hombre/i;
+const IS_IOS=/iPhone|iPad|iPod/i.test(navigator.userAgent)||(/Macintosh/i.test(navigator.userAgent)&&navigator.maxTouchPoints>1);
+const IS_APPLE=IS_IOS||(/Macintosh/i.test(navigator.userAgent)&&/Safari/i.test(navigator.userAgent)&&!/Chrome|Chromium|Edg/i.test(navigator.userAgent));
 const IS_WIN=/windows/i.test((navigator.userAgentData&&navigator.userAgentData.platform)||navigator.userAgent||'');
 let voicePref={};try{voicePref=JSON.parse(localStorage.getItem('ecoe_voices')||'{}')}catch(e){}
 const esVoices=()=>SYN?SYN.getVoices().filter(v=>/^es/i.test(v.lang)):[];
@@ -2184,7 +2186,7 @@ function speak(text){
   const gendered=v&&(voicePref[a.sex==='f'?'f':'m']===v.name||(a.sex==='f'?F_NAMES:M_NAMES).test(v.name));
   const tone=ageTone(speakerAge(cur.pt));
   u.pitch=Math.max(.1,Math.min(2,(gendered?1:(a.sex==='f'?1.15:0.82))*tone.p));
-  u.rate=Math.min(2,(({triste:.9,angustia:.95,agitado:1.08,dolor:1.02}[a.mood])||1)*1.3*tone.r);
+  u.rate=Math.max(.6,Math.min(IS_APPLE?1.08:2,(({triste:.9,angustia:.95,agitado:1.08,dolor:1.02}[a.mood])||1)*(IS_APPLE?1:1.3)*tone.r));
   u.onend=u.onerror=()=>afterSay();
   SYN.speak(u)}
 /* elegir voces */
@@ -2196,17 +2198,17 @@ $('voicesBtn').hidden=!SYN;
 $('voicesBtn').onclick=()=>{const p=$('vPanel');p.hidden=!p.hidden;if(!p.hidden)fillVoices()};
 if(SYN)SYN.addEventListener&&SYN.addEventListener('voiceschanged',()=>{if(!$('vPanel').hidden)fillVoices()});
 ['vF','vM'].forEach(id=>$(id).onchange=()=>{voicePref[id==='vF'?'f':'m']=$(id).value||undefined;try{localStorage.setItem('ecoe_voices',JSON.stringify(voicePref))}catch(e){}});
-document.querySelectorAll('[data-try]').forEach(b=>b.onclick=()=>{if(!SYN)return;const sex=b.dataset.try;SYN.cancel();const u=new SpeechSynthesisUtterance(sex==='f'?'Hola, doctora. Vengo porque me duele la cabeza desde ayer.':'Hola, doctor. Me duele el pecho desde hace un rato.');const v=pickVoice(sex);if(v){u.voice=v;u.lang=v.lang}else u.lang='es-AR';u.rate=1.3;SYN.speak(u)});
+document.querySelectorAll('[data-try]').forEach(b=>b.onclick=()=>{if(!SYN)return;const sex=b.dataset.try;SYN.cancel();const u=new SpeechSynthesisUtterance(sex==='f'?'Hola, doctora. Vengo porque me duele la cabeza desde ayer.':'Hola, doctor. Me duele el pecho desde hace un rato.');const v=pickVoice(sex);if(v){u.voice=v;u.lang=v.lang}else u.lang='es-AR';u.rate=IS_APPLE?1:1.3;SYN.speak(u)});
 /* conversación: escucha, envía al terminar de hablar y vuelve a escuchar cuando el paciente responde */
 const conv={on:false,rec:null,listening:false};
 function vstat(t){$('vStat').textContent=t||''}
-function afterSay(){if(conv.on)setTimeout(listen,350)}
+function afterSay(){if(!conv.on)return;if(IS_IOS){syncConv();vstat('Tocá «Hablar» para hacer la próxima pregunta.')}else setTimeout(listen,350)}
 const PAUSE_MS=1000;
 function listen(){
   if(!conv.on||conv.listening||!SR||!run||run.phase!=='run'||run.busy)return;
-  if(SYN&&SYN.speaking)return;
-  const r=new SR();conv.rec=r;r.lang='es-AR';r.interimResults=true;r.continuous=true;r.maxAlternatives=1;
-  let finalT='',interimT='',timer=null,sent=false;conv.listening=true;vstat('Escuchando…');
+  if(SYN&&SYN.speaking&&!IS_IOS)return;
+  const r=new SR();conv.rec=r;r.lang='es-AR';r.interimResults=true;r.continuous=!IS_IOS;r.maxAlternatives=1;
+  let finalT='',interimT='',timer=null,sent=false;conv.listening=true;vstat('Escuchando…');if(IS_IOS)syncConv();
   const text=()=>(finalT+' '+interimT).replace(/\s+/g,' ').trim();
   const send=()=>{if(sent)return;sent=true;clearTimeout(timer);try{r.stop()}catch(e){}};
   r.onresult=e=>{interimT='';for(let i=e.resultIndex;i<e.results.length;i++){const t=e.results[i][0].transcript;if(e.results[i].isFinal)finalT+=' '+t;else interimT+=t}
@@ -2215,11 +2217,12 @@ function listen(){
   r.onerror=e=>{if(e.error==='not-allowed'||e.error==='service-not-allowed'){conv.on=false;syncConv();vstat('El navegador no permite usar el micrófono acá. Probá desde la web en Chrome, Edge o Safari.')}};
   r.onend=()=>{clearTimeout(timer);conv.listening=false;conv.rec=null;const t=text();
     if(!conv.on)return;
-    if(t){vstat('');heard(t)}else setTimeout(listen,250)};
+    syncConv();if(t){vstat('');heard(t)}else if(IS_IOS)vstat('No te escuché. Tocá «Hablar» y probá de nuevo.');else setTimeout(listen,250)};
   try{r.start()}catch(e){conv.listening=false}}
 function stopListen(){if(conv.rec){try{conv.rec.abort()}catch(e){}}conv.listening=false;conv.rec=null}
-function syncConv(){$('convBtn').setAttribute('aria-pressed',conv.on);$('convBtn').textContent=conv.on?'Terminar conversación por voz':'Conversar por voz';if(!conv.on){stopListen();vstat('')}}
-$('convBtn').onclick=()=>{conv.on=!conv.on;syncConv();if(conv.on){vstat('Hablá cuando quieras. Al terminar de preguntar, el paciente responde solo.');hush();setTimeout(listen,300)}};
+function syncConv(){const b=$('convBtn');if(IS_IOS){b.setAttribute('aria-pressed',!!conv.listening);b.textContent=conv.listening?'Enviar ahora':'Hablar'}else{b.setAttribute('aria-pressed',conv.on);b.textContent=conv.on?'Terminar conversación por voz':'Conversar por voz'}if(!conv.on){stopListen();vstat('')}}
+$('convBtn').onclick=()=>{if(IS_IOS){if(conv.listening){try{conv.rec&&conv.rec.stop()}catch(e){}return}conv.on=true;hush();listen();return}
+  conv.on=!conv.on;syncConv();if(conv.on){vstat('Hablá cuando quieras. Al terminar de preguntar, el paciente responde solo.');hush();setTimeout(listen,300)}};
 const STOP=new Set('el la los las un una unos unas de del al a y o que en con por para su sus se me te le lo es esta este eso esto como mas muy ya hay usted vos tu tus mi mis algo alguna algun alguno algunos algunas cual cuales donde hasta sobre entre sin otra otro otros otras ha han fue hacer tiene tenes tengo ser estar si no'.split(' '));
 const SYNO=[[/^(toma|tome|tomo|usa|uso|usast|consum)/,'tomar'],[/^(dol|duel|dues)/,'dolor'],[/^(fum|cigar|tabaq|pucho)/,'fumar'],[/^(medic|remed|pastil|farmac|droga|tratam)/,'medic'],[/^(alerg)/,'alerg'],
  [/^(presi|tensi|hipert)/,'presion'],[/^(azuc|diabe|gluc)/,'diabet'],[/^(colest|grasa)/,'colest'],[/^(respir|aire|ahog|disne|agit)/,'aire'],
