@@ -2167,7 +2167,7 @@ function speak(text){
 const conv={on:false,rec:null,listening:false};
 function vstat(t){$('vStat').textContent=t||''}
 function afterSay(){if(conv.on)setTimeout(listen,350)}
-const PAUSE_MS=2000;
+const PAUSE_MS=1000;
 function listen(){
   if(!conv.on||conv.listening||!SR||!run||run.phase!=='run'||run.busy)return;
   if(SYN&&SYN.speaking)return;
