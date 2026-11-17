@@ -537,8 +537,10 @@ body.st .vpanel{display:none}
     <div class="cfg">
       <label>Proveedor<select id="aiProv"><option value="gemini">Google Gemini (recomendado)</option><option value="groq">Groq</option></select></label>
       <label>Clave de API<input id="aiKey" type="password" autocomplete="off" spellcheck="false" placeholder="Pegá tu clave"></label>
-      <label>Modelo<input id="aiModel" list="aiModels" spellcheck="false"><datalist id="aiModels"></datalist></label>
+      <label>Modelo<select id="aiModel"></select></label>
     </div>
+    <p class="muted small" id="aiHint"></p>
+    <label class="small muted" style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="aiAll"> Mostrar todos los modelos (sin probar)</label>
     <div class="row"><button class="btn primary" id="aiSave">Guardar y probar</button><button class="btn" id="aiDel">Borrar la clave</button><button class="btn" id="aiClose">Cerrar</button></div>
     <p class="small" id="aiMsg" role="status"></p>
     <p class="muted small">La clave queda guardada solo en este navegador y se envía únicamente al proveedor elegido. No la compartas con nadie.</p>
@@ -2377,60 +2379,100 @@ async function gradeChat(){
 }
 
 /* ============ IA con clave propia (versión web) ============ */
+const IADEF='gemini-flash-latest',IABACK=['gemini-flash-latest','gemini-2.5-flash'];
 const PROV={
- gemini:{model:'gemini-3.5-flash-lite',steps:['Entrá a <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> con tu cuenta de Google.','Tocá el botón para crear una clave de API («Create API key») y aceptá los términos si te los pide. Es gratis y no pide tarjeta.','Copiá la clave que aparece.','Pegala acá abajo y tocá «Guardar y probar». Si avisa que llegaste al límite gratuito, esperá un minuto y seguí.']},
+ gemini:{model:IADEF,steps:['Entrá a <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> con tu cuenta de Google.','Tocá «Create API key» y aceptá los términos si te los pide. Es gratis y no pide tarjeta.','Copiá la clave que aparece.','Pegala acá abajo y tocá «Guardar y probar». La página prueba los modelos con tu clave y deja elegido el que funcione.']},
  groq:{model:'openai/gpt-oss-120b',steps:['Entrá a <a href="https://console.groq.com/keys" target="_blank" rel="noopener">console.groq.com/keys</a> y creá una cuenta.','Creá una clave de API y copiala.','Pegala acá abajo y tocá «Guardar y probar».']}};
-function aiErr(status,msg){const e=new Error(msg||('HTTP '+status));e.code=status===429?'rate_limited':(status===400||status===401||status===403||status===404)?'bad_key':'failed';return e}
-async function aiCall(cfg,msgs,maxTok){
-  let res,data;
+function aiErr(status,msg){const e=new Error(msg||('HTTP '+status));e.status=status;e.code=status===429?'rate_limited':(status===400||status===401||status===403)?'bad_key':status===404?'no_model':'failed';return e}
+async function aiFetch(url,opt,ms){const ac=new AbortController(),t=setTimeout(()=>ac.abort(),ms||45000);
+  try{const r=await fetch(url,Object.assign({},opt,{signal:ac.signal}));const d=await r.json().catch(()=>({}));if(!r.ok)throw aiErr(r.status,d.error&&d.error.message);return d}
+  catch(e){if(e.name==='AbortError')throw aiErr(0,'La IA tardó demasiado en responder.');if(e instanceof TypeError)throw aiErr(0,'No se pudo conectar. Revisá la conexión a internet.');throw e}
+  finally{clearTimeout(t)}}
+async function gemOnce(model,key,msgs,maxTok,json){
+  const sys=msgs.filter(m=>m.role==='system').map(m=>m.content).join('\n\n');
+  const body={contents:msgs.filter(m=>m.role!=='system').map(m=>({role:m.role==='assistant'?'model':'user',parts:[{text:m.content}]})),
+    generationConfig:{maxOutputTokens:maxTok,temperature:json?0.2:0.7}};
+  if(sys)body.systemInstruction={parts:[{text:sys}]};if(json)body.generationConfig.responseMimeType='application/json';
+  const d=await aiFetch('https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(model)+':generateContent',{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':key},body:JSON.stringify(body)});
+  const c=(d.candidates||[])[0]||{},t=((c.content||{}).parts||[]).filter(p=>p.text&&!p.thought).map(p=>p.text).join('').trim();
+  if(!t)throw aiErr(500,d.promptFeedback&&d.promptFeedback.blockReason?'Gemini bloqueó la consulta ('+d.promptFeedback.blockReason+').':'La IA no devolvió respuesta'+(c.finishReason?' ('+c.finishReason+')':'')+'.');
+  return t}
+let aiNotified='';
+async function aiCall(cfg,msgs,maxTok,json){
   if(cfg.prov==='gemini'){
-    res=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(cfg.model)+':generateContent',{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':cfg.key},
-      body:JSON.stringify({contents:msgs.map(m=>({role:m.role==='assistant'?'model':'user',parts:[{text:m.content}]})),generationConfig:{maxOutputTokens:maxTok}})});
-    data=await res.json().catch(()=>({}));if(!res.ok)throw aiErr(res.status,data.error&&data.error.message);
-    const parts=(((data.candidates||[])[0]||{}).content||{}).parts||[];
-    return parts.filter(p=>p.text&&!p.thought).map(p=>p.text).join('').trim();
-  }
-  res=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+cfg.key},
-    body:JSON.stringify({model:cfg.model,messages:msgs,max_completion_tokens:maxTok})});
-  data=await res.json().catch(()=>({}));if(!res.ok)throw aiErr(res.status,data.error&&data.error.message);
-  return ((((data.choices||[])[0]||{}).message||{}).content||'').trim();
-}
+    const tries=[cfg.model||IADEF].concat((cfg.models||[]).filter(m=>m.ok).map(m=>m.id),IABACK).filter((m,i,a)=>m&&a.indexOf(m)===i).slice(0,4);let err;
+    for(const mod of tries){try{const t=await gemOnce(mod,cfg.key,msgs,maxTok,json);
+        if(mod!==tries[0]&&aiNotified!==mod){aiNotified=mod;const n=$('aiMsg');if(n)n.textContent='Se usó '+mod+' porque '+tries[0]+' no respondió.'}
+        return t}
+      catch(e){err=e;if(![0,404,429,500,503].includes(e.status))throw e}}
+    throw err}
+  const d=await aiFetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+cfg.key},
+    body:JSON.stringify(Object.assign({model:cfg.model,messages:msgs,max_completion_tokens:maxTok,temperature:json?0.2:0.7},json?{response_format:{type:'json_object'}}:{}))});
+  return ((((d.choices||[])[0]||{}).message||{}).content||'').trim()}
 function makeAI(cfg){
-  const f=async input=>({text:await aiCall(cfg,typeof input==='string'?[{role:'user',content:input}]:input,1200)});
-  f.json=async prompt=>{const t=await aiCall(cfg,[{role:'user',content:prompt}],2000);const m=t.match(/\{[\s\S]*\}/);if(!m)throw new Error('sin JSON');return JSON.parse(m[0])};
-  return f;
-}
+  const f=async input=>({text:await aiCall(cfg,typeof input==='string'?[{role:'user',content:input}]:input,1500,false)});
+  f.json=async prompt=>{const t=await aiCall(cfg,[{role:'user',content:prompt}],2500,true);const m=t.match(/\{[\s\S]*\}/);if(!m)throw new Error('sin JSON');return JSON.parse(m[0])};
+  return f}
+/* lista corta de Gemini: modelos estables de texto, en orden de preferencia */
+function gemShort(ids){const out=[],add=(id,n)=>{if(id&&ids.includes(id)&&!out.some(m=>m.id===id))out.push({id,n})};
+  const top=re=>ids.map(id=>{const m=id.match(re);return m?{id,v:parseFloat(m[1])}:null}).filter(Boolean).sort((a,z)=>z.v-a.v)[0];
+  const fl=top(/^gemini-(\d+(?:\.\d+)?)-flash$/),lt=top(/^gemini-(\d+(?:\.\d+)?)-flash-lite$/);
+  add('gemini-flash-latest','Gemini Flash (siempre la última versión)');if(fl)add(fl.id,'Gemini '+fl.v+' Flash');add('gemini-2.5-flash','Gemini 2.5 Flash (respaldo)');
+  if(ids.includes('gemini-flash-lite-latest'))add('gemini-flash-lite-latest','Gemini Flash-Lite: más rápido y con más cupo, algo menos preciso');
+  else if(lt)add(lt.id,'Gemini '+lt.v+' Flash-Lite: más rápido y con más cupo, algo menos preciso');
+  return out}
 async function aiModels(prov,key){
-  try{
-    if(prov==='gemini'){const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models?pageSize=200',{headers:{'x-goog-api-key':key}});if(!r.ok)return[];const d=await r.json();
-      return (d.models||[]).filter(m=>(m.supportedGenerationMethods||[]).includes('generateContent')).map(m=>m.name.replace('models/','')).filter(n=>/^gemini/.test(n)&&!/tts|image|live|audio|embed/.test(n))}
-    const r=await fetch('https://api.groq.com/openai/v1/models',{headers:{'Authorization':'Bearer '+key}});if(!r.ok)return[];const d=await r.json();
-    return (d.data||[]).map(m=>m.id).filter(n=>!/whisper|tts|guard|orpheus/.test(n));
-  }catch(e){return[]}
-}
+  try{if(prov==='gemini'){const d=await aiFetch('https://generativelanguage.googleapis.com/v1beta/models?pageSize=1000',{headers:{'x-goog-api-key':key}},30000);
+      return (d.models||[]).filter(m=>(m.supportedGenerationMethods||[]).includes('generateContent')).map(m=>m.name.replace('models/','')).filter(n=>/^gemini/.test(n)&&!/(embed|tts|image|audio|live|vision|aqa|robotics|computer|native)/i.test(n)).sort()}
+    const d=await aiFetch('https://api.groq.com/openai/v1/models',{headers:{'Authorization':'Bearer '+key}},30000);
+    return (d.data||[]).map(m=>m.id).filter(n=>!/whisper|tts|guard|orpheus/.test(n)).sort()}
+  catch(e){if(e.code==='bad_key'||e.code==='rate_limited')throw e;return[]}}
+function modelOpts(c){const p=c.prov||'gemini';let list;
+  if($('aiAll')&&$('aiAll').checked&&c.all&&c.all.length)list=c.all.map(id=>({id,n:id,ok:true}));
+  else{list=(c.models||[]).filter(m=>m.ok);if(!list.length)list=[{id:PROV[p].model,n:PROV[p].model}]}
+  const cur=c.model||PROV[p].model;if(!list.some(m=>m.id===cur))list=[{id:cur,n:cur+' (elegido antes)'}].concat(list);
+  const rec=(c.models||[]).find(m=>m.ok);
+  return list.map(m=>`<option value="${esc(m.id)}"${m.id===cur?' selected':''}>${esc(m.n)}${rec&&m.id===rec.id?' · recomendado':''}</option>`).join('')}
 function aiUI(){
-  const c=store.ai||{},p=$('aiProv').value=c.prov||$('aiProv').value||'gemini';$('aiKey').value=c.key||$('aiKey').value;if(!$('aiModel').value)$('aiModel').value=c.model||PROV[p].model;
+  const c=store.ai||{},p=$('aiProv').value=c.prov||$('aiProv').value||'gemini';$('aiKey').value=c.key||$('aiKey').value;
+  const cc=c.prov===p?c:{prov:p};$('aiModel').innerHTML=modelOpts(cc);
+  $('aiHint').textContent=cc.models&&cc.models.length?'La lista muestra solo los modelos que respondieron bien con tu clave. Dejá el recomendado salvo que se agote el cupo: si uno falla, se usa otro automáticamente.':'Al tocar «Guardar y probar», la página prueba los modelos con tu clave y deja elegido el que funcione.';
   $('aiSteps').innerHTML=PROV[p].steps.map(s=>`<li>${s}</li>`).join('');$('aiBtn').textContent=sample?'IA activada ✓ (cambiar)':'Configurar IA';
 }
 function openAI(){$('aiPanel').hidden=false;aiUI();$('aiPanel').scrollIntoView({behavior:'smooth',block:'start'})}
 $('aiBtn').onclick=()=>{if($('aiPanel').hidden)openAI();else $('aiPanel').hidden=true};
 $('aiHintBtn').onclick=openAI;
 $('aiClose').onclick=()=>{$('aiPanel').hidden=true};
-$('aiProv').onchange=()=>{const p=$('aiProv').value;$('aiModel').value=PROV[p].model;$('aiModels').innerHTML='';$('aiSteps').innerHTML=PROV[p].steps.map(s=>`<li>${s}</li>`).join('')};
+$('aiProv').onchange=()=>{const p=$('aiProv').value;$('aiModel').innerHTML=modelOpts(store.ai&&store.ai.prov===p?store.ai:{prov:p});$('aiSteps').innerHTML=PROV[p].steps.map(s=>`<li>${s}</li>`).join('')};
+$('aiAll').onchange=()=>{$('aiModel').innerHTML=modelOpts(store.ai&&store.ai.prov===$('aiProv').value?store.ai:{prov:$('aiProv').value})};
+$('aiModel').onchange=()=>{if(store.ai&&store.ai.prov===$('aiProv').value){store.ai.model=$('aiModel').value;save();sample=makeAI(store.ai);$('aiMsg').textContent='Modelo cambiado a '+store.ai.model+'.'}};
 $('aiDel').onclick=()=>{delete store.ai;save();sample=null;$('aiKey').value='';$('aiMsg').textContent='Clave borrada de este navegador.';aiUI();if(run&&run.phase==='run')setMode('guided')};
 $('aiSave').onclick=async()=>{
-  const cfg={prov:$('aiProv').value,key:$('aiKey').value.trim(),model:$('aiModel').value.trim()||PROV[$('aiProv').value].model};
-  if(!cfg.key){$('aiMsg').textContent='Falta pegar la clave.';return}
-  $('aiSave').disabled=true;$('aiMsg').textContent='Probando la conexión…';
-  const list=await aiModels(cfg.prov,cfg.key);$('aiModels').innerHTML=list.map(m=>`<option value="${esc(m)}">`).join('');
+  const prov=$('aiProv').value,key=$('aiKey').value.trim(),msg=$('aiMsg');
+  if(!key){msg.textContent='Falta pegar la clave.';return}
+  $('aiSave').disabled=true;msg.textContent='Comprobando la clave…';
   try{
-    await aiCall(cfg,[{role:'user',content:'Respondé solo: listo'}],200);
-    store.ai=cfg;save();sample=makeAI(cfg);$('aiMsg').textContent='Funciona. La entrevista libre ya está disponible en todas las estaciones.';
-    if(run&&run.phase==='run')setMode(run.mode);
+    const ids=await aiModels(prov,key);let cfg;
+    if(prov==='gemini'){
+      let short=gemShort(ids);if(!short.length)short=IABACK.map(id=>({id,n:id}));
+      let last=null;
+      for(let i=0;i<short.length;i++){const m=short[i];msg.textContent=`Clave válida. Probando modelos (${i+1}/${short.length}): ${m.id}…`;
+        try{await gemOnce(m.id,key,[{role:'user',content:'Respondé solo: OK'}],50,false);m.ok=true}catch(e){m.ok=false;last=e;if(e.code==='bad_key')throw e}}
+      const ok=short.filter(m=>m.ok),prev=store.ai&&store.ai.prov==='gemini'?store.ai.model:null;
+      if(!ok.length)throw last||aiErr(500,'Ningún modelo respondió.');
+      cfg={prov,key,model:ok.some(m=>m.id===prev)?prev:ok[0].id,models:short,all:ids};
+      msg.textContent=`Funciona: respondieron ${ok.length} de ${short.length} modelos. Quedó elegido ${cfg.model}. La entrevista libre ya está disponible en todas las estaciones.`;
+    }else{
+      const model=ids.includes($('aiModel').value)?$('aiModel').value:(ids.includes(PROV.groq.model)?PROV.groq.model:(ids[0]||PROV.groq.model));
+      cfg={prov,key,model,models:[{id:model,n:model,ok:true}],all:ids};
+      await aiCall(cfg,[{role:'user',content:'Respondé solo: OK'}],50,false);
+      msg.textContent='Funciona con '+model+'. La entrevista libre ya está disponible en todas las estaciones.';
+    }
+    store.ai=cfg;save();sample=makeAI(cfg);if(run&&run.phase==='run')setMode(run.mode);
   }catch(e){
-    $('aiMsg').textContent=e.code==='rate_limited'?'La clave es válida, pero llegaste al límite gratuito por ahora. Probá en un minuto o elegí otro modelo.':
-      e.code==='bad_key'?('No funcionó con esa clave y ese modelo ('+(e.message||'').slice(0,140)+').'+(list.length?' Modelos disponibles con tu clave: '+list.slice(0,8).join(', ')+'.':' Revisá que la clave esté completa.')):
-      'No se pudo conectar con el proveedor. Revisá tu conexión e intentá de nuevo.';
+    msg.textContent=e.code==='rate_limited'?'La clave es válida, pero llegaste al límite gratuito por ahora. Probá en un minuto.':
+      e.code==='bad_key'?'La clave no es válida o no tiene permiso. Revisá que esté completa y sin espacios ('+String(e.message||'').slice(0,120)+').':
+      (e.message||'No se pudo conectar con el proveedor. Revisá tu conexión e intentá de nuevo.');
   }
   $('aiSave').disabled=false;aiUI();
 };
