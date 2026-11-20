@@ -499,6 +499,13 @@ body.st .vpanel{display:none}
 .fuentes{border-top:.5px solid var(--sep);padding-top:12px;display:flex;flex-direction:column;gap:6px}
 .fuentes ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:.86rem;color:var(--ink)}
 .fuentes b{font-weight:500}
+
+/* cartel inicial de IA */
+#aiGate{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:20px;background:color-mix(in srgb,#000 35%,transparent);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);animation:gateIn .3s ease both}
+#aiGate .panel{max-width:460px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.25);animation:gateUp .35s cubic-bezier(.2,.8,.2,1) both}
+#aiGate h3{margin:0}#aiGate p{margin:0;line-height:1.5}
+#aiGate.out{animation:gateOut .25s ease both}
+@keyframes gateIn{from{opacity:0}}@keyframes gateOut{to{opacity:0}}@keyframes gateUp{from{opacity:0;transform:translateY(14px) scale(.98)}}
 </style>
 </head>
 <body><div class="aurora" aria-hidden="true"><i></i><i></i><i></i><i></i></div><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><radialGradient id="fxdg" cx="40%" cy="60%" r="70%"><stop offset="0" stop-color="rgba(235,248,255,.55)"/><stop offset="1" stop-color="rgba(150,195,230,.55)"/></radialGradient></defs></svg>
@@ -2443,7 +2450,19 @@ $('aiSave').onclick=async()=>{
 /* ============ Inicio ============ */
 renderHall();
 if(inClaude){claude.use('sample').then(s=>{sample=s||null;if(sample&&run&&run.phase==='door')run.mode='free'}).catch(()=>{})}
-else{$('aiBtn').hidden=false;if(store.ai&&store.ai.key)sample=makeAI(store.ai);aiUI()}
+else{$('aiBtn').hidden=false;if(store.ai&&store.ai.key)sample=makeAI(store.ai);aiUI();
+  let skip=false;try{skip=sessionStorage.getItem('ecoe-ai-skip')==='1'}catch(e){}
+  if(!(store.ai&&store.ai.key)&&!skip){
+    const m=document.createElement('div');m.id='aiGate';m.setAttribute('role','dialog');m.setAttribute('aria-modal','true');m.setAttribute('aria-labelledby','aiGateT');
+    m.innerHTML=`<div class="panel"><h3 id="aiGateT">Antes de empezar: configurá la IA</h3><p>Con la IA podés escribirle o hablarle libremente al paciente, y el simulador corrige lo que escribís en el examen físico, los estudios y el tratamiento. Necesitás una clave gratuita de Google Gemini o de Groq; se guarda sólo en este navegador.</p><p class="muted small">Sin IA igual podés practicar todas las estaciones eligiendo entre las opciones sugeridas.</p><div class="row"><button class="btn primary" id="aiGateGo">Configurar la IA</button><button class="btn" id="aiGateNo">Continuar sin configurar</button></div></div>`;
+    document.body.appendChild(m);
+    const close=()=>{m.classList.add('out');setTimeout(()=>m.remove(),250)};
+    window.closeAIGate=()=>{if(document.getElementById('aiGate'))close()};
+    $('aiGateGo').onclick=()=>{close();openAI();setTimeout(()=>$('aiKey').focus(),400)};
+    $('aiGateNo').onclick=()=>{try{sessionStorage.setItem('ecoe-ai-skip','1')}catch(e){}close()};
+    setTimeout(()=>$('aiGateGo').focus(),50);
+  }
+}
 </script>
 <script type="module">
 /* ============ Cuenta de Google + progreso en la nube (Firebase) ============
@@ -2505,7 +2524,7 @@ if (firebaseConfig.apiKey && !(window.claude && claude.use)) {
       try { localStorage.setItem('ecoe-sim', JSON.stringify(store)); } catch (e) {}
       if (store.theme) setTheme(store.theme);
       renderHall();
-      if (store.ai && store.ai.key) { sample = makeAI(store.ai); aiUI(); }
+      if (store.ai && store.ai.key) { sample = makeAI(store.ai); aiUI(); window.closeAIGate && closeAIGate(); }
       ready = true; await push();
       msg.textContent = (u.displayName ? u.displayName.split(' ')[0] + ' · ' : '') + 'progreso sincronizado ✓';
     } catch (e) { msg.textContent = 'No se pudo leer el progreso de la nube'; console.error(e); }
