@@ -628,7 +628,7 @@ const COT_FRAME="Estructura y dimensiones adaptadas de los componentes competenc
 const ST=[
 {id:'ive',area:'obs',motivo:'Atraso menstrual y un test positivo',lugar:'Guardia de un hospital general · horario nocturno',
  pt:{n:'Gisela',e:'33 años',av:{sex:'f',skin:2,hair:'long',hc:'#3b2a20',mood:'angustia',top:'#7b5ea7'}},
- sit:'Estás de guardia en un hospital general. Podés indicar estudios, dar un turno al consultorio de salud sexual o derivar en el día. Consulta Gisela, inquieta, con un test de embarazo positivo que se hizo esa tarde.',
+ sit:'',
  tareas:['Realizar la anamnesis, informar y organizar la atención que solicita.'],
  abre:'Perdón por venir a esta hora… Me hice un test y dio positivo. No puedo tener otro hijo ahora.',
  guion:'Trabaja limpiando casas por hora, sin días pagos si falta. Está separada y tiene dos hijos de 6 y 10 años; vive con ellos y su mamá la ayuda a cuidarlos. Tiene un compañero desde hace unos meses, que no sabe del embarazo. Ansiosa, mira el celular. SOLO si preguntan específicamente: quiere interrumpir el embarazo; FUM 14 de septiembre, ciclos regulares; dos partos vaginales sin complicaciones; usaba DIU, se lo retiraron hace tres meses por dolor y no empezó otro método; sin enfermedades, cirugías ni alergias; no toma medicación; teme que «sea una operación» y que duela; no puede perder días de trabajo; pregunta si se puede hacer con pastillas en su casa y si tiene que pagar; con el compañero se lleva bien y no hay violencia; su mamá la puede acompañar.',
@@ -2059,7 +2059,7 @@ function openStation(id){
   const sheet=`<div class="eyebrow">${AREAS[cur.area][0]} · Instrucciones para el estudiante ${cur.real?'<span class="real">estación real</span>':''}</div>
     <h2>${esc(cur.motivo)}</h2>
     <p><b>Lugar:</b> ${esc(cur.lugar)}</p><p><b>Paciente:</b> ${esc(cur.pt.n)}, ${esc(cur.pt.e)}</p>
-    <p>${esc(cur.sit)}</p><p><b>Tiempo ideal: 8 minutos.</b> En el simulador tenés hasta ${limitFor(cur,run.mode)/60} minutos para leer y elegir. Tareas:</p><ol>${cur.tareas.map(t=>`<li>${esc(t)}</li>`).join('')}</ol>`;
+    ${cur.sit?`<p>${esc(cur.sit)}</p>`:''}<p><b>Tiempo ideal: 8 minutos.</b> En el simulador tenés hasta ${limitFor(cur,run.mode)/60} minutos para leer y elegir. Tareas:</p><ol>${cur.tareas.map(t=>`<li>${esc(t)}</li>`).join('')}</ol>`;
   $('sheet').innerHTML=sheet;$('sheet2').innerHTML=sheet.replace(/<div class="eyebrow">.*?<\/div>/s,'');
   $('tbArea').textContent=AREAS[cur.area][0];$('tbTitle').textContent=cur.motivo;
   $('avBox').innerHTML=avatar(cur.pt.av,true,cur.id);$('ptName').textContent=cur.pt.n;$('ptMeta').textContent=cur.pt.e;
