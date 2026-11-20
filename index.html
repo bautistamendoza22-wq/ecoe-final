@@ -626,13 +626,13 @@ const G={a:'Anamnesis',e:'Exploración física',j:'Juicio clínico y plan diagn�
 const COT_FRAME="Estructura y dimensiones adaptadas de los componentes competenciales del ECOE de fin de grado (Conferencia Nacional de Decanos de Medicina de España; Guía de la prueba ECOE, Universidad de Granada 2023-2024). Ítems de comunicación según la guía Calgary-Cambridge (Kurtz, Silverman y Draper, 2013).";
 /* q:[categoría,pregunta,respuesta,ítem] · x:[examen o estudio,resultado,ítem | -1 neutro | -9 innecesario] · d:[conducta,devolución,ítem | -1 error | -2 neutro,descuento] · cot:[ítem,puntos,grupo] */
 const ST=[
-{id:'ive',area:'obs',motivo:'Atraso menstrual y un test positivo',lugar:'Guardia de un hospital general · horario nocturno',
+{id:'ive',area:'obs',motivo:'Atraso menstrual y un test positivo',lugar:'Consultorio externo de medicina general · hospital municipal',
  pt:{n:'Gisela',e:'33 años',av:{sex:'f',skin:2,hair:'long',hc:'#3b2a20',mood:'angustia',top:'#7b5ea7'}},
- sit:'',
+ sit:'Atendés el consultorio externo de medicina general de un hospital municipal. Gisela tenía turno para traer unos análisis de rutina, pero al sentarse aclara que viene por otra cosa. El hospital cuenta con un equipo de salud sexual al que podés derivar.',
  tareas:['Realizar la anamnesis, informar y organizar la atención que solicita.'],
- abre:'Perdón por venir a esta hora… Me hice un test y dio positivo. No puedo tener otro hijo ahora.',
+ abre:'Saqué el turno para traer los análisis, pero en realidad vengo por otra cosa… Me hice un test y dio positivo. No puedo tener otro hijo ahora.',
  guion:'Trabaja limpiando casas por hora, sin días pagos si falta. Está separada y tiene dos hijos de 6 y 10 años; vive con ellos y su mamá la ayuda a cuidarlos. Tiene un compañero desde hace unos meses, que no sabe del embarazo. Ansiosa, mira el celular. SOLO si preguntan específicamente: quiere interrumpir el embarazo; FUM 14 de septiembre, ciclos regulares; dos partos vaginales sin complicaciones; usaba DIU, se lo retiraron hace tres meses por dolor y no empezó otro método; sin enfermedades, cirugías ni alergias; no toma medicación; teme que «sea una operación» y que duela; no puede perder días de trabajo; pregunta si se puede hacer con pastillas en su casa y si tiene que pagar; con el compañero se lleva bien y no hay violencia; su mamá la puede acompañar.',
- q:[['Motivo','¿Qué te trae a la guardia? ¿Qué necesitás de nosotros hoy?','Me hice un test y dio positivo. No quiero seguir con el embarazo, y quería saber qué tengo que hacer.',0],
+ q:[['Motivo','¿Qué te trae hoy? ¿Qué necesitás de nosotros?','Me hice un test y dio positivo. No quiero seguir con el embarazo, y quería saber qué tengo que hacer.',0],
     ['Antecedentes','¿Cuándo fue tu última menstruación? ¿Sos regular?','El 14 de septiembre. Soy muy regular, por eso me di cuenta enseguida.',1],
     ['Antecedentes','¿Tuviste otros embarazos? ¿Cómo fueron los partos?','Tengo dos chicos, de 6 y de 10. Los dos partos fueron normales.',2],
     ['Antecedentes','¿Tenés alguna enfermedad, alergia o tomás medicación?','No, nada. Soy sana.',2],
